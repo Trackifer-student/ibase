@@ -1,5 +1,24 @@
 import { accountingLessons } from './modules/accounting'
 import { financeZeroModules } from './modules/financeZero'
+import { threeStatementLessons } from './modules/threeStatements'
+import { corporateFinanceLessons } from './modules/corporateFinance'
+import { enterpriseEquityLessons } from './modules/enterpriseEquity'
+import { valuationLessons } from './modules/valuation'
+import { dcfLessons } from './modules/dcf'
+import { maLessons } from './modules/ma'
+import { lboLessons } from './modules/lbo'
+import { marketsLessons } from './modules/markets'
+import {
+  recruitingProcessLessons,
+  networkingLessons,
+  resumeStoryLessons,
+} from './modules/recruiting'
+import {
+  excelLessons,
+  modelingLessons,
+  powerpointLessons,
+  analystWorkLessons,
+} from './modules/analyst'
 const whatIsIBLessons = [
   {
     id: 'what-bankers-do',
@@ -1305,7 +1324,7 @@ export const tracks = [
         subtitle: 'Where memorization stops working.',
         description:
           'Walk through depreciation, CapEx, working capital, debt, impairments, and other interview favorites.',
-        lessonCount: 12,
+        lessons: threeStatementLessons,
       },
       {
         id: 'corp-finance',
@@ -1314,7 +1333,7 @@ export const tracks = [
         subtitle: 'Why money today is worth more than money later.',
         description:
           'Time value of money, risk, return, capital structure, CAPM, beta, and WACC.',
-        lessonCount: 12,
+        lessons: corporateFinanceLessons,
       },
       {
         id: 'ev-equity',
@@ -1323,7 +1342,7 @@ export const tracks = [
         subtitle: "The interviewer's favorite way to confuse you.",
         description:
           'Market cap, debt, cash, preferred stock, NCI, diluted shares, and the EV bridge.',
-        lessonCount: 12,
+        lessons: enterpriseEquityLessons,
       },
       {
         id: 'valuation',
@@ -1332,7 +1351,7 @@ export const tracks = [
         subtitle: "So... what's this company actually worth?",
         description:
           'Trading comps, precedent transactions, multiples, private-company valuation, and football fields.',
-        lessonCount: 16,
+        lessons: valuationLessons,
       },
       {
         id: 'dcf',
@@ -1341,7 +1360,7 @@ export const tracks = [
         subtitle: "You'll get asked this. A lot.",
         description:
           'Free cash flow, WACC, terminal value, discounting, sensitivities, and the full DCF walkthrough.',
-        lessonCount: 24,
+        lessons: dcfLessons,
       },
       {
         id: 'ma',
@@ -1350,7 +1369,7 @@ export const tracks = [
         subtitle: 'What happens when one company buys another.',
         description:
           'Accretion/dilution, synergies, purchase accounting, goodwill, consideration, and merger mechanics.',
-        lessonCount: 20,
+        lessons: maLessons,
       },
       {
         id: 'lbo',
@@ -1359,7 +1378,7 @@ export const tracks = [
         subtitle: 'Useful. Just not the first thing to obsess over.',
         description:
           'Debt, sources & uses, returns, IRR, MOIC, paper LBOs, and what makes a good LBO candidate.',
-        lessonCount: 12,
+        lessons: lboLessons,
       },
       {
         id: 'markets',
@@ -1368,7 +1387,7 @@ export const tracks = [
         subtitle: 'Sound like someone who actually follows finance.',
         description:
           'Rates, inflation, the Fed, equity and credit markets, recent transactions, and discussing a deal intelligently.',
-        lessonCount: 14,
+        lessons: marketsLessons,
       },
     ],
   },
@@ -1389,7 +1408,7 @@ export const tracks = [
         subtitle: 'Know the process before it starts moving fast.',
         description:
           'Timelines, internships, HireVues, first rounds, Superdays, bank types, and choosing groups.',
-        lessonCount: 11,
+        lessons: recruitingProcessLessons,
       },
       {
         id: 'networking',
@@ -1398,7 +1417,7 @@ export const tracks = [
         subtitle: 'How to talk to bankers like a normal person.',
         description:
           'Cold emails, alumni outreach, coffee chats, follow-ups, referrals, and the mistakes that kill conversations.',
-        lessonCount: 12,
+        lessons: networkingLessons,
       },
       {
         id: 'resume-story',
@@ -1407,7 +1426,7 @@ export const tracks = [
         subtitle: 'Make your experience make sense.',
         description:
           'Resume bullets, your story, why IB, why this bank, behavioral questions, and building a story bank.',
-        lessonCount: 20,
+        lessons: resumeStoryLessons,
       },
     ],
   },
@@ -1428,7 +1447,7 @@ export const tracks = [
         subtitle: 'Speed matters more than you think.',
         description:
           'Navigation, formatting, formulas, shortcuts, sensitivities, model structure, and error checking.',
-        lessonCount: 15,
+        lessons: excelLessons,
       },
       {
         id: 'modeling',
@@ -1437,7 +1456,7 @@ export const tracks = [
         subtitle: 'Turn the concepts into an actual model.',
         description:
           'Revenue builds, schedules, three-statement models, DCFs, merger models, and introductory LBO modeling.',
-        lessonCount: 15,
+        lessons: modelingLessons,
       },
       {
         id: 'powerpoint',
@@ -1446,7 +1465,7 @@ export const tracks = [
         subtitle: 'Yes, alignment actually matters.',
         description:
           'Pitchbook structure, charts, valuation pages, formatting, footnotes, proofreading, and storytelling.',
-        lessonCount: 13,
+        lessons: powerpointLessons,
       },
       {
         id: 'analyst-work',
@@ -1455,7 +1474,7 @@ export const tracks = [
         subtitle: 'The stuff nobody puts in the textbook.',
         description:
           'Attention to detail, sourcing, version control, comments, research, prioritization, and checking your work.',
-        lessonCount: 14,
+        lessons: analystWorkLessons,
       },
     ],
   },
