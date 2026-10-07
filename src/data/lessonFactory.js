@@ -117,5 +117,5 @@ export const moduleFromSpecs = ({
   subtitle,
   description,
   quizTitle: quizTitle || `${title} Quiz`,
-  lessons: specs.map(makeLesson),
+  lessons: specs.map((spec) => (spec?.steps ? spec : makeLesson(spec))),
 })
