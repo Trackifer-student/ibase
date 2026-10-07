@@ -3,64 +3,147 @@ export const accountingLessons = [
     id: 'why-accounting-matters',
     title: 'Why Accounting Matters in Investment Banking',
     summary:
-      'Why bankers care about financial statements before valuation even starts.',
+      'Why accounting is the language underneath valuation, modeling, and deal analysis.',
+    concepts: ['accounting', 'financialStatement'],
+    prerequisites: ['accounting', 'financialStatement'],
     steps: [
       {
         type: 'intro',
         eyebrow: 'START WITH THE WHY',
-        title: 'Accounting is the language behind almost every banking analysis.',
+        title: 'Accounting turns a business into information you can analyze.',
         body:
-          'Before you can value a company, build a model, or analyze a deal, you need to understand what the company is actually earning, owning, owing, and spending.',
-        noteTitle: 'Do not skip this',
+          'Investment bankers do not value a logo or a product in the abstract. They analyze a real business: what it sells, what it costs to operate, what it owns, what it owes, and how much cash it produces.',
+        noteTitle: 'The point of this module',
         note:
-          'A lot of technical interview questions that look like valuation questions are really accounting questions underneath.',
+          'You are not trying to become an accountant. You are learning enough [[accounting|accounting]] to understand the financial logic behind banking work.',
       },
       {
-        type: 'list',
-        eyebrow: 'WHERE IT SHOWS UP',
-        title: 'Bankers use accounting constantly.',
-        body:
-          'You do not need to become an accountant. You do need to understand the financial logic.',
-        items: [
-          'Reading company filings',
-          'Understanding historical performance',
-          'Building financial models',
-          'Calculating EBITDA and cash flow',
-          'Analyzing working capital',
-          'Valuing companies',
-          'Evaluating acquisitions',
-          'Checking whether a model actually balances',
+        type: 'teach',
+        eyebrow: 'WHY BANKERS CARE',
+        title: 'Almost every technical banking task starts with financial statements.',
+        paragraphs: [
+          'A banker researching a company starts with its reported financial information.',
+          'A valuation model uses revenue, profit, cash flow, debt, cash, and other accounting data as inputs.',
+          'An M&A model needs to understand how two companies’ financial statements will combine.',
+          'A lender or sponsor needs to know whether the business can generate enough cash to support debt.',
+          'If the underlying financial statements are misunderstood, the analysis built on top of them will also be wrong.',
         ],
-        noteTitle: 'On the job',
-        note:
-          'If the financial statements do not make sense to you, the model built on top of them will not make sense either.',
+        calloutTitle: 'Useful mental model',
+        callout:
+          'Accounting describes what happened financially. Finance uses that information to make decisions about value, funding, and transactions.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'FROM BUSINESS EVENT TO BANKING ANALYSIS',
+        title: 'Imagine a company sells $1 million of software.',
+        scenario:
+          'The sale sounds simple, but a banker immediately has several follow-up questions.',
+        workedSteps: [
+          {
+            label: 'Revenue',
+            text:
+              'Was the $1 million actually earned during this period?',
+          },
+          {
+            label: 'Cash',
+            text:
+              'Did the customer already pay, or is the company still waiting to collect?',
+          },
+          {
+            label: 'Profit',
+            text:
+              'What costs were required to generate the sale?',
+          },
+          {
+            label: 'Balance sheet',
+            text:
+              'Did the transaction create a receivable, deferred revenue, or another balance sheet account?',
+          },
+          {
+            label: 'Valuation',
+            text:
+              'Is this sale recurring, profitable, and likely to continue in the future?',
+          },
+        ],
+        takeaway:
+          'Accounting gives the structure needed to answer the first four questions before finance can tackle the fifth.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CHECK YOUR MODEL',
         title:
-          'Why does accounting matter to an investment banking analyst?',
+          'Why does an investment banking analyst need accounting knowledge?',
         options: [
-          'Because bankers prepare personal tax returns',
-          'Because financial analysis depends on understanding a company’s statements',
-          'Because accounting replaces valuation',
-          'Because only accountants are allowed to read financial filings',
+          'Because valuation and modeling depend on understanding financial statements',
+          'Because bankers mainly prepare personal tax returns',
+          'Because accounting makes valuation unnecessary',
+          'Because only accountants can read public-company filings',
         ],
-        correctIndex: 1,
+        correctIndex: 0,
         correctTitle: 'Exactly.',
         correctText:
-          'Financial models, valuation, transaction analysis, and company research all depend on understanding the underlying financial statements.',
-        wrongTitle: 'Not quite.',
+          'Bankers rely on financial statements to understand companies before building valuation, financing, and transaction analysis.',
+        wrongTitle: 'Think about the input to the analysis.',
         wrongText:
-          'Bankers are not acting as accountants, but they depend heavily on accounting information to analyze companies.',
+          'A banking model is only as useful as the financial information and accounting logic underneath it.',
+        reviewConcepts: ['accounting', 'financialStatement'],
+      },
+      {
+        type: 'written',
+        eyebrow: 'EXPLAIN THE WHY',
+        title:
+          'Why would misunderstanding a company’s accounting create problems in a valuation model?',
+        body:
+          'Answer in plain English. Focus on the connection between the financial statements and the model.',
+        placeholder:
+          'If the financial statements are misunderstood, then...',
+        modelAnswer:
+          'Valuation models use financial-statement numbers and accounting relationships as inputs, so misunderstanding the accounting can lead to incorrect revenue, profit, cash flow, debt, or other assumptions and therefore a bad valuation.',
+        reviewConcepts: ['accounting', 'financialStatement', 'valuation'],
+        rubric: {
+          criteria: [
+            {
+              id: 'inputs',
+              label:
+                'recognize that valuation or modeling uses accounting information as an input',
+              keywords: [
+                'input',
+                'inputs',
+                'financial statements',
+                'numbers',
+                'data',
+                'model',
+                'valuation',
+                'accounting',
+              ],
+            },
+            {
+              id: 'consequence',
+              label:
+                'explain that bad accounting understanding can produce incorrect analysis or value',
+              keywords: [
+                'wrong',
+                'incorrect',
+                'bad',
+                'mistake',
+                'misstate',
+                'misleading',
+                'valuation',
+                'cash flow',
+                'profit',
+                'revenue',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
         title: 'Accounting is the foundation, not the destination.',
         body:
-          'We will start with the simplest possible building blocks: revenue, expenses, and profit.',
+          'Next we rebuild the income statement from the most basic pieces: revenue, expenses, and profit.',
         takeaway:
-          'Bankers use accounting to understand historical performance and build the financial analysis used in valuation and transactions.',
+          'Bankers use accounting to understand the business before they value it, finance it, or advise on a transaction.',
       },
     ],
   },
@@ -69,86 +152,123 @@ export const accountingLessons = [
     id: 'revenue-expenses-profit',
     title: 'Revenue, Expenses & Profit',
     summary:
-      'The basic economics of how a company turns sales into earnings.',
+      'Build the basic economic engine before adding accounting detail.',
+    concepts: [
+      'revenue',
+      'expense',
+      'profit',
+      'costOfGoodsSold',
+      'grossProfit',
+      'operatingExpense',
+    ],
+    prerequisites: ['revenue', 'expense', 'profit'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'THE BASIC ENGINE',
-        title: 'A business earns revenue and incurs expenses to generate profit.',
+        eyebrow: 'THE ECONOMIC ENGINE',
+        title: 'A business sells something, incurs costs, and hopes something is left over.',
         body:
-          'Almost everything on the income statement builds from that simple idea.',
+          'Every income statement becomes easier once you can separate three ideas: money generated from customers, costs required to run the business, and the profit that remains.',
         noteTitle: 'Start simple',
         note:
-          'Do not rush into EBITDA, EBIT, and free cash flow before revenue and expenses feel obvious.',
+          'Do not jump straight to EBITDA or free cash flow. First make [[revenue|revenue]], [[expense|expenses]], and [[profit|profit]] feel obvious.',
       },
       {
-        type: 'concept',
-        eyebrow: 'THE THREE BUILDING BLOCKS',
-        title: 'Sales come in. Costs come out. What remains is profit.',
-        body:
-          'Different types of profit appear at different points on the income statement.',
-        cards: [
+        type: 'teach',
+        eyebrow: 'FIRST LAYER',
+        title: 'Revenue tells you how much the business sold.',
+        paragraphs: [
+          'Revenue is the value of goods or services sold during a period.',
+          'If a company sells 1,000 subscriptions for $20 each, it generates $20,000 of revenue.',
+          'Revenue is sometimes called the top line because it appears near the top of the income statement.',
+          'Revenue alone does not tell you whether the company made money because the company also had to incur costs.',
+        ],
+        calloutTitle: 'Do not confuse',
+        callout:
+          'Revenue is sales before subtracting expenses. It is not the same thing as profit or cash.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'SECOND LAYER',
+        title: 'Not all expenses sit in the same place.',
+        paragraphs: [
+          'Some costs are closely tied to producing or delivering what the company sells. These are often included in [[costOfGoodsSold|cost of goods sold]], or COGS.',
+          'Other costs are required to run the broader organization, such as sales teams, headquarters, and research. These are often [[operatingExpense|operating expenses]].',
+          'Separating cost categories lets analysts see where profit is being created or consumed.',
+          'The exact labels vary by industry, so always understand the economics rather than memorizing one company’s wording.',
+        ],
+        calloutTitle: 'Example',
+        callout:
+          'For a retailer, the cost of merchandise sold is usually COGS. Corporate salaries and advertising are more likely operating expenses.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'FOLLOW ONE INCOME STATEMENT',
+        title: 'A simple business generates $1,000 of revenue.',
+        scenario:
+          'The company has $600 of direct product costs and $250 of other operating expenses.',
+        workedSteps: [
           {
-            number: 'R',
-            title: 'Revenue',
-            text:
-              'The value of goods or services a company sells during a period.',
+            label: 'Revenue',
+            text: '$1,000.',
           },
           {
-            number: 'E',
-            title: 'Expenses',
-            text:
-              'Costs incurred to generate revenue and operate the business.',
+            label: 'Less COGS',
+            text: '$1,000 − $600 = $400 of [[grossProfit|gross profit]].',
           },
           {
-            number: 'P',
-            title: 'Profit',
+            label: 'Less operating expenses',
+            text: '$400 − $250 = $150 of simplified operating profit.',
+          },
+          {
+            label: 'What changed?',
             text:
-              'What remains after subtracting the relevant expenses from revenue.',
+              'Each layer tells you how much of the original revenue remains after another category of cost.',
           },
         ],
-        plainTitle: 'The core equation',
-        plainText:
-          'Revenue − Expenses = Profit. The rest of accounting mostly adds detail about which revenue, which expenses, and when they are recognized.',
+        takeaway:
+          'Income statements are easier when you view them as a series of profit layers rather than a wall of line items.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'CALCULATE GROSS PROFIT',
         title:
-          'A company earns $500 million of revenue and has $320 million of total expenses. What is profit?',
-        answer: 180,
+          'A company generates $900 million of revenue and has $540 million of COGS. What is gross profit?',
+        answer: 360,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter gross profit',
         explanation:
-          '$500 million of revenue − $320 million of expenses = $180 million of profit.',
+          '$900 million − $540 million = $360 million of gross profit.',
+        reviewConcepts: ['revenue', 'costOfGoodsSold', 'grossProfit'],
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CHECK THE DISTINCTION',
         title:
-          'If revenue increases while all expenses stay exactly the same, what happens to profit?',
+          'A company grows revenue by $20 million while every expense stays exactly the same. What happens to profit?',
         options: [
-          'Profit decreases',
-          'Profit increases',
-          'Profit must stay unchanged',
-          'The balance sheet disappears',
+          'Profit increases by $20 million',
+          'Profit decreases by $20 million',
+          'Profit must remain unchanged',
+          'Revenue becomes an asset',
         ],
-        correctIndex: 1,
+        correctIndex: 0,
         correctTitle: 'Right.',
         correctText:
-          'With expenses unchanged, additional revenue flows through to higher profit.',
-        wrongTitle: 'Keep it simple.',
+          'If expenses truly remain unchanged, the additional revenue flows through to additional profit.',
+        wrongTitle: 'Keep the equation simple.',
         wrongText:
-          'If revenue rises and expenses do not change, profit increases.',
+          'Profit is revenue minus expenses. Higher revenue with unchanged expenses means higher profit.',
+        reviewConcepts: ['revenue', 'expense', 'profit'],
       },
       {
         type: 'complete',
-        title: 'You have the basic economic engine.',
+        title: 'You now understand the basic shape of profitability.',
         body:
-          'Now we need one important complication: accounting does not always recognize revenue and expenses when cash moves.',
+          'The next complication is timing: accounting profit and cash can move at different times.',
         takeaway:
-          'Profit represents revenue minus expenses, but accounting rules determine when those items are recognized.',
+          'Revenue is reduced by different categories of expenses to create different layers of profit.',
       },
     ],
   },
@@ -157,85 +277,154 @@ export const accountingLessons = [
     id: 'cash-vs-accrual',
     title: 'Cash vs. Accrual Accounting',
     summary:
-      'Why revenue, expenses, and cash flow can happen at different times.',
+      'Why earning revenue, recording expenses, and moving cash can happen at different times.',
+    concepts: [
+      'accrualAccounting',
+      'accountsReceivable',
+      'accountsPayable',
+      'deferredRevenue',
+      'cash',
+    ],
+    prerequisites: ['revenue', 'expense', 'cash'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'A CRITICAL DISTINCTION',
-        title: 'Profit is not the same thing as cash flow.',
+        eyebrow: 'THE TIMING PROBLEM',
+        title: 'Economic activity and cash movement do not always happen together.',
         body:
-          'Under accrual accounting, revenue and expenses are generally recorded when they are earned or incurred, not simply when cash changes hands.',
-        noteTitle: 'Interview favorite',
+          'A business can earn revenue before a customer pays. It can receive cash before earning revenue. It can incur an expense before paying the supplier. Accrual accounting exists partly to handle those timing differences.',
+        noteTitle: 'Core principle',
         note:
-          'Understanding the difference between cash and accrual accounting is essential for understanding how the three statements connect.',
+          'Under [[accrualAccounting|accrual accounting]], revenue is generally recognized when earned and expenses when incurred, not simply whenever cash moves.',
       },
       {
-        type: 'concept',
-        eyebrow: 'TWO DIFFERENT TIMINGS',
-        title: 'Accounting activity and cash movement can happen separately.',
-        body:
-          'That timing difference creates many balance sheet accounts.',
-        cards: [
+        type: 'worked',
+        eyebrow: 'CASE 1: REVENUE BEFORE CASH',
+        title: 'You finish $10,000 of work today. The customer pays next month.',
+        scenario:
+          'The economic work is complete, but the cash has not arrived.',
+        workedSteps: [
           {
-            number: 'AR',
-            title: 'Accounts Receivable',
+            label: 'Revenue',
             text:
-              'Revenue has been recognized, but the customer has not paid the company yet.',
+              'The company can recognize $10,000 of revenue because it earned it.',
           },
           {
-            number: 'AP',
-            title: 'Accounts Payable',
+            label: 'Cash',
             text:
-              'An expense or purchase has occurred, but the company has not paid the supplier yet.',
+              'Cash does not increase yet because the customer has not paid.',
           },
           {
-            number: 'DR',
-            title: 'Deferred Revenue',
+            label: 'Balance sheet',
             text:
-              'The company received cash before it earned the related revenue.',
+              '[[accountsReceivable|Accounts receivable]] increases by $10,000 because the customer owes the company money.',
+          },
+          {
+            label: 'Later collection',
+            text:
+              'When the customer pays, cash rises and accounts receivable falls. No new revenue is created at that point because the revenue was already recognized.',
           },
         ],
-        plainTitle: 'The key idea',
-        plainText:
-          'The income statement tracks economic activity. The cash flow statement tracks actual cash movement.',
+        takeaway:
+          'Accounts receivable is the bridge between earned revenue and cash collected later.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'CASE 2: EXPENSE BEFORE CASH',
+        title: 'A supplier delivers $4,000 of materials today and lets you pay next month.',
+        scenario:
+          'The company has received the economic benefit, but the supplier has not yet been paid.',
+        workedSteps: [
+          {
+            label: 'Obligation',
+            text:
+              'The company now owes the supplier $4,000.',
+          },
+          {
+            label: 'Balance sheet',
+            text:
+              '[[accountsPayable|Accounts payable]] increases.',
+          },
+          {
+            label: 'Cash',
+            text:
+              'Cash does not fall until the company actually pays the supplier.',
+          },
+        ],
+        takeaway:
+          'Accounts payable is one example of an obligation that can exist before the related cash payment.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'CASE 3: CASH BEFORE REVENUE',
+        title: 'A customer prepays $1,200 for a one-year subscription.',
+        scenario:
+          'The company receives the cash now but still owes twelve months of service.',
+        workedSteps: [
+          {
+            label: 'Cash',
+            text:
+              'Cash increases immediately by $1,200.',
+          },
+          {
+            label: 'Revenue',
+            text:
+              'The company has not yet earned the full $1,200 of revenue.',
+          },
+          {
+            label: 'Balance sheet',
+            text:
+              'The unearned amount is recorded as [[deferredRevenue|deferred revenue]], a liability.',
+          },
+          {
+            label: 'Over time',
+            text:
+              'As the company provides the service, deferred revenue declines and revenue is recognized.',
+          },
+        ],
+        takeaway:
+          'Cash can arrive before revenue just as revenue can appear before cash.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'TIMING CHECK',
         title:
-          'A company completes $100 of work for a customer today but will not be paid until next month. What happens today?',
+          'A company earns $50 of revenue today but will collect the customer cash next month. What is the most likely immediate effect?',
         options: [
-          'No revenue is recognized until cash arrives',
-          'Revenue can be recognized and accounts receivable increases',
-          'Cash increases immediately',
-          'Debt increases automatically',
+          'Revenue rises and accounts receivable rises',
+          'Cash rises and no revenue is recorded',
+          'Debt automatically rises',
+          'Deferred revenue rises',
         ],
-        correctIndex: 1,
+        correctIndex: 0,
         correctTitle: 'Exactly.',
         correctText:
-          'The company has earned the revenue, so revenue can be recognized even though cash has not yet been collected. Accounts receivable records the amount owed.',
-        wrongTitle: 'Watch the timing.',
+          'The company earned the revenue, but because cash has not arrived, the amount owed by the customer appears as accounts receivable.',
+        wrongTitle: 'Separate earning from collecting.',
         wrongText:
-          'Under accrual accounting, earning revenue and collecting cash do not have to happen at the same time.',
+          'Under accrual accounting, revenue can be recognized before the related cash is collected.',
+        reviewConcepts: ['accrualAccounting', 'accountsReceivable', 'cash'],
       },
       {
         type: 'fill',
         eyebrow: 'VOCABULARY CHECK',
         title:
-          'Revenue recognized before the customer pays often creates accounts ______.',
+          'Revenue recognized before the customer pays commonly creates accounts ______.',
         answer: 'receivable',
-        alternatives: ['receivable', 'accounts receivable'],
-        hint: 'Think about money the company is still waiting to receive.',
+        alternatives: ['accounts receivable'],
+        hint:
+          'This asset represents money customers still owe the company.',
         successText:
-          'Right. Accounts receivable represents amounts customers owe the company.',
+          'Correct. Accounts receivable represents amounts customers owe for revenue already recognized.',
+        reviewConcepts: ['accountsReceivable'],
       },
       {
         type: 'complete',
-        title: 'Profit and cash can move differently.',
+        title: 'You now understand why profit and cash can differ.',
         body:
-          'That distinction becomes much clearer once we look at each of the three financial statements individually.',
+          'Next we organize revenue and expenses into the first major financial statement: the income statement.',
         takeaway:
-          'Accrual accounting recognizes economic activity when earned or incurred, which can differ from the timing of cash movement.',
+          'Accrual accounting separates the timing of economic recognition from the timing of cash movement.',
       },
     ],
   },
@@ -244,76 +433,144 @@ export const accountingLessons = [
     id: 'income-statement',
     title: 'The Income Statement',
     summary:
-      'Revenue down to net income and what each layer tells you.',
+      'Follow the company from revenue down to net income and understand what each layer means.',
+    concepts: [
+      'incomeStatement',
+      'revenue',
+      'costOfGoodsSold',
+      'grossProfit',
+      'operatingExpense',
+      'ebit',
+      'interest',
+      'taxExpense',
+      'netIncome',
+    ],
+    prerequisites: ['revenue', 'expense', 'profit'],
     steps: [
       {
         type: 'intro',
         eyebrow: 'STATEMENT 1 OF 3',
-        title: 'The income statement shows profitability over a period of time.',
+        title: 'The income statement measures profitability over a period of time.',
         body:
-          'It answers a simple question: how much did the company earn after accounting for the costs associated with running the business?',
+          'It starts with what the company sold and works downward through different costs until it reaches bottom-line accounting profit.',
         noteTitle: 'Period, not snapshot',
         note:
-          'An income statement covers a period such as a quarter or year. That is different from the balance sheet, which represents one point in time.',
+          'An [[incomeStatement|income statement]] covers a period such as a quarter or a year. The balance sheet will be a snapshot at one specific date.',
       },
       {
         type: 'list',
-        eyebrow: 'TOP TO BOTTOM',
-        title: 'A simplified income statement looks like this.',
+        eyebrow: 'THE BASIC FLOW',
+        title: 'Read the income statement from top to bottom.',
         body:
-          'The exact labels differ between companies, but the basic flow is consistent.',
+          'Real companies use different labels, but the economic sequence usually looks like this.',
         items: [
           'Revenue',
           'Less: Cost of Goods Sold',
           'Equals: Gross Profit',
           'Less: Operating Expenses',
           'Equals: Operating Income / EBIT',
-          'Less: Interest Expense',
+          'Less: Interest and other non-operating items',
           'Less: Taxes',
           'Equals: Net Income',
         ],
-        noteTitle: 'Know the flow',
+        noteTitle: 'Why the layers matter',
         note:
-          'You should eventually be able to move from revenue down to net income without thinking about the order.',
+          'Each subtotal answers a different question about where the company is making or losing money.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'BUILD ONE FROM SCRATCH',
+        title: 'A simplified company has $1,000 of revenue.',
+        scenario:
+          'Assume $600 of COGS, $200 of operating expenses, $50 of interest expense, and a 25% tax rate on pre-tax income.',
+        workedSteps: [
+          {
+            label: 'Revenue',
+            text: '$1,000.',
+          },
+          {
+            label: 'Gross profit',
+            text:
+              '$1,000 − $600 = $400 of [[grossProfit|gross profit]].',
+          },
+          {
+            label: 'EBIT',
+            text:
+              '$400 − $200 = $200 of [[ebit|EBIT]], or operating income.',
+          },
+          {
+            label: 'Pre-tax income',
+            text:
+              '$200 − $50 of interest = $150.',
+          },
+          {
+            label: 'Taxes',
+            text:
+              '25% × $150 = $37.50 of tax expense.',
+          },
+          {
+            label: 'Net income',
+            text:
+              '$150 − $37.50 = $112.50 of [[netIncome|net income]].',
+          },
+        ],
+        takeaway:
+          'The income statement is a waterfall: each new category of cost reduces the profit available at the next level.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'WHAT EACH PROFIT LEVEL TELLS YOU',
+        title: 'Different profit measures isolate different parts of the business.',
+        paragraphs: [
+          'Gross profit focuses on revenue after direct production or delivery costs.',
+          'EBIT focuses on operating profitability before interest and taxes.',
+          'Net income includes financing costs, taxes, and other items and therefore represents bottom-line accounting profit attributable after those costs.',
+          'Bankers use different profit measures for different questions, so the right metric depends on what you are trying to analyze.',
+        ],
+        calloutTitle: 'Interview habit',
+        callout:
+          'Do not say one profit measure is always “better.” Explain what it includes, what it excludes, and why that is useful for the question.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'FULL FLOW CHECK',
         title:
-          'Revenue is $800 million and COGS is $500 million. What is gross profit?',
-        answer: 300,
+          'Revenue is $800, COGS is $500, operating expenses are $180, and interest expense is $20. Ignoring taxes, what is pre-tax income?',
+        answer: 100,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter pre-tax income',
         explanation:
-          '$800 million of revenue − $500 million of COGS = $300 million of gross profit.',
+          '$800 − $500 = $300 gross profit. $300 − $180 = $120 EBIT. $120 − $20 = $100 pre-tax income.',
+        reviewConcepts: ['grossProfit', 'ebit', 'interest'],
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'PLACEMENT CHECK',
         title:
-          'Which line is generally found at the bottom of the income statement?',
+          'Which item is generally subtracted after EBIT to help reach pre-tax income?',
         options: [
-          'Cash',
-          'Accounts Receivable',
-          'Net Income',
-          'Property, Plant & Equipment',
+          'Interest expense',
+          'Cash balance',
+          'Accounts receivable',
+          'Inventory',
         ],
-        correctIndex: 2,
+        correctIndex: 0,
         correctTitle: 'Correct.',
         correctText:
-          'Net income represents the company’s accounting profit after operating costs, interest, taxes, and other relevant items.',
-        wrongTitle: 'Think profitability.',
+          'Interest expense is a financing cost and is generally below operating income / EBIT.',
+        wrongTitle: 'Think income statement, not balance sheet.',
         wrongText:
-          'Cash, accounts receivable, and PP&E are balance sheet accounts. Net income sits on the income statement.',
+          'Cash, receivables, and inventory are balance sheet items. Interest expense is an income-statement cost.',
+        reviewConcepts: ['ebit', 'interest', 'incomeStatement'],
       },
       {
         type: 'complete',
-        title: 'The income statement tells you how profitable the company was.',
+        title: 'The income statement now has a logical shape.',
         body:
-          'Next we move from performance over time to what the company owns and owes at a specific moment.',
+          'Next we switch from performance over time to the company’s financial position at a single point in time.',
         takeaway:
-          'The income statement moves from revenue through expenses to net income over a defined period.',
+          'The income statement moves from revenue through operating costs, financing costs, and taxes to reach net income.',
       },
     ],
   },
@@ -322,86 +579,157 @@ export const accountingLessons = [
     id: 'balance-sheet',
     title: 'The Balance Sheet',
     summary:
-      'Assets, liabilities, equity, and the equation that always has to balance.',
+      'Understand what the company owns, what it owes, and how the accounting equation holds everything together.',
+    concepts: [
+      'balanceSheet',
+      'asset',
+      'liability',
+      'equity',
+      'accountingEquation',
+      'retainedEarnings',
+      'inventory',
+      'ppe',
+    ],
+    prerequisites: ['asset', 'liability', 'equity'],
     steps: [
       {
         type: 'intro',
         eyebrow: 'STATEMENT 2 OF 3',
-        title: 'The balance sheet is a snapshot of the company at one point in time.',
+        title: 'The balance sheet is a snapshot of the company on one date.',
         body:
-          'It shows what the company owns, what it owes, and the residual value attributable to shareholders.',
-        noteTitle: 'Know this cold',
+          'Instead of asking what happened during the quarter, it asks what resources the company controls and what claims exist against those resources right now.',
+        noteTitle: 'Know this equation cold',
         note:
-          'Assets = Liabilities + Shareholders’ Equity.',
+          '[[accountingEquation|Assets = Liabilities + Equity]].',
       },
       {
         type: 'concept',
-        eyebrow: 'THREE SECTIONS',
-        title: 'Everything fits into one of three broad buckets.',
+        eyebrow: 'THREE BUCKETS',
+        title: 'Everything fits into assets, liabilities, or equity.',
         body:
-          'The accounting equation connects them.',
+          'The categories are broad, but the underlying logic is straightforward.',
         cards: [
           {
             number: 'A',
             title: 'Assets',
             text:
-              'Resources the company owns or controls, such as cash, inventory, receivables, PP&E, and certain intangible assets.',
+              'Resources with economic value, such as cash, receivables, inventory, and PP&E.',
           },
           {
             number: 'L',
             title: 'Liabilities',
             text:
-              'Obligations the company owes, such as accounts payable, debt, and deferred revenue.',
+              'Obligations owed to other parties, such as accounts payable, deferred revenue, and debt.',
           },
           {
             number: 'E',
-            title: 'Shareholders’ Equity',
+            title: 'Equity',
             text:
-              'The residual accounting value attributable to shareholders after liabilities.',
+              'The accounting claim attributable to owners after liabilities.',
           },
         ],
-        plainTitle: 'The equation',
+        plainTitle: 'The relationship',
         plainText:
-          'Assets = Liabilities + Equity. If your model does not satisfy this equation, something is wrong.',
+          'The company’s resources are financed by claims from creditors and owners, so the two sides of the balance sheet must balance.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'CURRENT VS. LONG-TERM',
+        title: 'Timing also helps organize the balance sheet.',
+        paragraphs: [
+          'Assets expected to turn into cash or be used relatively soon are often classified as current assets. Cash, [[accountsReceivable|accounts receivable]], and [[inventory|inventory]] are common examples.',
+          'Longer-lived operating assets such as [[ppe|property, plant & equipment]] are generally non-current.',
+          'Current liabilities are obligations expected to be settled relatively soon, while debt and other obligations can also be long-term.',
+          'The exact classification rules matter in accounting, but for banking you first need the economic meaning of each account.',
+        ],
+        calloutTitle: 'Classification question',
+        callout:
+          'Ask two things: What is this item economically, and when is it expected to turn into cash, be used, or be settled?',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'MAKE THE EQUATION WORK',
+        title: 'A company has $1,000 of assets and $650 of liabilities.',
+        scenario:
+          'What must shareholders’ equity equal?',
+        workedSteps: [
+          {
+            label: 'Equation',
+            text:
+              'Assets = Liabilities + Equity.',
+          },
+          {
+            label: 'Insert the numbers',
+            text:
+              '$1,000 = $650 + Equity.',
+          },
+          {
+            label: 'Solve',
+            text:
+              'Equity = $350.',
+          },
+          {
+            label: 'Interpretation',
+            text:
+              'The $1,000 of resources are financed by $650 of creditor claims and $350 of accounting equity.',
+          },
+        ],
+        takeaway:
+          'The balance sheet cannot be understood as a loose list of accounts; every account must fit into the accounting equation.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'ONE IMPORTANT EQUITY ACCOUNT',
+        title: 'Net income can increase retained earnings.',
+        paragraphs: [
+          '[[retainedEarnings|Retained earnings]] sits within shareholders’ equity.',
+          'When a company earns net income and does not distribute all of it to shareholders, retained earnings generally increases.',
+          'That creates one of the major links between the income statement and balance sheet.',
+        ],
+        calloutTitle: 'Preview',
+        callout:
+          'You will use this link in the next two lessons when we connect all three statements.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'BALANCE-SHEET CHECK',
         title:
-          'A company has $900 million of assets and $550 million of liabilities. What is shareholders’ equity?',
-        answer: 350,
+          'A company has $720 of assets and $465 of liabilities. What is equity?',
+        answer: 255,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter equity',
         explanation:
-          '$900 million of assets − $550 million of liabilities = $350 million of shareholders’ equity.',
+          '$720 − $465 = $255 of equity.',
+        reviewConcepts: ['accountingEquation', 'asset', 'liability', 'equity'],
       },
       {
         type: 'mcq',
         eyebrow: 'CLASSIFY IT',
         title:
-          'Which of the following is generally a liability?',
+          'Which item is normally an asset rather than a liability?',
         options: [
-          'Cash',
-          'Inventory',
-          'Accounts Payable',
-          'Property, Plant & Equipment',
+          'Inventory held for sale',
+          'Accounts payable owed to suppliers',
+          'Debt owed to lenders',
+          'Deferred revenue for service still owed to customers',
         ],
-        correctIndex: 2,
-        correctTitle: 'Exactly.',
+        correctIndex: 0,
+        correctTitle: 'Right.',
         correctText:
-          'Accounts payable represents money the company owes to suppliers.',
-        wrongTitle: 'Not that one.',
+          'Inventory is a resource the company controls and expects to sell or use, so it is an asset.',
+        wrongTitle: 'Ask whether the company owns a resource or owes an obligation.',
         wrongText:
-          'Cash, inventory, and PP&E are assets. Accounts payable is an obligation and therefore a liability.',
+          'Accounts payable, debt, and deferred revenue are obligations. Inventory is a resource.',
+        reviewConcepts: ['inventory', 'asset', 'liability'],
       },
       {
         type: 'complete',
-        title: 'The balance sheet tells you what the company has and how it is financed.',
+        title: 'The balance sheet is now a system, not a memorization list.',
         body:
-          'But neither profit nor the balance sheet alone tells you exactly what happened to cash. That is the job of the cash flow statement.',
+          'Next we learn the statement that explains how actual cash changed during the period.',
         takeaway:
-          'The balance sheet is a point-in-time snapshot governed by Assets = Liabilities + Equity.',
+          'The balance sheet is a point-in-time snapshot built around Assets = Liabilities + Equity.',
       },
     ],
   },
@@ -410,86 +738,146 @@ export const accountingLessons = [
     id: 'cash-flow-statement',
     title: 'The Cash Flow Statement',
     summary:
-      'How operating, investing, and financing activity explains the change in cash.',
+      'Reconcile accounting profit with actual cash movement across operations, investing, and financing.',
+    concepts: [
+      'cashFlowStatement',
+      'cashFlowFromOperations',
+      'cashFlowFromInvesting',
+      'cashFlowFromFinancing',
+      'cash',
+      'netIncome',
+    ],
+    prerequisites: ['cashFlowStatement', 'netIncome', 'cash'],
     steps: [
       {
         type: 'intro',
         eyebrow: 'STATEMENT 3 OF 3',
-        title: 'The cash flow statement explains why cash changed.',
+        title: 'The cash flow statement explains why the cash balance changed.',
         body:
-          'Under the indirect method, it begins with net income and adjusts for non-cash items and other differences between accounting profit and actual cash movement.',
-        noteTitle: 'The purpose',
+          'Net income is an accounting profit measure, not a direct record of cash collected and paid. The cash flow statement bridges that gap.',
+        noteTitle: 'Indirect method',
         note:
-          'The cash flow statement bridges accounting earnings to the company’s actual change in cash.',
+          'Most public-company cash flow statements start with [[netIncome|net income]] and adjust it to reach actual operating cash flow.',
       },
       {
         type: 'concept',
         eyebrow: 'THREE SECTIONS',
-        title: 'Cash flow is grouped by the type of activity.',
+        title: 'Group cash movement by what the company is doing.',
         body:
-          'You should know these three sections cold.',
+          'The sections help you separate the business itself from long-term investment and financing choices.',
         cards: [
           {
             number: 'CFO',
             title: 'Cash Flow from Operations',
             text:
-              'Cash generated or used by the company’s core operating activities, including adjustments for non-cash items and working capital.',
+              'Cash generated or used by the core business, including non-cash adjustments and working-capital changes.',
           },
           {
             number: 'CFI',
             title: 'Cash Flow from Investing',
             text:
-              'Cash used for or generated by long-term investments such as CapEx, acquisitions, and asset sales.',
+              'Cash used for or generated by long-term assets, investments, and acquisitions.',
           },
           {
             number: 'CFF',
             title: 'Cash Flow from Financing',
             text:
-              'Cash related to debt, equity, dividends, share repurchases, and other financing activity.',
+              'Cash raised from or returned to lenders and shareholders.',
           },
         ],
-        plainTitle: 'The ending result',
+        plainTitle: 'Ending cash',
         plainText:
-          'CFO + CFI + CFF = Net Change in Cash. Add that to beginning cash to reach ending cash.',
+          'CFO + CFI + CFF = Net Change in Cash. Beginning Cash + Net Change in Cash = Ending Cash.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'WHY START WITH NET INCOME?',
+        title: 'Turn accounting earnings into operating cash flow.',
+        scenario:
+          'A company reports $100 of net income, $20 of depreciation, and a $15 increase in accounts receivable. Ignore everything else.',
+        workedSteps: [
+          {
+            label: 'Start with net income',
+            text:
+              '$100.',
+          },
+          {
+            label: 'Add back depreciation',
+            text:
+              'Depreciation reduced net income but did not require a new cash payment in this period, so add back $20.',
+          },
+          {
+            label: 'Adjust for receivables',
+            text:
+              'Accounts receivable increased $15, meaning some reported revenue has not yet been collected in cash. Subtract $15.',
+          },
+          {
+            label: 'Operating cash flow',
+            text:
+              '$100 + $20 − $15 = $105.',
+          },
+        ],
+        takeaway:
+          'The indirect cash flow statement asks: what made accounting profit different from actual cash generated by operations?',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'INVESTING AND FINANCING',
+        title: 'The other sections explain major uses and sources of capital.',
+        paragraphs: [
+          'Buying equipment with cash is generally a [[cashFlowFromInvesting|cash flow from investing]] outflow.',
+          'Issuing debt is generally a [[cashFlowFromFinancing|cash flow from financing]] inflow.',
+          'Repaying debt, paying dividends, or repurchasing shares are generally financing outflows.',
+          'These sections do not tell you whether a decision was good or bad by themselves. They tell you where the cash moved.',
+        ],
+        calloutTitle: 'Analyst habit',
+        callout:
+          'Classify the economic activity first. Then think about the sign: did cash enter or leave the company?',
+      },
+      {
+        type: 'number',
+        eyebrow: 'NET CHANGE IN CASH',
+        title:
+          'CFO is +$180, CFI is −$120, and CFF is −$25. What is the net change in cash?',
+        answer: 35,
+        tolerance: 0.01,
+        suffix: 'million',
+        placeholder: 'Enter net change in cash',
+        explanation:
+          '$180 − $120 − $25 = a $35 million increase in cash.',
+        reviewConcepts: [
+          'cashFlowFromOperations',
+          'cashFlowFromInvesting',
+          'cashFlowFromFinancing',
+        ],
       },
       {
         type: 'mcq',
         eyebrow: 'CLASSIFY IT',
         title:
-          'A company spends cash to purchase new manufacturing equipment. Where does that normally appear?',
+          'A company spends $40 million of cash on new manufacturing equipment. Where does the cash outflow normally appear?',
         options: [
-          'Cash Flow from Operations',
           'Cash Flow from Investing',
           'Cash Flow from Financing',
           'Revenue',
+          'Shareholders’ Equity only',
         ],
-        correctIndex: 1,
-        correctTitle: 'Right.',
+        correctIndex: 0,
+        correctTitle: 'Correct.',
         correctText:
-          'Purchasing long-term assets is capital expenditure and normally appears in cash flow from investing.',
-        wrongTitle: 'Think long-term investment.',
+          'Buying a long-lived asset is a capital expenditure and generally appears as an investing cash outflow.',
+        wrongTitle: 'Think long-term asset investment.',
         wrongText:
-          'CapEx represents investment in long-term assets, so it normally appears in the investing section.',
-      },
-      {
-        type: 'number',
-        eyebrow: 'MINI CALCULATION',
-        title:
-          'CFO is +$150 million, CFI is −$90 million, and CFF is −$20 million. What is the net change in cash?',
-        answer: 40,
-        tolerance: 0.01,
-        suffix: 'million',
-        placeholder: 'Enter the answer in millions',
-        explanation:
-          '$150 million − $90 million − $20 million = a $40 million increase in cash.',
+          'Purchases of long-term assets are generally classified in cash flow from investing.',
+        reviewConcepts: ['cashFlowFromInvesting', 'capex'],
       },
       {
         type: 'complete',
-        title: 'Now you know the purpose of all three statements.',
+        title: 'You now know what each statement is trying to explain.',
         body:
-          'The next lesson connects them, because in the real world they do not operate independently.',
+          'Next we connect them into one integrated financial system.',
         takeaway:
-          'The cash flow statement explains the change in cash through operating, investing, and financing activities.',
+          'The cash flow statement reconciles net income to cash and organizes cash movement into operating, investing, and financing activities.',
       },
     ],
   },
@@ -498,73 +886,183 @@ export const accountingLessons = [
     id: 'three-statements-connect',
     title: 'How the Three Statements Connect',
     summary:
-      'The major links between net income, cash, retained earnings, and balance sheet accounts.',
+      'See the financial statements as one integrated model rather than three separate reports.',
+    concepts: [
+      'netIncome',
+      'retainedEarnings',
+      'cashFlowStatement',
+      'balanceSheet',
+      'incomeStatement',
+      'cash',
+    ],
+    prerequisites: ['incomeStatement', 'balanceSheet', 'cashFlowStatement'],
     steps: [
       {
         type: 'intro',
         eyebrow: 'CONNECT THE SYSTEM',
-        title: 'The three statements are separate reports describing one company.',
+        title: 'The three statements describe one company, so they must connect.',
         body:
-          'Changes on one statement often create effects on the others. That is why three-statement modeling works as an integrated system.',
-        noteTitle: 'Interview favorite',
+          'The income statement measures profit, the cash flow statement explains cash movement, and the balance sheet shows the ending financial position. Changes on one statement often flow into another.',
+        noteTitle: 'Interview importance',
         note:
-          '“Walk me through the three financial statements and how they connect” is one of the most common foundational technical questions.',
+          'Understanding the connections matters more than memorizing three separate definitions.',
       },
       {
         type: 'list',
-        eyebrow: 'THE MAJOR LINKS',
-        title: 'Start with these connections.',
+        eyebrow: 'THE FOUR LINKS TO KNOW FIRST',
+        title: 'Start with the biggest connections.',
         body:
-          'You do not need every accounting edge case yet.',
+          'You do not need every edge case yet. Lock in these relationships first.',
         items: [
-          'Net income from the income statement flows into the cash flow statement',
-          'Net income also contributes to retained earnings within shareholders’ equity',
-          'The cash flow statement calculates the change in cash',
-          'Ending cash flows back onto the balance sheet',
-          'Balance sheet changes such as working capital affect cash flow',
-          'Depreciation reduces PP&E and is added back as a non-cash item on the cash flow statement',
+          'Net income flows from the income statement into the cash flow statement',
+          'Net income also contributes to retained earnings within equity',
+          'The cash flow statement calculates the period’s change in cash',
+          'Ending cash from the cash flow statement appears on the ending balance sheet',
         ],
-        noteTitle: 'Do not memorize blindly',
+        noteTitle: 'One loop',
         note:
-          'The next module will make you walk actual transactions through all three statements. That is where this starts to stick.',
+          'Income statement → cash flow statement → ending cash on the balance sheet, while net income also updates retained earnings.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'WALK ONE DOLLAR THROUGH',
+        title: 'A company earns $50 of net income and nothing else changes.',
+        scenario:
+          'Assume no non-cash items, no working-capital changes, no investing or financing activity, and no dividends.',
+        workedSteps: [
+          {
+            label: 'Income statement',
+            text:
+              'Net income is $50.',
+          },
+          {
+            label: 'Cash flow statement',
+            text:
+              'With no adjustments, operating cash flow is $50 and net cash increases by $50.',
+          },
+          {
+            label: 'Balance sheet cash',
+            text:
+              'Cash increases by $50.',
+          },
+          {
+            label: 'Balance sheet equity',
+            text:
+              '[[retainedEarnings|Retained earnings]] also increases by $50 because the company kept the profit.',
+          },
+          {
+            label: 'Does the balance sheet still balance?',
+            text:
+              'Yes. Assets rise $50 through cash, and equity rises $50 through retained earnings.',
+          },
+        ],
+        takeaway:
+          'The same underlying event can move through multiple statements while preserving the accounting equation.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'ADD A NON-CASH EXPENSE',
+        title: 'Now add $10 of depreciation.',
+        scenario:
+          'Assume the company has $10 of depreciation expense and ignore taxes for the moment.',
+        workedSteps: [
+          {
+            label: 'Income statement',
+            text:
+              'Depreciation reduces EBIT and net income by $10.',
+          },
+          {
+            label: 'Cash flow statement',
+            text:
+              'Because depreciation is non-cash in the current period, add the $10 back in operating cash flow.',
+          },
+          {
+            label: 'Balance sheet asset',
+            text:
+              'PP&E decreases by $10 through accumulated depreciation.',
+          },
+          {
+            label: 'Balance sheet equity',
+            text:
+              'Lower net income means retained earnings is $10 lower than it otherwise would have been.',
+          },
+        ],
+        takeaway:
+          'A non-cash expense can reduce earnings and asset value without reducing current-period cash.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'LINKAGE CHECK',
         title:
-          'Which income statement line typically serves as the starting point of an indirect cash flow statement?',
+          'Where does the ending cash balance calculated on the cash flow statement ultimately appear?',
         options: [
-          'Revenue',
-          'Gross Profit',
-          'Net Income',
-          'Accounts Payable',
+          'On the balance sheet',
+          'As revenue on the income statement',
+          'As EBITDA',
+          'Nowhere else',
         ],
-        correctIndex: 2,
+        correctIndex: 0,
         correctTitle: 'Exactly.',
         correctText:
-          'The indirect cash flow statement generally starts with net income and reconciles it to cash generated or used.',
-        wrongTitle: 'Think bottom line.',
+          'The cash flow statement explains the change in cash, and the resulting ending cash balance appears on the balance sheet.',
+        wrongTitle: 'Think ending financial position.',
         wrongText:
-          'Under the indirect method, net income is the typical starting point.',
+          'Cash is an asset, so the ending cash balance belongs on the balance sheet.',
+        reviewConcepts: ['cashFlowStatement', 'balanceSheet', 'cash'],
       },
       {
-        type: 'fill',
-        eyebrow: 'CONNECTION CHECK',
+        type: 'written',
+        eyebrow: 'EXPLAIN THE CONNECTION',
         title:
-          'Ending cash from the cash flow statement appears as cash on the ______ sheet.',
-        answer: 'balance',
-        alternatives: ['balance', 'balance sheet'],
-        hint: 'Which statement contains cash as an asset?',
-        successText:
-          'Correct. Ending cash calculated through the cash flow statement appears on the balance sheet.',
+          'How does net income connect the income statement to the other two statements?',
+        body:
+          'Mention both the cash flow statement and the balance sheet.',
+        placeholder:
+          'Net income flows into..., and it also...',
+        modelAnswer:
+          'Net income starts the indirect cash flow statement and is adjusted to calculate cash from operations. Net income also increases retained earnings on the balance sheet, assuming it is not distributed through dividends or other adjustments.',
+        reviewConcepts: [
+          'netIncome',
+          'cashFlowStatement',
+          'retainedEarnings',
+          'balanceSheet',
+        ],
+        rubric: {
+          criteria: [
+            {
+              id: 'cashflow',
+              label:
+                'explain that net income feeds into the cash flow statement',
+              keywords: [
+                'cash flow statement',
+                'cash flow',
+                'cfo',
+                'operating cash',
+                'starts',
+                'starting point',
+              ],
+            },
+            {
+              id: 'equity',
+              label:
+                'explain that net income affects retained earnings or equity',
+              keywords: [
+                'retained earnings',
+                'equity',
+                'shareholders equity',
+                'balance sheet',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
-        title: 'The statements form one connected financial system.',
+        title: 'You now see one financial system instead of three isolated statements.',
         body:
-          'Next we clarify three profitability metrics that interviewers expect you to distinguish immediately.',
+          'Next we compare three profit measures bankers use constantly: EBITDA, EBIT, and net income.',
         takeaway:
-          'Net income links the income statement to cash flow and equity, while ending cash and other balance sheet changes complete the three-statement connection.',
+          'Net income, cash, retained earnings, and balance sheet accounts create the core links between the three statements.',
       },
     ],
   },
@@ -573,86 +1071,134 @@ export const accountingLessons = [
     id: 'ebitda-ebit-net-income',
     title: 'EBITDA, EBIT & Net Income',
     summary:
-      'Three profitability metrics that measure different layers of the business.',
+      'Understand what each profit measure includes, excludes, and is trying to tell you.',
+    concepts: ['ebitda', 'ebit', 'netIncome', 'depreciation', 'amortization', 'interest', 'taxExpense'],
+    prerequisites: ['incomeStatement', 'netIncome'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'DO NOT MIX THESE UP',
-        title: 'EBITDA, EBIT, and net income are not interchangeable.',
+        eyebrow: 'THREE PROFIT MEASURES',
+        title: 'EBITDA, EBIT, and net income answer different questions.',
         body:
-          'Each metric removes a different set of expenses and therefore answers a slightly different question.',
-        noteTitle: 'Know this cold',
+          'They are related, but they are not interchangeable. Each removes or includes different categories of cost.',
+        noteTitle: 'The order',
         note:
-          'This distinction becomes extremely important once you reach valuation multiples.',
+          'EBITDA is generally above EBIT, and EBIT is generally above net income when the excluded expenses are positive.',
       },
       {
         type: 'concept',
-        eyebrow: 'THREE LEVELS OF PROFIT',
-        title: 'Move from operating performance toward the shareholder bottom line.',
+        eyebrow: 'SIDE BY SIDE',
+        title: 'Know what each measure excludes.',
         body:
-          'Think about which expenses each metric includes.',
+          'The names tell you much of the answer.',
         cards: [
           {
             number: 'EBITDA',
             title: 'EBITDA',
             text:
-              'Earnings Before Interest, Taxes, Depreciation & Amortization. A commonly used proxy for operating profitability before D&A.',
+              'Earnings before interest, taxes, depreciation, and amortization.',
           },
           {
             number: 'EBIT',
             title: 'EBIT',
             text:
-              'Earnings Before Interest and Taxes. Includes the impact of depreciation and amortization.',
+              'Earnings before interest and taxes. Depreciation and amortization have already been deducted.',
           },
           {
             number: 'NI',
             title: 'Net Income',
             text:
-              'The accounting profit remaining after operating expenses, interest, taxes, and other relevant items.',
+              'Bottom-line accounting profit after operating costs, interest, taxes, and other relevant items.',
           },
         ],
-        plainTitle: 'A useful relationship',
+        plainTitle: 'The bridge',
         plainText:
-          'EBITDA − D&A = EBIT. From EBIT, subtract items such as interest and taxes to eventually reach net income.',
+          'EBITDA − D&A = EBIT. EBIT − net interest and other items − taxes = Net Income, in a simplified flow.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'BRIDGE THE METRICS',
+        title: 'Start with $200 of EBITDA.',
+        scenario:
+          'Assume $30 of depreciation and amortization, $20 of interest expense, and $30 of taxes.',
+        workedSteps: [
+          {
+            label: 'EBITDA',
+            text: '$200.',
+          },
+          {
+            label: 'Subtract D&A',
+            text:
+              '$200 − $30 = $170 of EBIT.',
+          },
+          {
+            label: 'Subtract interest',
+            text:
+              '$170 − $20 = $150 of pre-tax income.',
+          },
+          {
+            label: 'Subtract taxes',
+            text:
+              '$150 − $30 = $120 of net income.',
+          },
+        ],
+        takeaway:
+          'Each step includes another category of cost that the higher profit measure excluded.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'WHY BANKERS USE EBITDA',
+        title: 'EBITDA can help compare operating performance before financing and certain non-cash charges.',
+        paragraphs: [
+          'Because EBITDA excludes interest, it is less affected by how a company chooses to finance itself.',
+          'Because it excludes taxes, it is less affected by tax structure and jurisdiction.',
+          'Because it excludes depreciation and amortization, it removes those accounting charges from the metric.',
+          'That can make EBITDA useful for certain comparisons and valuation multiples, but it does not mean EBITDA equals cash flow.',
+        ],
+        calloutTitle: 'Very important',
+        callout:
+          'EBITDA ignores capital expenditures, working-capital needs, taxes, and interest. A company can have strong EBITDA and still generate weak cash flow.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'BRIDGE CHECK',
         title:
-          'A company has $120 million of EBITDA and $25 million of D&A. What is EBIT?',
-        answer: 95,
+          'EBITDA is $150 and D&A is $25. What is EBIT?',
+        answer: 125,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter EBIT',
         explanation:
-          '$120 million of EBITDA − $25 million of D&A = $95 million of EBIT.',
+          '$150 − $25 = $125 of EBIT.',
+        reviewConcepts: ['ebitda', 'ebit', 'depreciation', 'amortization'],
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CONCEPT CHECK',
         title:
-          'Which metric is calculated before depreciation and amortization?',
+          'Which statement about EBITDA is most accurate?',
         options: [
-          'Net Income',
-          'EBIT',
-          'EBITDA',
-          'Retained Earnings',
+          'EBITDA is a profit measure, but it is not the same as cash flow',
+          'EBITDA equals ending cash',
+          'EBITDA includes interest expense',
+          'EBITDA is always lower than net income',
         ],
-        correctIndex: 2,
+        correctIndex: 0,
         correctTitle: 'Exactly.',
         correctText:
-          'Depreciation and amortization are explicitly added back when moving from EBIT to EBITDA.',
-        wrongTitle: 'Look at the name.',
+          'EBITDA is widely used, but it does not capture all cash costs or investment needs.',
+        wrongTitle: 'Do not turn EBITDA into cash.',
         wrongText:
-          'EBITDA stands for Earnings Before Interest, Taxes, Depreciation and Amortization.',
+          'EBITDA excludes several items that still matter economically, including CapEx, taxes, interest, and working capital.',
+        reviewConcepts: ['ebitda', 'cashFlow'],
       },
       {
         type: 'complete',
-        title: 'Profitability depends on where you stop the income statement.',
+        title: 'You now know what the three major profit measures are actually doing.',
         body:
-          'Next we isolate depreciation and amortization, because their non-cash nature creates one of the most famous banking interview questions.',
+          'Next we unpack depreciation and amortization, the items separating EBITDA from EBIT.',
         takeaway:
-          'EBITDA excludes D&A, EBIT includes D&A but excludes interest and taxes, and net income reflects the broader accounting bottom line.',
+          'EBITDA, EBIT, and net income differ because each includes a different set of costs.',
       },
     ],
   },
@@ -661,80 +1207,124 @@ export const accountingLessons = [
     id: 'depreciation-amortization',
     title: 'Depreciation & Amortization',
     summary:
-      'Why long-term asset costs are spread over time and why D&A gets added back to cash flow.',
+      'Why companies spread the cost of long-lived assets over time and how non-cash expenses affect the statements.',
+    concepts: ['depreciation', 'amortization', 'ppe', 'capex', 'ebitda', 'ebit'],
+    prerequisites: ['ebitda', 'ebit', 'balanceSheet', 'cashFlowStatement'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'NON-CASH DOES NOT MEAN FAKE',
-        title: 'Depreciation spreads the cost of a long-term asset across its useful life.',
+        eyebrow: 'COST OVER TIME',
+        title: 'Buying a long-lived asset and expensing it are not always the same event.',
         body:
-          'Instead of expensing the entire cost of a long-lived asset immediately, accounting generally capitalizes the asset and recognizes expense over time.',
-        noteTitle: 'Key distinction',
+          'If a company buys equipment that will be used for years, accounting generally does not treat the full purchase price as an income-statement expense on day one.',
+        noteTitle: 'The idea',
         note:
-          'Depreciation generally relates to tangible assets such as equipment. Amortization often relates to certain intangible assets.',
+          '[[depreciation|Depreciation]] allocates the cost of tangible long-lived assets over time. [[amortization|Amortization]] often does something similar for certain intangible assets.',
       },
       {
-        type: 'concept',
-        eyebrow: 'WHAT ACTUALLY HAPPENS',
-        title: 'The cash payment and accounting expense can occur at different times.',
-        body:
-          'That timing is why D&A affects both profit and cash flow differently.',
-        cards: [
+        type: 'worked',
+        eyebrow: 'TANGIBLE ASSET',
+        title: 'A company buys a $100 machine with a five-year useful life.',
+        scenario:
+          'Assume straight-line depreciation, no salvage value, and ignore taxes.',
+        workedSteps: [
           {
-            number: '1',
-            title: 'Asset Purchased',
+            label: 'Day 1 cash flow',
             text:
-              'Cash is spent to acquire a long-term asset and the asset is recorded on the balance sheet.',
+              'The company spends $100 of cash on [[capex|CapEx]].',
           },
           {
-            number: '2',
-            title: 'Expense Recognized Over Time',
+            label: 'Balance sheet',
             text:
-              'Depreciation reduces reported earnings in later periods even though no new cash payment is required for that depreciation expense.',
+              'The company records the machine in [[ppe|PP&E]] rather than taking a $100 operating expense immediately.',
+          },
+          {
+            label: 'Annual depreciation',
+            text:
+              '$100 ÷ 5 years = $20 of annual depreciation expense.',
+          },
+          {
+            label: 'Income statement',
+            text:
+              'Each year, the $20 depreciation expense reduces EBIT.',
+          },
+          {
+            label: 'Cash flow statement',
+            text:
+              'Because the $20 depreciation expense is non-cash in that year, it is added back in CFO under the indirect method.',
           },
         ],
-        plainTitle: 'Why it gets added back',
-        plainText:
-          'Depreciation lowers net income but is non-cash in the current period, so it is added back in cash flow from operations under the indirect method.',
+        takeaway:
+          'The cash left when the asset was purchased. Depreciation is the later accounting allocation of that historical cost.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'WHY IT IS CALLED NON-CASH',
+        title: 'Non-cash does not mean economically meaningless.',
+        paragraphs: [
+          'Depreciation does not require a new cash payment in the period the expense is recorded.',
+          'But the underlying asset cost was real: the company already paid cash to acquire or build the asset.',
+          'That is why analysts should not blindly add back depreciation and conclude it never matters.',
+          'Capital-intensive businesses often need continuing CapEx to replace or expand the assets that are depreciating.',
+        ],
+        calloutTitle: 'Key distinction',
+        callout:
+          'Depreciation is non-cash in the current period. The asset itself was not free.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'AMORTIZATION',
+        title: 'Amortization commonly applies to certain intangible assets.',
+        paragraphs: [
+          'A finite-lived intangible asset may be expensed over its useful life through amortization.',
+          'Customer relationships, certain technologies, and other acquired intangible assets can create amortization expense.',
+          'Like depreciation, amortization is generally added back in operating cash flow because the current-period expense is non-cash.',
+          'In acquisition analysis, amortization can become important because deals can create new identifiable intangible assets.',
+        ],
+        calloutTitle: 'Remember the bridge',
+        callout:
+          'EBITDA − Depreciation − Amortization = EBIT, in the simplified bridge.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'DEPRECIATION CHECK',
         title:
-          'A company buys a $100 million machine and depreciates it evenly over 10 years with no residual value. What is annual depreciation?',
-        answer: 10,
+          'A $240 machine is depreciated straight-line over six years with no salvage value. What is annual depreciation?',
+        answer: 40,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter annual depreciation',
         explanation:
-          '$100 million ÷ 10 years = $10 million of annual straight-line depreciation.',
+          '$240 ÷ 6 = $40 per year.',
+        reviewConcepts: ['depreciation', 'ppe'],
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'STATEMENT EFFECT',
         title:
           'Why is depreciation added back on the cash flow statement under the indirect method?',
         options: [
+          'Because it reduced net income without causing a new cash outflow in the current period',
+          'Because the asset was free',
           'Because depreciation increases revenue',
-          'Because it reduced net income without representing a current-period cash outflow',
           'Because depreciation is debt',
-          'Because the asset was never purchased',
         ],
-        correctIndex: 1,
-        correctTitle: 'Exactly.',
+        correctIndex: 0,
+        correctTitle: 'Correct.',
         correctText:
-          'Depreciation lowered accounting earnings, but the depreciation expense itself does not represent a new cash payment in that period.',
-        wrongTitle: 'Focus on cash timing.',
+          'Depreciation is an accounting expense in the current period, but the related asset purchase cash outflow occurred separately.',
+        wrongTitle: 'Focus on timing of cash.',
         wrongText:
-          'The asset may have required cash when purchased, but the later depreciation expense itself is non-cash.',
+          'The current depreciation expense lowers net income even though there is no matching current-period cash payment.',
+        reviewConcepts: ['depreciation', 'cashFlowStatement'],
       },
       {
         type: 'complete',
-        title: 'Depreciation separates cash spending from expense recognition.',
+        title: 'Depreciation and amortization now have an economic story.',
         body:
-          'That naturally leads to CapEx: the actual investment in long-term assets.',
+          'Next we focus on the cash investment that often creates depreciation in the first place: capital expenditures.',
         takeaway:
-          'D&A reduces accounting earnings but is non-cash in the period recognized, so it is added back in the operating cash flow reconciliation.',
+          'D&A spreads historical asset cost across time, reduces accounting profit, and is non-cash in the period recorded.',
       },
     ],
   },
@@ -743,84 +1333,167 @@ export const accountingLessons = [
     id: 'capex',
     title: 'Capital Expenditures',
     summary:
-      'How companies invest in long-term assets and why CapEx differs from an operating expense.',
+      'Understand why buying long-lived assets affects cash immediately but earnings over time.',
+    concepts: ['capex', 'ppe', 'depreciation', 'cashFlowFromInvesting'],
+    prerequisites: ['depreciation', 'ppe', 'cashFlowStatement'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'INVESTING FOR THE FUTURE',
-        title: 'CapEx is money spent on long-term assets.',
+        eyebrow: 'INVESTING IN THE BUSINESS',
+        title: 'CapEx is cash spent on long-lived assets.',
         body:
-          'Examples include factories, equipment, servers, buildings, and other assets expected to provide benefits beyond the current period.',
-        noteTitle: 'Interview favorite',
+          'Companies need buildings, servers, machinery, vehicles, and other long-lived assets to operate and grow. Buying or improving those assets usually creates capital expenditures.',
+        noteTitle: 'The timing mismatch',
         note:
-          'A common distinction is whether a cost should be expensed immediately or capitalized and recognized over time.',
+          '[[capex|CapEx]] is usually a cash outflow today, while the related [[depreciation|depreciation]] expense is recognized over future periods.',
       },
       {
-        type: 'concept',
-        eyebrow: 'EXPENSE VS. CAPITALIZE',
-        title: 'The accounting treatment depends on the nature of the spending.',
-        body:
-          'The timing of expense recognition is the key difference.',
-        cards: [
+        type: 'worked',
+        eyebrow: 'THREE-STATEMENT VIEW',
+        title: 'A company spends $60 on new equipment.',
+        scenario:
+          'Assume the equipment is purchased for cash and ignore taxes.',
+        workedSteps: [
           {
-            number: 'EXP',
-            title: 'Expense',
+            label: 'Cash flow statement',
             text:
-              'Recognized on the income statement in the current period, reducing current earnings.',
+              'Cash flow from investing includes a $60 CapEx outflow.',
           },
           {
-            number: 'CAP',
-            title: 'Capitalize',
+            label: 'Balance sheet cash',
             text:
-              'Record the spending as an asset on the balance sheet and recognize expense over future periods, often through depreciation or amortization.',
+              'Cash decreases by $60.',
+          },
+          {
+            label: 'Balance sheet PP&E',
+            text:
+              'PP&E increases by $60 initially.',
+          },
+          {
+            label: 'Income statement today',
+            text:
+              'There is generally no immediate $60 operating expense solely because the equipment was purchased.',
+          },
+          {
+            label: 'Future periods',
+            text:
+              'Depreciation expense gradually reduces the book value of the asset and lowers EBIT.',
           },
         ],
-        plainTitle: 'Cash still leaves',
-        plainText:
-          'Capitalizing a purchase does not mean it was free. CapEx is still generally a cash outflow, usually shown in cash flow from investing.',
+        takeaway:
+          'CapEx changes the form of an asset from cash into a long-lived operating asset, then depreciation recognizes cost over time.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'MAINTENANCE VS. GROWTH',
+        title: 'Not all CapEx serves the same purpose.',
+        paragraphs: [
+          'Maintenance CapEx is spending needed to keep the existing business operating at roughly its current capability.',
+          'Growth CapEx is spending intended to increase capacity, enter markets, or support expansion.',
+          'Companies do not always report a perfectly clean split, so analysts often need judgment.',
+          'The distinction matters because a business requiring heavy ongoing maintenance investment may convert EBITDA into cash less efficiently.',
+        ],
+        calloutTitle: 'Why bankers care',
+        callout:
+          'Two companies with identical EBITDA can have very different cash generation if one needs much more CapEx.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'COMPARE TWO BUSINESSES',
+        title: 'Same EBITDA, different cash needs.',
+        scenario:
+          'Company A and Company B each generate $100 of EBITDA. Company A needs $10 of annual CapEx; Company B needs $60.',
+        workedSteps: [
+          {
+            label: 'Company A',
+            text:
+              'Less cash is required to maintain or expand long-lived assets.',
+          },
+          {
+            label: 'Company B',
+            text:
+              'Much more cash is absorbed by capital spending.',
+          },
+          {
+            label: 'Implication',
+            text:
+              'The same EBITDA does not imply the same cash generation.',
+          },
+        ],
+        takeaway:
+          'Capital intensity is one reason analysts look beyond EBITDA.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CLASSIFICATION CHECK',
         title:
-          'A company buys a new $50 million factory. Which treatment is most typical at purchase?',
+          'Where does a cash purchase of new equipment normally appear on the cash flow statement?',
         options: [
-          'Expense the full $50 million through operating expenses immediately',
-          'Record a long-term asset and show the cash purchase in investing cash flow',
-          'Record $50 million of revenue',
-          'Increase accounts receivable',
+          'Cash Flow from Investing',
+          'Cash Flow from Financing',
+          'Revenue',
+          'Deferred Revenue',
         ],
-        correctIndex: 1,
+        correctIndex: 0,
         correctTitle: 'Right.',
         correctText:
-          'The factory is a long-term asset. Its purchase is generally capitalized, while the cash outflow appears in investing activities.',
-        wrongTitle: 'Think long-term asset.',
+          'CapEx is generally an investing cash outflow.',
+        wrongTitle: 'Think long-lived asset purchase.',
         wrongText:
-          'Long-lived productive assets are generally capitalized rather than fully expensed immediately.',
+          'Purchasing PP&E is an investment in long-term operating assets and therefore usually belongs in CFI.',
+        reviewConcepts: ['capex', 'cashFlowFromInvesting'],
       },
       {
-        type: 'fill',
-        eyebrow: 'VOCABULARY CHECK',
+        type: 'written',
+        eyebrow: 'EXPLAIN THE DIFFERENCE',
         title:
-          'Recording a long-term expenditure as an asset rather than immediately expensing it is called ______.',
-        answer: 'capitalizing',
-        alternatives: [
-          'capitalizing',
-          'capitalization',
-          'capitalize',
-          'capitalized',
-        ],
-        hint: 'Same root word as capital expenditure.',
-        successText:
-          'Exactly. Capitalizing a cost records it as an asset that is generally expensed over future periods.',
+          'Why can two companies with the same EBITDA generate very different amounts of cash?',
+        body:
+          'Use capital expenditures as one reason.',
+        placeholder:
+          'One company may need to spend much more cash on...',
+        modelAnswer:
+          'Two companies can have the same EBITDA but different cash generation if one needs much more capital expenditure to maintain or grow its assets, because CapEx uses cash even though it is not deducted in EBITDA.',
+        reviewConcepts: ['ebitda', 'capex', 'cashFlow'],
+        rubric: {
+          criteria: [
+            {
+              id: 'capex',
+              label:
+                'identify different capital-expenditure needs',
+              keywords: [
+                'capex',
+                'capital expenditure',
+                'equipment',
+                'assets',
+                'maintenance',
+                'investment',
+              ],
+            },
+            {
+              id: 'cash',
+              label:
+                'explain that CapEx uses cash even though EBITDA does not deduct it',
+              keywords: [
+                'cash',
+                'cash flow',
+                'uses cash',
+                'spend',
+                'outflow',
+                'ebitda',
+                'not included',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
-        title: 'CapEx affects cash immediately but earnings over time.',
+        title: 'You now understand the cash side of long-lived assets.',
         body:
-          'Next we move to another major source of cash-flow differences: working capital.',
+          'Next we move to day-to-day operating assets and liabilities through working capital.',
         takeaway:
-          'CapEx is investment in long-term assets, usually recorded as an asset and reflected as an investing cash outflow.',
+          'CapEx uses cash immediately, creates or improves long-lived assets, and affects earnings later through depreciation.',
       },
     ],
   },
@@ -829,84 +1502,151 @@ export const accountingLessons = [
     id: 'working-capital',
     title: 'Working Capital',
     summary:
-      'Receivables, inventory, payables, and why growth can consume cash.',
+      'Learn how receivables, inventory, and payables can turn accounting profit into more or less cash.',
+    concepts: [
+      'workingCapital',
+      'accountsReceivable',
+      'inventory',
+      'accountsPayable',
+      'cashFlowFromOperations',
+    ],
+    prerequisites: ['accountsReceivable', 'accountsPayable', 'cashFlowStatement'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'CASH HIDES HERE',
-        title: 'Working capital captures short-term operating assets and liabilities.',
+        eyebrow: 'THE CASH TIED UP IN OPERATIONS',
+        title: 'A profitable sale does not always produce cash immediately.',
         body:
-          'For banking and modeling, the most useful concept is usually operating net working capital rather than simply all current assets minus all current liabilities.',
-        noteTitle: 'Know the intuition',
+          'Day-to-day operating accounts can temporarily absorb or release cash. Working capital is the framework bankers use to think about those timing effects.',
+        noteTitle: 'Focus on operating accounts',
         note:
-          'An increase in operating net working capital is generally a use of cash. A decrease is generally a source of cash.',
+          'In banking analysis, [[workingCapital|working capital]] often focuses on short-term operating assets and liabilities rather than simply every current balance-sheet account.',
       },
       {
         type: 'concept',
-        eyebrow: 'THE MAJOR ACCOUNTS',
-        title: 'Some operating accounts tie up cash. Others preserve it.',
+        eyebrow: 'THREE ACCOUNTS TO KNOW FIRST',
+        title: 'Receivables, inventory, and payables drive the intuition.',
         body:
-          'Think about whether cash has already been collected or paid.',
+          'Ask whether each account represents cash the business has not yet collected, cash already spent, or cash payment delayed.',
         cards: [
           {
             number: 'AR',
             title: 'Accounts Receivable',
             text:
-              'Customers owe the company money. Higher receivables generally mean more cash is tied up waiting to be collected.',
+              'Revenue earned but customer cash not yet collected. More AR generally ties up cash.',
           },
           {
             number: 'INV',
             title: 'Inventory',
             text:
-              'The company has spent money on products or materials that have not yet been sold.',
+              'Cash invested in goods or materials that have not yet been sold. More inventory generally ties up cash.',
           },
           {
             number: 'AP',
             title: 'Accounts Payable',
             text:
-              'The company owes suppliers money. Higher payables generally mean the company has delayed a cash payment.',
+              'Supplier obligations not yet paid. More AP generally preserves cash for longer.',
           },
         ],
-        plainTitle: 'Cash-flow intuition',
+        plainTitle: 'Cash intuition',
         plainText:
-          'More operating assets usually consume cash. More operating liabilities usually provide cash, all else equal.',
+          'Operating assets usually use cash when they increase. Operating liabilities usually provide cash when they increase.',
       },
       {
-        type: 'mcq',
-        eyebrow: 'QUICK CHECK',
-        title:
-          'Accounts receivable increases by $20 million because customers have not paid yet. What is the general cash-flow impact?',
-        options: [
-          'Source of cash',
-          'Use of cash',
-          'No possible relationship to cash',
-          'Always financing cash flow',
+        type: 'worked',
+        eyebrow: 'ACCOUNTS RECEIVABLE',
+        title: 'AR increases by $20.',
+        scenario:
+          'The company recognized revenue, but customers are taking longer to pay.',
+        workedSteps: [
+          {
+            label: 'Income statement',
+            text:
+              'Revenue and profit may already reflect the sales.',
+          },
+          {
+            label: 'Cash reality',
+            text:
+              'The company has not collected $20 of that amount yet.',
+          },
+          {
+            label: 'Cash flow statement',
+            text:
+              'An increase in AR is generally a $20 use of cash in CFO.',
+          },
         ],
-        correctIndex: 1,
-        correctTitle: 'Exactly.',
-        correctText:
-          'Revenue may have been recognized, but the company has not collected the cash. The increase in receivables is therefore generally a use of cash.',
-        wrongTitle: 'Follow the cash.',
-        wrongText:
-          'Higher receivables mean more money is still sitting with customers rather than in the company’s bank account.',
+        takeaway:
+          'Higher receivables can make accounting earnings look stronger than the cash actually collected.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'ACCOUNTS PAYABLE',
+        title: 'AP increases by $15.',
+        scenario:
+          'The company received goods or services but has not yet paid suppliers.',
+        workedSteps: [
+          {
+            label: 'Obligation',
+            text:
+              'The company owes suppliers $15 more.',
+          },
+          {
+            label: 'Cash reality',
+            text:
+              'Because payment has been delayed, the company still holds that $15 of cash.',
+          },
+          {
+            label: 'Cash flow statement',
+            text:
+              'An increase in AP is generally a $15 source of cash in CFO.',
+          },
+        ],
+        takeaway:
+          'Operating liabilities can temporarily fund the business by delaying cash payments.',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'WORKING-CAPITAL CASH EFFECT',
         title:
-          'Operating current assets are $180 million and operating current liabilities are $120 million. What is operating net working capital?',
-        answer: 60,
+          'AR increases by $30, inventory increases by $10, and AP increases by $15. What is the net cash impact from these changes?',
+        answer: -25,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter cash impact; use a negative number for cash use',
         explanation:
-          '$180 million of operating current assets − $120 million of operating current liabilities = $60 million of operating net working capital.',
+          'AR uses $30, inventory uses $10, and AP provides $15. Net cash impact = −$30 − $10 + $15 = −$25.',
+        reviewConcepts: [
+          'accountsReceivable',
+          'inventory',
+          'accountsPayable',
+          'workingCapital',
+        ],
+      },
+      {
+        type: 'mcq',
+        eyebrow: 'DIRECTION CHECK',
+        title:
+          'All else equal, what does an increase in accounts receivable usually do to operating cash flow?',
+        options: [
+          'Reduces operating cash flow',
+          'Increases operating cash flow',
+          'Has no possible cash effect',
+          'Automatically increases debt',
+        ],
+        correctIndex: 0,
+        correctTitle: 'Correct.',
+        correctText:
+          'More AR means more revenue has not yet been collected in cash, so the increase generally reduces CFO.',
+        wrongTitle: 'Ask whether customers paid yet.',
+        wrongText:
+          'An increase in receivables represents cash the company is still waiting to collect.',
+        reviewConcepts: ['accountsReceivable', 'cashFlowFromOperations'],
       },
       {
         type: 'complete',
-        title: 'Working capital explains why earnings and cash can diverge.',
+        title: 'Working capital now has a cash-flow meaning.',
         body:
-          'Next we look at a particularly important working-capital liability: deferred revenue.',
+          'Next we focus on one especially important timing account: deferred revenue.',
         takeaway:
           'Increases in operating assets generally use cash, while increases in operating liabilities generally provide cash.',
       },
@@ -917,79 +1657,153 @@ export const accountingLessons = [
     id: 'deferred-revenue',
     title: 'Deferred Revenue',
     summary:
-      'What happens when a customer pays before the company earns the revenue.',
+      'Understand what happens when customers pay before the company earns the revenue.',
+    concepts: ['deferredRevenue', 'cash', 'revenue', 'liability', 'cashFlowFromOperations'],
+    prerequisites: ['accrualAccounting', 'cash', 'revenue'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'CASH FIRST, REVENUE LATER',
-        title: 'Deferred revenue begins with the company getting paid early.',
+        eyebrow: 'CASH BEFORE REVENUE',
+        title: 'Sometimes the customer pays first and the company performs later.',
         body:
-          'If a customer pays before the company has delivered the promised product or service, the company generally cannot recognize all of that amount as revenue yet.',
+          'Subscription businesses, airlines, event companies, and many other businesses can receive cash before they have fully earned the related revenue.',
         noteTitle: 'Why it is a liability',
         note:
-          'The company has the cash, but it still owes the customer a product or service.',
+          '[[deferredRevenue|Deferred revenue]] represents an obligation to provide goods or services in the future.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'ONE-YEAR SUBSCRIPTION',
+        title: 'A customer prepays $1,200 for twelve months of service.',
+        scenario:
+          'Assume the company receives all cash on day one and earns revenue evenly over twelve months.',
+        workedSteps: [
+          {
+            label: 'Day 1 cash',
+            text:
+              'Cash increases by $1,200.',
+          },
+          {
+            label: 'Day 1 liability',
+            text:
+              'Deferred revenue increases by $1,200 because the company still owes twelve months of service.',
+          },
+          {
+            label: 'After one month',
+            text:
+              'The company earns $100 of revenue.',
+          },
+          {
+            label: 'After one month balance sheet',
+            text:
+              'Deferred revenue falls by $100 to $1,100.',
+          },
+          {
+            label: 'New cash?',
+            text:
+              'No new cash is required when that $100 of revenue is recognized because the customer already paid.',
+          },
+        ],
+        takeaway:
+          'Deferred revenue turns previously collected cash into revenue as the company performs its obligation.',
       },
       {
         type: 'concept',
-        eyebrow: 'THE SEQUENCE',
-        title: 'Cash and revenue occur at different times.',
+        eyebrow: 'COMPARE THE TWO TIMING ACCOUNTS',
+        title: 'Accounts receivable and deferred revenue are opposites in timing.',
         body:
-          'This is a classic accrual-accounting timing difference.',
+          'Both relate to revenue, but the order of revenue and cash is reversed.',
         cards: [
           {
-            number: '1',
-            title: 'Customer Pays',
+            number: 'AR',
+            title: 'Accounts Receivable',
             text:
-              'Cash increases and deferred revenue increases as a liability.',
+              'Revenue first, cash later. The company is owed money.',
           },
           {
-            number: '2',
-            title: 'Company Performs',
+            number: 'DR',
+            title: 'Deferred Revenue',
             text:
-              'Deferred revenue decreases and revenue is recognized on the income statement.',
+              'Cash first, revenue later. The company owes service or product.',
           },
         ],
-        plainTitle: 'Common example',
+        plainTitle: 'Shortcut',
         plainText:
-          'A software customer pays for a one-year subscription upfront. The company receives the cash immediately but generally recognizes the revenue over the service period.',
+          'AR = customer owes company. Deferred revenue = company owes customer performance.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'BALANCE-SHEET CHECK',
         title:
-          'A customer prepays $1,200 for a one-year service contract before any service has been delivered. What generally increases immediately?',
+          'Why is deferred revenue normally recorded as a liability?',
         options: [
-          'Cash and deferred revenue',
-          'Revenue only',
-          'Accounts receivable only',
-          'Debt and interest expense',
+          'Because the company has received cash but still owes goods or services',
+          'Because the customer owes the company money',
+          'Because it represents equipment',
+          'Because it is always bank debt',
         ],
         correctIndex: 0,
-        correctTitle: 'Correct.',
+        correctTitle: 'Exactly.',
         correctText:
-          'The company receives cash but still owes the service, creating deferred revenue.',
-        wrongTitle: 'Remember the obligation.',
+          'The cash arrived, but the company still has an obligation to perform.',
+        wrongTitle: 'Think about who owes what.',
         wrongText:
-          'Receiving cash does not necessarily mean revenue has already been earned.',
+          'Deferred revenue reflects the company’s obligation to deliver future goods or services.',
+        reviewConcepts: ['deferredRevenue', 'liability'],
       },
       {
-        type: 'fill',
-        eyebrow: 'CLASSIFY IT',
+        type: 'written',
+        eyebrow: 'EXPLAIN THE TIMING',
         title:
-          'Deferred revenue is generally recorded as a ______ on the balance sheet.',
-        answer: 'liability',
-        alternatives: ['liability'],
-        hint: 'The company still owes something to the customer.',
-        successText:
-          'Exactly. Deferred revenue represents an obligation to provide goods or services in the future.',
+          'Why can deferred revenue increase cash without increasing revenue by the same amount immediately?',
+        body:
+          'Explain what the company has received and what it still owes.',
+        placeholder:
+          'The company receives the cash now, but...',
+        modelAnswer:
+          'The company receives customer cash upfront, but it has not yet earned all of the revenue because it still owes future goods or services. The unearned amount stays as a liability until the company performs.',
+        reviewConcepts: ['deferredRevenue', 'cash', 'revenue'],
+        rubric: {
+          criteria: [
+            {
+              id: 'cash',
+              label:
+                'recognize that customer cash is received upfront',
+              keywords: [
+                'cash',
+                'paid',
+                'prepaid',
+                'upfront',
+                'receive',
+                'received',
+              ],
+            },
+            {
+              id: 'notearned',
+              label:
+                'explain that the revenue is not yet fully earned because service or product is still owed',
+              keywords: [
+                'not earned',
+                'unearned',
+                'owe',
+                'owed',
+                'service',
+                'future',
+                'perform',
+                'deliver',
+                'liability',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
-        title: 'Cash collection does not automatically equal revenue recognition.',
+        title: 'Deferred revenue is now a timing story rather than a vocabulary word.',
         body:
-          'Next we look at another item that reduces accounting profit without requiring the same amount of current cash: stock-based compensation.',
+          'Next we look at another non-cash accounting item with major interview relevance: stock-based compensation.',
         takeaway:
-          'Deferred revenue is a liability created when cash is received before the related revenue has been earned.',
+          'Deferred revenue arises when cash arrives before the related revenue is earned.',
       },
     ],
   },
@@ -998,74 +1812,131 @@ export const accountingLessons = [
     id: 'stock-based-compensation',
     title: 'Stock-Based Compensation',
     summary:
-      'Why paying employees with equity still creates an expense and potential dilution.',
+      'Why paying employees with equity can reduce earnings without using current-period cash.',
+    concepts: ['stockBasedCompensation', 'equity', 'cashFlowFromOperations', 'shareholder'],
+    prerequisites: ['equity', 'cashFlowStatement', 'netIncome'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'NON-CASH, BUT NOT FREE',
-        title: 'Companies can compensate employees with equity as well as cash.',
+        eyebrow: 'PAYING WITH EQUITY',
+        title: 'Compensation does not have to be paid entirely in cash.',
         body:
-          'Stock-based compensation, or SBC, is generally recognized as an expense even though it does not require an equivalent current-period cash payment.',
-        noteTitle: 'Important nuance',
+          'Companies can compensate employees with stock, restricted stock units, options, and other equity awards. Accounting still recognizes compensation expense even though the company may not pay the same amount of cash in that period.',
+        noteTitle: 'The concept',
         note:
-          'Calling SBC “non-cash” does not mean it has no economic cost. Issuing equity can dilute existing shareholders.',
+          '[[stockBasedCompensation|Stock-based compensation]], or SBC, is employee compensation delivered through equity awards.',
       },
       {
-        type: 'concept',
-        eyebrow: 'TWO EFFECTS',
-        title: 'SBC affects both profitability and ownership.',
-        body:
-          'That is why analysts care about it.',
-        cards: [
+        type: 'worked',
+        eyebrow: 'THREE-STATEMENT INTUITION',
+        title: 'A company records $10 of stock-based compensation expense.',
+        scenario:
+          'Ignore taxes and other changes.',
+        workedSteps: [
           {
-            number: 'IS',
-            title: 'Income Statement',
+            label: 'Income statement',
             text:
-              'Stock-based compensation is recognized as an expense and therefore reduces accounting earnings.',
+              'Compensation expense reduces operating income and net income by $10.',
           },
           {
-            number: 'CFS',
-            title: 'Cash Flow Statement',
+            label: 'Cash flow statement',
             text:
-              'Because the expense itself is non-cash, it is generally added back in the operating cash flow reconciliation.',
+              'Because the accounting expense did not require a $10 current-period cash payment, the $10 is generally added back in CFO under the indirect method.',
           },
           {
-            number: 'SH',
-            title: 'Shareholders',
+            label: 'Equity',
             text:
-              'Equity compensation can increase diluted share count and reduce existing shareholders’ ownership percentage.',
+              'The equity award affects shareholders’ equity and can increase the share count over time depending on the award.',
           },
         ],
-        plainTitle: 'Do not say this',
-        plainText:
-          '“SBC does not matter because it is non-cash” is poor reasoning. Cash timing and economic cost are not the same thing.',
+        takeaway:
+          'SBC can reduce accounting earnings without reducing current-period cash by the same amount.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'NON-CASH DOES NOT MEAN FREE',
+        title: 'Shareholders can still bear an economic cost.',
+        paragraphs: [
+          'If a company issues additional shares to employees, existing shareholders can own a smaller percentage of the company than they otherwise would.',
+          'That effect is called dilution.',
+          'This is why analysts should be careful with the phrase “non-cash expense.” Non-cash does not mean no economic consequence.',
+          'In valuation, companies with heavy SBC often require careful treatment of share count and ongoing compensation economics.',
+        ],
+        calloutTitle: 'Key distinction',
+        callout:
+          'Cash cost and economic cost are not always the same thing.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CASH-FLOW CHECK',
         title:
-          'Why might investors still care about stock-based compensation even though it is non-cash?',
+          'Why is stock-based compensation commonly added back on the indirect cash flow statement?',
         options: [
-          'It can dilute existing shareholders',
-          'It automatically eliminates taxes',
-          'It is always recorded as debt',
-          'It increases cash revenue',
+          'Because it reduced net income without an equivalent current-period cash outflow',
+          'Because employees were not compensated',
+          'Because it increases revenue',
+          'Because it is debt repayment',
         ],
         correctIndex: 0,
-        correctTitle: 'Exactly.',
+        correctTitle: 'Correct.',
         correctText:
-          'Equity compensation can increase the diluted share count, spreading ownership across more shares.',
-        wrongTitle: 'Think ownership.',
+          'The expense lowers accounting earnings, but the company did not pay the same amount of cash in the period.',
+        wrongTitle: 'Focus on the current-period cash effect.',
         wrongText:
-          'The key economic issue is potential shareholder dilution.',
+          'SBC is an accounting compensation expense that often does not require equivalent cash payment when recorded.',
+        reviewConcepts: ['stockBasedCompensation', 'cashFlowFromOperations'],
+      },
+      {
+        type: 'written',
+        eyebrow: 'ECONOMIC THINKING',
+        title:
+          'Why is it misleading to say stock-based compensation “does not matter” just because it is non-cash?',
+        body:
+          'Think about employee compensation and shareholder dilution.',
+        placeholder:
+          'It may not use current cash, but...',
+        modelAnswer:
+          'Stock-based compensation still pays employees and can dilute existing shareholders by increasing the share count, so it can have a real economic cost even though it does not require the same amount of current-period cash.',
+        reviewConcepts: ['stockBasedCompensation', 'shareholder', 'equity'],
+        rubric: {
+          criteria: [
+            {
+              id: 'noncash',
+              label:
+                'recognize that the expense may not use current-period cash',
+              keywords: [
+                'non cash',
+                'non-cash',
+                'cash',
+                'current cash',
+                'outflow',
+              ],
+            },
+            {
+              id: 'economic',
+              label:
+                'identify a real economic consequence such as compensation or dilution',
+              keywords: [
+                'dilution',
+                'dilute',
+                'shares',
+                'share count',
+                'employees',
+                'compensation',
+                'economic cost',
+                'ownership',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
-        title: 'Non-cash does not mean economically irrelevant.',
+        title: 'You now understand why non-cash accounting items still require judgment.',
         body:
-          'Next we look at taxes, where accounting timing differences can create another layer of balance sheet complexity.',
+          'Next we apply the same timing logic to taxes.',
         takeaway:
-          'SBC reduces accounting profit, is generally added back as a non-cash operating adjustment, and may dilute shareholders.',
+          'SBC reduces accounting earnings, is often added back in CFO, and can still impose an economic cost through compensation and dilution.',
       },
     ],
   },
@@ -1074,80 +1945,116 @@ export const accountingLessons = [
     id: 'taxes',
     title: 'Taxes & Deferred Taxes',
     summary:
-      'Tax expense, cash taxes, and why timing differences create deferred tax balances.',
+      'Separate accounting tax expense from cash taxes and understand why timing differences create deferred taxes.',
+    concepts: ['taxExpense', 'deferredTax', 'netIncome', 'depreciation'],
+    prerequisites: ['netIncome', 'depreciation', 'cashFlowStatement'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'KEEP THE FIRST PASS SIMPLE',
-        title: 'Accounting tax expense and actual cash taxes do not always match.',
+        eyebrow: 'BOOK TAX VS. CASH TAX',
+        title: 'Tax expense and cash taxes do not always match.',
         body:
-          'Differences between financial accounting rules and tax rules can cause income or expenses to be recognized at different times.',
-        noteTitle: 'Do not overdo this yet',
+          'Accounting rules and tax rules can recognize the same economic item at different times. That can make reported tax expense differ from the cash actually paid to tax authorities during the period.',
+        noteTitle: 'The key idea',
         note:
-          'For early interviews, understand the intuition behind deferred taxes before worrying about complicated tax accounting.',
+          '[[deferredTax|Deferred taxes]] arise from timing differences between book accounting and tax accounting.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'START WITH TAX EXPENSE',
+        title: 'Tax expense helps move pre-tax income to net income.',
+        paragraphs: [
+          'A simplified income statement calculates pre-tax income before recording [[taxExpense|tax expense]].',
+          'Subtracting tax expense helps reach net income.',
+          'But the accounting tax expense does not necessarily equal the current-period cash tax payment.',
+          'Differences can come from depreciation methods, recognition timing, loss carryforwards, and many other tax rules.',
+        ],
+        calloutTitle: 'Do not assume',
+        callout:
+          'Income-statement tax expense and cash taxes paid are related, but they are not automatically identical.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'TIMING DIFFERENCE EXAMPLE',
+        title: 'Tax depreciation is faster than book depreciation.',
+        scenario:
+          'Assume a company records $20 of book depreciation but can deduct $40 for tax purposes this year.',
+        workedSteps: [
+          {
+            label: 'Book accounting',
+            text:
+              'Only $20 of depreciation reduces book pre-tax income.',
+          },
+          {
+            label: 'Tax accounting',
+            text:
+              '$40 of depreciation reduces taxable income this year.',
+          },
+          {
+            label: 'Cash taxes today',
+            text:
+              'Taxable income is lower, so current cash taxes may be lower than book tax expense would suggest.',
+          },
+          {
+            label: 'Deferred tax',
+            text:
+              'Because the difference is timing-based and may reverse later, a deferred tax balance can be created.',
+          },
+        ],
+        takeaway:
+          'Deferred taxes often reflect “different timing now, reversal later” rather than a permanent free tax benefit.',
       },
       {
         type: 'concept',
-        eyebrow: 'TIMING DIFFERENCES',
-        title: 'Deferred taxes move tax effects across periods.',
+        eyebrow: 'TWO BROAD TYPES',
+        title: 'Deferred tax assets and liabilities reflect future tax effects.',
         body:
-          'Two balance sheet concepts come up most often.',
+          'You do not need every tax rule yet. Understand the direction.',
         cards: [
           {
             number: 'DTA',
             title: 'Deferred Tax Asset',
             text:
-              'Generally represents a potential future tax benefit created by timing differences or certain tax attributes.',
+              'Generally represents a future tax benefit created by certain timing differences or tax attributes.',
           },
           {
             number: 'DTL',
             title: 'Deferred Tax Liability',
             text:
-              'Generally represents taxes expected to be paid in the future because of timing differences.',
+              'Generally represents future taxes expected from timing differences that reduced taxes earlier.',
           },
         ],
-        plainTitle: 'The intuition',
+        plainTitle: 'Use judgment',
         plainText:
-          'Deferred taxes often exist because book accounting and tax accounting recognize the same economics in different periods.',
-      },
-      {
-        type: 'number',
-        eyebrow: 'MINI CALCULATION',
-        title:
-          'Pre-tax income is $100 million and the simplified tax rate is 25%. Ignoring deferred-tax complications, what is tax expense?',
-        answer: 25,
-        tolerance: 0.01,
-        suffix: 'million',
-        placeholder: 'Enter the answer in millions',
-        explanation:
-          '$100 million × 25% = $25 million of tax expense.',
+          'The classification depends on how book and tax treatment differ and how that difference is expected to reverse.',
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'CONCEPT CHECK',
         title:
-          'What is the simplest reason a deferred tax balance can exist?',
+          'What is the best reason book tax expense can differ from cash taxes paid?',
         options: [
-          'Book accounting and tax accounting can recognize items at different times',
-          'Taxes never require cash',
-          'Revenue is always tax-free',
-          'All companies use identical tax rules worldwide',
+          'Accounting and tax rules can recognize items at different times',
+          'Cash taxes never exist',
+          'Tax expense is always revenue',
+          'The balance sheet removes all taxes',
         ],
         correctIndex: 0,
         correctTitle: 'Exactly.',
         correctText:
-          'Timing differences between book and tax accounting can create future tax benefits or obligations.',
-        wrongTitle: 'Think timing.',
+          'Different recognition timing under book and tax rules can create differences between reported tax expense and cash taxes.',
+        wrongTitle: 'Think timing differences.',
         wrongText:
-          'Deferred taxes often arise because the same economic item is recognized in different periods for book and tax purposes.',
+          'Book accounting and tax accounting do not always recognize the same item in the same period.',
+        reviewConcepts: ['taxExpense', 'deferredTax'],
       },
       {
         type: 'complete',
-        title: 'You have enough tax accounting for the foundation layer.',
+        title: 'You now have the right intuition for deferred taxes.',
         body:
-          'Next we move to assets created frequently during acquisitions: goodwill and intangible assets.',
+          'Next we move into acquisition accounting and two balance-sheet items that show up constantly in M&A: goodwill and intangible assets.',
         takeaway:
-          'Book tax expense and cash taxes can differ, creating deferred tax assets or liabilities through timing differences.',
+          'Tax expense and cash taxes can differ because book and tax rules may recognize the same economics at different times.',
       },
     ],
   },
@@ -1156,80 +2063,119 @@ export const accountingLessons = [
     id: 'goodwill-intangibles',
     title: 'Goodwill & Intangible Assets',
     summary:
-      'What acquisition accounting puts on the balance sheet beyond physical assets.',
+      'Understand the acquisition-accounting logic behind goodwill, identifiable intangibles, amortization, and impairment.',
+    concepts: ['goodwill', 'intangibleAsset', 'amortization', 'impairment', 'asset'],
+    prerequisites: ['asset', 'amortization', 'balanceSheet'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'M&A STARTS SHOWING UP',
-        title: 'A company can own valuable assets that you cannot physically touch.',
+        eyebrow: 'M&A ACCOUNTING',
+        title: 'An acquisition can create new balance-sheet assets.',
         body:
-          'Brands, patents, customer relationships, software, and other identifiable intangibles can carry significant economic value.',
+          'When one company buys another, the purchase price may exceed the target’s existing book equity. Accounting then allocates the purchase price across identifiable assets and liabilities, with the residual often becoming goodwill.',
         noteTitle: 'Why bankers care',
         note:
-          'Goodwill and intangible assets become especially important in acquisition accounting and M&A analysis.',
+          '[[goodwill|Goodwill]] and [[intangibleAsset|intangible assets]] appear frequently in M&A models, purchase accounting, and transaction analysis.',
       },
       {
-        type: 'concept',
-        eyebrow: 'DO NOT CONFUSE THEM',
-        title: 'Identifiable intangibles and goodwill are different.',
-        body:
-          'Both can arise in acquisitions, but they represent different things.',
-        cards: [
+        type: 'teach',
+        eyebrow: 'IDENTIFIABLE INTANGIBLES',
+        title: 'Some valuable assets are not physical.',
+        paragraphs: [
+          'A company can own valuable patents, trademarks, technology, customer relationships, licenses, and other non-physical resources.',
+          'In an acquisition, certain identifiable intangible assets can be recognized separately at fair value.',
+          'Finite-lived intangible assets may then create [[amortization|amortization]] expense over time.',
+          'The exact accounting can become technical, but the economic idea is simple: some of the purchase price is assigned to identifiable non-physical assets.',
+        ],
+        calloutTitle: 'Physical vs. non-physical',
+        callout:
+          'PP&E is tangible. Patents and customer relationships are examples of intangible assets.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'CALCULATE GOODWILL',
+        title: 'A buyer pays $500 for a company.',
+        scenario:
+          'Assume the fair value of identifiable assets acquired is $420 and liabilities assumed are $120.',
+        workedSteps: [
           {
-            number: 'IA',
-            title: 'Identifiable Intangibles',
+            label: 'Identifiable net assets',
             text:
-              'Separately identifiable non-physical assets such as patents, trademarks, technology, and customer relationships.',
+              '$420 of assets − $120 of liabilities = $300.',
           },
           {
-            number: 'GW',
-            title: 'Goodwill',
+            label: 'Purchase price',
             text:
-              'The residual acquisition value remaining after allocating the purchase price to identifiable assets and liabilities at fair value.',
+              'The buyer paid $500.',
+          },
+          {
+            label: 'Residual',
+            text:
+              '$500 − $300 = $200.',
+          },
+          {
+            label: 'Goodwill',
+            text:
+              'The simplified goodwill created is $200.',
           },
         ],
-        plainTitle: 'Simplified goodwill formula',
-        plainText:
-          'Goodwill ≈ Purchase Price − Fair Value of Identifiable Net Assets Acquired.',
+        takeaway:
+          'Goodwill is the residual purchase price after accounting for the fair value of identifiable net assets acquired.',
+      },
+      {
+        type: 'teach',
+        eyebrow: 'WHAT GOODWILL REPRESENTS',
+        title: 'Goodwill often reflects value that is difficult to separate into individual assets.',
+        paragraphs: [
+          'A buyer may pay for an assembled workforce, brand strength, expected synergies, strategic positioning, or other benefits that are not separately recorded as identifiable assets.',
+          'Those expectations can contribute to goodwill.',
+          'Goodwill is not normally amortized in the same way as a finite-lived intangible asset under U.S. GAAP.',
+          'Instead, goodwill is tested for [[impairment|impairment]], which can create a large non-cash write-down if the acquired business performs worse than expected.',
+        ],
+        calloutTitle: 'Do not over-interpret',
+        callout:
+          'Goodwill is an accounting residual created in acquisition accounting, not a direct market-value estimate of “brand.”',
       },
       {
         type: 'number',
-        eyebrow: 'MINI CALCULATION',
+        eyebrow: 'GOODWILL CHECK',
         title:
-          'A buyer pays $600 million for a company whose identifiable assets are worth $500 million and liabilities are $150 million. Using the simplified formula, how much goodwill is created?',
-        answer: 250,
+          'A buyer pays $900. Identifiable assets are valued at $760 and liabilities assumed are $210. What is simplified goodwill?',
+        answer: 350,
         tolerance: 0.01,
         suffix: 'million',
-        placeholder: 'Enter the answer in millions',
+        placeholder: 'Enter goodwill',
         explanation:
-          'Identifiable net assets = $500 million − $150 million = $350 million. $600 million purchase price − $350 million = $250 million of goodwill.',
+          'Net identifiable assets = $760 − $210 = $550. Goodwill = $900 − $550 = $350.',
+        reviewConcepts: ['goodwill', 'intangibleAsset'],
       },
       {
         type: 'mcq',
-        eyebrow: 'QUICK CHECK',
+        eyebrow: 'ACCOUNTING CHECK',
         title:
-          'Which asset is most likely to be an identifiable intangible?',
+          'What can happen if an acquired business performs much worse than expected and its goodwill is no longer supported?',
         options: [
-          'Cash',
-          'Inventory',
-          'Customer relationships',
-          'Accounts payable',
+          'The company may record a goodwill impairment',
+          'Goodwill automatically becomes cash',
+          'Revenue must equal goodwill',
+          'All debt disappears',
         ],
-        correctIndex: 2,
+        correctIndex: 0,
         correctTitle: 'Correct.',
         correctText:
-          'Customer relationships can be separately identifiable intangible assets in acquisition accounting.',
-        wrongTitle: 'Think non-physical value.',
+          'A goodwill impairment can reduce the carrying value of goodwill and create a non-cash expense.',
+        wrongTitle: 'Think asset write-down.',
         wrongText:
-          'Customer relationships are non-physical assets that may be separately identified and valued.',
+          'When carrying value is no longer supported, accounting may require an impairment charge.',
+        reviewConcepts: ['goodwill', 'impairment'],
       },
       {
         type: 'complete',
-        title: 'Goodwill is the acquisition residual, not a pile of mysterious cash.',
+        title: 'You now understand the accounting logic beneath two major M&A balance-sheet items.',
         body:
-          'We finish the module by turning financial-statement numbers into useful ratios.',
+          'The final lesson turns financial-statement numbers into ratios that help compare companies.',
         takeaway:
-          'Identifiable intangible assets can be separately valued, while goodwill represents residual acquisition value beyond identifiable net assets.',
+          'Acquisitions can create identifiable intangible assets and goodwill, and those assets can later create amortization or impairment effects.',
       },
     ],
   },
@@ -1238,109 +2184,192 @@ export const accountingLessons = [
     id: 'financial-ratios',
     title: 'Basic Financial Ratios',
     summary:
-      'Margins, liquidity, and leverage metrics that turn raw statements into analysis.',
+      'Turn raw statement numbers into margins, liquidity measures, and leverage metrics that are easier to compare.',
+    concepts: [
+      'grossMargin',
+      'operatingMargin',
+      'netMargin',
+      'currentRatio',
+      'debtToEbitda',
+      'ebitda',
+    ],
+    prerequisites: ['incomeStatement', 'balanceSheet', 'ebitda'],
     steps: [
       {
         type: 'intro',
-        eyebrow: 'NUMBERS NEED CONTEXT',
-        title: '$100 million of profit means very little by itself.',
+        eyebrow: 'FROM NUMBERS TO RELATIONSHIPS',
+        title: 'A dollar amount means more when you put it in context.',
         body:
-          'Ratios let you compare companies of different sizes and analyze profitability, liquidity, and leverage more intelligently.',
-        noteTitle: 'Do not memorize 50 ratios',
+          'A company earning $100 of profit might sound strong, but the interpretation changes if revenue is $200 versus $10 billion. Ratios help scale financial information and make comparisons more meaningful.',
+        noteTitle: 'Ratios are tools, not answers',
         note:
-          'For banking, focus on ratios that actually help you understand operating performance, financial position, and valuation.',
+          'A ratio can highlight a relationship. You still need business context to understand why the ratio is high, low, improving, or deteriorating.',
       },
       {
         type: 'concept',
-        eyebrow: 'THREE USEFUL CATEGORIES',
-        title: 'Ratios answer different types of questions.',
+        eyebrow: 'PROFITABILITY MARGINS',
+        title: 'Margins tell you how much of each revenue dollar remains at different levels.',
         body:
-          'Start with a few intuitive examples.',
+          'Divide the relevant profit measure by revenue.',
         cards: [
           {
-            number: 'M',
-            title: 'Margins',
+            number: 'GM',
+            title: 'Gross Margin',
             text:
-              'Measure profitability relative to revenue, such as gross margin, EBITDA margin, or net margin.',
+              'Gross Profit ÷ Revenue. Shows what remains after direct product or service costs.',
           },
           {
-            number: 'LQ',
-            title: 'Liquidity',
+            number: 'OM',
+            title: 'Operating Margin',
             text:
-              'Measures the company’s ability to meet shorter-term obligations, such as the current ratio.',
+              'EBIT ÷ Revenue. Shows what remains after core operating costs.',
           },
           {
-            number: 'LV',
-            title: 'Leverage',
+            number: 'NM',
+            title: 'Net Margin',
             text:
-              'Measures debt relative to the company’s earnings or capital structure, such as Debt / EBITDA.',
+              'Net Income ÷ Revenue. Shows bottom-line accounting profit as a percentage of sales.',
           },
         ],
-        plainTitle: 'Why ratios help',
+        plainTitle: 'Interpretation',
         plainText:
-          'A $200 million EBITDA business looks very different if it has $500 million of revenue versus $5 billion of revenue.',
+          'Higher is not automatically better in every context, but margins are useful for comparing profitability across time and peers.',
+      },
+      {
+        type: 'worked',
+        eyebrow: 'MARGIN WALKTHROUGH',
+        title: 'A company has $1,000 of revenue.',
+        scenario:
+          'Gross profit is $400, EBIT is $150, and net income is $90.',
+        workedSteps: [
+          {
+            label: 'Gross margin',
+            text:
+              '$400 ÷ $1,000 = 40%.',
+          },
+          {
+            label: 'Operating margin',
+            text:
+              '$150 ÷ $1,000 = 15%.',
+          },
+          {
+            label: 'Net margin',
+            text:
+              '$90 ÷ $1,000 = 9%.',
+          },
+          {
+            label: 'What the gaps show',
+            text:
+              'The fall from 40% to 15% reflects operating costs below gross profit. The fall from 15% to 9% reflects interest, taxes, and other below-operating items.',
+          },
+        ],
+        takeaway:
+          'A margin is not just a percentage; it helps show where revenue is being consumed by different costs.',
+      },
+      {
+        type: 'concept',
+        eyebrow: 'LIQUIDITY AND LEVERAGE',
+        title: 'Other ratios answer different questions.',
+        body:
+          'Two common beginner examples are the current ratio and Debt / EBITDA.',
+        cards: [
+          {
+            number: 'CR',
+            title: 'Current Ratio',
+            text:
+              'Current Assets ÷ Current Liabilities. A simple short-term liquidity measure.',
+          },
+          {
+            number: 'D/E',
+            title: 'Debt / EBITDA',
+            text:
+              'Debt ÷ EBITDA. A common shorthand for leverage relative to operating earnings.',
+          },
+        ],
+        plainTitle: 'Be careful',
+        plainText:
+          'Neither ratio tells the whole story. Liquidity depends on asset quality and timing, while leverage depends on cash flow, interest cost, debt terms, and business risk.',
       },
       {
         type: 'number',
-        eyebrow: 'MARGIN CALCULATION',
+        eyebrow: 'MARGIN CHECK',
         title:
-          'A company generates $200 million of EBITDA on $1 billion of revenue. What is its EBITDA margin as a percentage?',
-        answer: 20,
+          'A company has $500 of revenue and $125 of EBIT. What is operating margin?',
+        answer: 25,
         tolerance: 0.01,
         suffix: '%',
-        placeholder: 'Enter the percentage',
+        placeholder: 'Enter operating margin',
         explanation:
-          '$200 million ÷ $1,000 million = 20% EBITDA margin.',
+          '$125 ÷ $500 = 25%.',
+        reviewConcepts: ['operatingMargin', 'ebit'],
       },
       {
         type: 'number',
-        eyebrow: 'LEVERAGE CALCULATION',
+        eyebrow: 'LEVERAGE CHECK',
         title:
-          'A company has $600 million of debt and $200 million of EBITDA. What is Debt / EBITDA?',
+          'A company has $450 of debt and $150 of EBITDA. What is Debt / EBITDA?',
         answer: 3,
         tolerance: 0.01,
         suffix: 'x',
-        placeholder: 'Enter the multiple',
+        placeholder: 'Enter leverage ratio',
         explanation:
-          '$600 million of debt ÷ $200 million of EBITDA = 3.0x Debt / EBITDA.',
-      },
-      {
-        type: 'mcq',
-        eyebrow: 'FINAL CHECK',
-        title:
-          'If two companies have identical EBITDA but Company A generates that EBITDA on much less revenue, what does Company A generally have?',
-        options: [
-          'A higher EBITDA margin',
-          'A lower EBITDA margin',
-          'Automatically more debt',
-          'Automatically less cash',
-        ],
-        correctIndex: 0,
-        correctTitle: 'Exactly.',
-        correctText:
-          'Generating the same EBITDA from less revenue means a greater percentage of revenue is converted into EBITDA.',
-        wrongTitle: 'Think percentage.',
-        wrongText:
-          'Margin measures profit relative to revenue. Same profit with lower revenue means the margin is higher.',
+          '$450 ÷ $150 = 3.0x Debt / EBITDA.',
+        reviewConcepts: ['debtToEbitda', 'debt', 'ebitda'],
       },
       {
         type: 'written',
-        eyebrow: 'PUT IT TOGETHER',
+        eyebrow: 'ANALYST THINKING',
         title:
-          'Why are margins often more useful than looking at profit alone?',
+          'Why is a ratio more useful when compared with the company’s history or with similar companies?',
         body:
-          'Think about comparing companies of different sizes.',
-        placeholder: 'Margins are useful because...',
+          'Explain why context matters.',
+        placeholder:
+          'A ratio by itself tells you..., but comparing it can show...',
         modelAnswer:
-          'Margins show profitability relative to revenue, making it easier to compare operating performance across companies of different sizes.',
+          'A ratio by itself shows a relationship but does not tell you whether that relationship is strong or weak. Comparing it with prior periods or similar companies helps show trends, differences in business economics, and whether performance is improving or deteriorating.',
+        reviewConcepts: ['grossMargin', 'operatingMargin', 'netMargin', 'debtToEbitda'],
+        rubric: {
+          criteria: [
+            {
+              id: 'standalone',
+              label:
+                'recognize that a standalone ratio has limited context',
+              keywords: [
+                'context',
+                'alone',
+                'by itself',
+                'limited',
+                'meaning',
+                'strong',
+                'weak',
+              ],
+            },
+            {
+              id: 'comparison',
+              label:
+                'explain that comparison reveals trends or differences',
+              keywords: [
+                'compare',
+                'comparison',
+                'history',
+                'trend',
+                'peers',
+                'similar companies',
+                'improve',
+                'deteriorate',
+                'change',
+              ],
+            },
+          ],
+        },
       },
       {
         type: 'complete',
         title: 'Accounting Foundations complete.',
         body:
-          'You now understand the three statements, accrual accounting, EBITDA, D&A, CapEx, working capital, deferred revenue, SBC, taxes, goodwill, and basic ratios. Next we make the statements move.',
+          'You can now read the core statements, separate accrual profit from cash, follow major statement links, understand common non-cash items, and interpret basic financial ratios.',
         takeaway:
-          'The next step is not more definitions. It is learning how individual transactions flow through all three financial statements.',
+          'You are ready for Three-Statement Linkages, where individual accounting changes are walked through across all three statements step by step.',
       },
     ],
   },
