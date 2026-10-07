@@ -11,7 +11,7 @@ const toId = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-const makeLesson = ({ moduleId, index, title, summary, context }) => ({
+const makeLesson = ({ moduleId, index, title, summary, context, options, correctIndex }) => ({
   id: `${moduleId}-${String(index + 1).padStart(2, '0')}-${toId(title)}`,
   title,
   summary,
@@ -72,13 +72,8 @@ const makeLesson = ({ moduleId, index, title, summary, context }) => ({
       type: 'mcq',
       eyebrow: 'CHECK YOUR UNDERSTANDING',
       title: `Which statement best captures ${title}?`,
-      options: [
-        summary,
-        'The best approach is to improvise each time so the process never becomes repeatable.',
-        'This only matters after you already have an offer or have been promoted above the analyst level.',
-        'The safest approach is to copy someone else’s wording or process without understanding why it works.',
-      ],
-      correctIndex: 0,
+      options,
+      correctIndex,
       correctTitle: 'Exactly.',
       correctText: summary,
       wrongTitle: 'Go back to the principle.',
@@ -101,15 +96,24 @@ const makeModule = ([id, number, title, subtitle, description, context, topics])
   title,
   subtitle,
   description,
-  lessons: topics.map(([lessonTitle, summary], index) =>
-    makeLesson({
+  lessons: topics.map(([lessonTitle, summary], index) => {
+    const distractors = [1, 2, 3].map(
+      (offset) => topics[(index + offset) % topics.length][1],
+    )
+    const correctIndex = index % 4
+    const options = [...distractors]
+    options.splice(correctIndex, 0, summary)
+
+    return makeLesson({
       moduleId: id,
       index,
       title: lessonTitle,
       summary,
       context,
-    }),
-  ),
+      options,
+      correctIndex,
+    })
+  }),
 })
 
 export const careerAdvancedModules = [
