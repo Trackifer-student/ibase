@@ -606,6 +606,9 @@ function App() {
   }
 
   const openLearn = () => {
+    setActiveTrack(null)
+    setActiveModule(null)
+    setActiveLesson(null)
     setPage('learn')
     scrollTop()
   }
