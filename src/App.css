@@ -1586,3 +1586,362 @@ main {
     margin-bottom: 10px;
   }
 }
+
+
+/* Quiz system */
+
+.quiz-shell {
+  width: min(900px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 64px 0 96px;
+  text-align: center;
+}
+
+.quiz-topline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+  text-align: left;
+}
+
+.quiz-topline h1 {
+  margin: 6px 0 0;
+}
+
+.quiz-topline > span {
+  font-weight: 700;
+  color: #64748b;
+}
+
+.quiz-question-card {
+  margin-top: 28px;
+  text-align: left;
+}
+
+.quiz-question-card > .primary-button {
+  margin-top: 24px;
+}
+
+.quiz-context {
+  margin: 0 0 12px;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quiz-score {
+  margin: 18px 0 8px;
+  font-size: clamp(2.25rem, 6vw, 4.25rem);
+  font-weight: 850;
+  letter-spacing: -0.05em;
+}
+
+.quiz-review-list {
+  display: grid;
+  gap: 14px;
+  margin: 34px 0;
+  text-align: left;
+}
+
+.quiz-review-card {
+  padding: 22px;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.quiz-review-card.correct {
+  text-align: center;
+}
+
+.quiz-review-card > span {
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quiz-review-card h3 {
+  margin: 8px 0 12px;
+}
+
+.quiz-ladder {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, minmax(150px, 0.75fr));
+  gap: 14px;
+  margin-top: 42px;
+  padding-top: 34px;
+  border-top: 1px solid #dbe4f0;
+  text-align: left;
+}
+
+.quiz-ladder > div {
+  padding-right: 16px;
+}
+
+.quiz-ladder h2,
+.track-exam-card h2 {
+  margin: 5px 0 8px;
+}
+
+.quiz-ladder p,
+.track-exam-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.65;
+}
+
+.quiz-ladder > button {
+  display: flex;
+  min-height: 126px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quiz-ladder > button:hover {
+  transform: translateY(-2px);
+  border-color: #8fb4ff;
+}
+
+.quiz-ladder > button span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.track-exam-card {
+  max-width: 780px;
+  margin: 48px auto 0;
+  padding: 30px;
+  border: 1px solid #cfe0ff;
+  border-radius: 22px;
+  background: #f7faff;
+  text-align: center;
+}
+
+.track-exam-card .primary-button {
+  margin-top: 22px;
+}
+
+.final-exam-card {
+  margin-top: 34px;
+}
+
+/* Interview prep */
+
+.interview-page,
+.ai-page {
+  text-align: center;
+}
+
+.interview-hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 30px 0 44px;
+}
+
+.interview-hero-actions span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.interview-topic-grid,
+.ai-lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  text-align: left;
+}
+
+.interview-topic-grid article,
+.ai-lesson-grid article {
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid #dbe4f0;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.interview-topic-grid article > span,
+.ai-lesson-grid article > span {
+  color: #4f7cff;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.interview-topic-grid h2,
+.ai-lesson-grid h2 {
+  margin: 12px 0 10px;
+}
+
+.interview-topic-grid p,
+.ai-lesson-grid p {
+  flex: 1;
+  margin: 0 0 18px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.interview-topic-grid button,
+.ai-lesson-grid button {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #2f65d9;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.practice-answer {
+  width: 100%;
+  min-height: 170px;
+  margin: 22px 0;
+  padding: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.practice-keypoints {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #cfe0ff;
+  border-radius: 16px;
+  background: #f7faff;
+}
+
+.practice-keypoints > span {
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.practice-keypoints ul {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+
+.practice-keypoints li + li {
+  margin-top: 8px;
+}
+
+.practice-rating {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* AI for Banking */
+
+.ai-lesson-page {
+  width: min(860px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 64px 0 96px;
+  text-align: center;
+}
+
+.ai-section-stack {
+  display: grid;
+  gap: 16px;
+  margin-top: 36px;
+  text-align: left;
+}
+
+.ai-section-stack article {
+  padding: 24px;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.ai-section-stack h2 {
+  margin: 0 0 10px;
+}
+
+.ai-section-stack p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.ai-checklist {
+  margin-top: 22px;
+  padding: 24px;
+  border-radius: 18px;
+  background: #0f172a;
+  color: #fff;
+  text-align: left;
+}
+
+.ai-checklist > span {
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ai-checklist ul {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+
+.ai-checklist li + li {
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .quiz-ladder {
+    grid-template-columns: 1fr;
+  }
+
+  .interview-topic-grid,
+  .ai-lesson-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .quiz-shell,
+  .ai-lesson-page {
+    width: min(100% - 24px, 900px);
+    padding-top: 36px;
+  }
+
+  .quiz-topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .interview-topic-grid,
+  .ai-lesson-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-rating {
+    flex-direction: column;
+  }
+}
