@@ -1,5 +1,7 @@
 import { accountingLessons } from './modules/accounting'
 import { financeZeroModules } from './modules/financeZero'
+import { technicalAdvancedById } from './modules/technicalAdvanced'
+import { careerAdvancedById } from './modules/careerAdvanced'
 const whatIsIBLessons = [
   {
     id: 'what-bankers-do',
@@ -1298,78 +1300,14 @@ export const tracks = [
     'Learn the income statement, balance sheet, cash flow statement, and the logic connecting them.',
   lessons: accountingLessons,
 },
-      {
-        id: 'three-statements',
-        number: '04',
-        title: 'Three-Statement Linkages',
-        subtitle: 'Where memorization stops working.',
-        description:
-          'Walk through depreciation, CapEx, working capital, debt, impairments, and other interview favorites.',
-        lessonCount: 12,
-      },
-      {
-        id: 'corp-finance',
-        number: '05',
-        title: 'Corporate Finance Foundations',
-        subtitle: 'Why money today is worth more than money later.',
-        description:
-          'Time value of money, risk, return, capital structure, CAPM, beta, and WACC.',
-        lessonCount: 12,
-      },
-      {
-        id: 'ev-equity',
-        number: '06',
-        title: 'Enterprise vs. Equity Value',
-        subtitle: "The interviewer's favorite way to confuse you.",
-        description:
-          'Market cap, debt, cash, preferred stock, NCI, diluted shares, and the EV bridge.',
-        lessonCount: 12,
-      },
-      {
-        id: 'valuation',
-        number: '07',
-        title: 'Valuation',
-        subtitle: "So... what's this company actually worth?",
-        description:
-          'Trading comps, precedent transactions, multiples, private-company valuation, and football fields.',
-        lessonCount: 16,
-      },
-      {
-        id: 'dcf',
-        number: '08',
-        title: 'DCF',
-        subtitle: "You'll get asked this. A lot.",
-        description:
-          'Free cash flow, WACC, terminal value, discounting, sensitivities, and the full DCF walkthrough.',
-        lessonCount: 24,
-      },
-      {
-        id: 'ma',
-        number: '09',
-        title: 'M&A',
-        subtitle: 'What happens when one company buys another.',
-        description:
-          'Accretion/dilution, synergies, purchase accounting, goodwill, consideration, and merger mechanics.',
-        lessonCount: 20,
-      },
-      {
-        id: 'lbo',
-        number: '10',
-        title: 'LBO Fundamentals',
-        subtitle: 'Useful. Just not the first thing to obsess over.',
-        description:
-          'Debt, sources & uses, returns, IRR, MOIC, paper LBOs, and what makes a good LBO candidate.',
-        lessonCount: 12,
-      },
-      {
-        id: 'markets',
-        number: '11',
-        title: 'Markets & Deals',
-        subtitle: 'Sound like someone who actually follows finance.',
-        description:
-          'Rates, inflation, the Fed, equity and credit markets, recent transactions, and discussing a deal intelligently.',
-        lessonCount: 14,
-      },
+      technicalAdvancedById['three-statements'],
+      technicalAdvancedById['corp-finance'],
+      technicalAdvancedById['ev-equity'],
+      technicalAdvancedById['valuation'],
+      technicalAdvancedById['dcf'],
+      technicalAdvancedById['ma'],
+      technicalAdvancedById['lbo'],
+      technicalAdvancedById['markets'],
     ],
   },
 
@@ -1382,33 +1320,9 @@ export const tracks = [
     description:
       'Learn how recruiting works, how to network without sounding transactional, and how to tell your story.',
     modules: [
-      {
-        id: 'recruiting-process',
-        number: '12',
-        title: 'IB Recruiting',
-        subtitle: 'Know the process before it starts moving fast.',
-        description:
-          'Timelines, internships, HireVues, first rounds, Superdays, bank types, and choosing groups.',
-        lessonCount: 11,
-      },
-      {
-        id: 'networking',
-        number: '13',
-        title: 'Networking',
-        subtitle: 'How to talk to bankers like a normal person.',
-        description:
-          'Cold emails, alumni outreach, coffee chats, follow-ups, referrals, and the mistakes that kill conversations.',
-        lessonCount: 12,
-      },
-      {
-        id: 'resume-story',
-        number: '14',
-        title: 'Resume & Story',
-        subtitle: 'Make your experience make sense.',
-        description:
-          'Resume bullets, your story, why IB, why this bank, behavioral questions, and building a story bank.',
-        lessonCount: 20,
-      },
+      careerAdvancedById['recruiting-process'],
+      careerAdvancedById['networking'],
+      careerAdvancedById['resume-story'],
     ],
   },
 
@@ -1421,42 +1335,10 @@ export const tracks = [
     description:
       'Learn the tools, habits, and workflows that become important once you actually sit down at the desk.',
     modules: [
-      {
-        id: 'excel',
-        number: '15',
-        title: 'Excel for Banking',
-        subtitle: 'Speed matters more than you think.',
-        description:
-          'Navigation, formatting, formulas, shortcuts, sensitivities, model structure, and error checking.',
-        lessonCount: 15,
-      },
-      {
-        id: 'modeling',
-        number: '16',
-        title: 'Financial Modeling',
-        subtitle: 'Turn the concepts into an actual model.',
-        description:
-          'Revenue builds, schedules, three-statement models, DCFs, merger models, and introductory LBO modeling.',
-        lessonCount: 15,
-      },
-      {
-        id: 'powerpoint',
-        number: '17',
-        title: 'PowerPoint & Pitchbooks',
-        subtitle: 'Yes, alignment actually matters.',
-        description:
-          'Pitchbook structure, charts, valuation pages, formatting, footnotes, proofreading, and storytelling.',
-        lessonCount: 13,
-      },
-      {
-        id: 'analyst-work',
-        number: '18',
-        title: 'Working Like an Analyst',
-        subtitle: 'The stuff nobody puts in the textbook.',
-        description:
-          'Attention to detail, sourcing, version control, comments, research, prioritization, and checking your work.',
-        lessonCount: 14,
-      },
+      careerAdvancedById['excel'],
+      careerAdvancedById['modeling'],
+      careerAdvancedById['powerpoint'],
+      careerAdvancedById['analyst-work'],
     ],
   },
 ]
