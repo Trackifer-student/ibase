@@ -1586,3 +1586,624 @@ main {
     margin-bottom: 10px;
   }
 }
+
+
+/* ==========================================
+   Multi-level quizzes
+========================================== */
+
+.module-quiz-card,
+.track-exam-card,
+.cumulative-exam-card,
+.interview-review-card {
+  margin: 34px auto 0;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  border: 1px solid #dce5f0;
+  border-radius: 18px;
+  background: #f8fbff;
+}
+
+.module-quiz-card h2,
+.track-exam-card h2,
+.cumulative-exam-card h2,
+.interview-review-card h2 {
+  margin: 3px 0 8px;
+  color: #14213d;
+  font-size: 25px;
+}
+
+.module-quiz-card p,
+.track-exam-card p,
+.cumulative-exam-card p,
+.interview-review-card p {
+  max-width: 700px;
+  margin: 0;
+  color: #6b788a;
+  line-height: 1.6;
+}
+
+.cumulative-exam-card {
+  max-width: 900px;
+  margin-top: 34px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.quiz-page {
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 46px 0 100px;
+}
+
+.quiz-intro,
+.quiz-results,
+.quiz-empty {
+  text-align: center;
+}
+
+.quiz-intro > h1,
+.quiz-results > h1,
+.quiz-empty > h1 {
+  max-width: 780px;
+  margin: 8px auto 16px;
+  color: #12213a;
+  font-size: clamp(38px, 6vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -2.5px;
+}
+
+.quiz-level-grid {
+  margin-top: 42px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.quiz-level-card {
+  min-height: 240px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #dfe6ef;
+  border-radius: 18px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.quiz-level-card:hover {
+  transform: translateY(-2px);
+  border-color: #b8cae5;
+  box-shadow: 0 12px 30px rgba(29, 47, 76, 0.07);
+}
+
+.quiz-level-card > span {
+  color: #2f6fed;
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.quiz-level-card > strong {
+  margin-top: 20px;
+  color: #152842;
+  font-size: 24px;
+}
+
+.quiz-level-card > p {
+  margin: 10px 0 20px;
+  color: #6d7a8b;
+  line-height: 1.6;
+}
+
+.quiz-level-card > small {
+  margin-top: auto;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f1f5fa;
+  color: #50637a;
+  font-weight: 750;
+}
+
+.quiz-runner-top,
+.interview-runner-top {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #7d8998;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quiz-question-card,
+.interview-question-card {
+  margin-top: 28px;
+  padding: 34px;
+  border: 1px solid #dfe6ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 12px 38px rgba(29, 47, 76, 0.05);
+}
+
+.quiz-question-meta,
+.interview-question-meta {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #718096;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quiz-question-card > h1,
+.interview-question-card > h1 {
+  margin: 0;
+  color: #172742;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+.quiz-answer-grid {
+  margin: 30px 0;
+  display: grid;
+  gap: 11px;
+}
+
+.quiz-answer {
+  width: 100%;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid #dfe6ef;
+  border-radius: 13px;
+  background: #fbfcfe;
+  color: #33465f;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quiz-answer:hover,
+.quiz-answer.selected {
+  border-color: #8eb0e4;
+  background: #f1f6ff;
+}
+
+.quiz-answer > span {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #eaf1fc;
+  color: #2f6fed;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.quiz-answer > p {
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 650;
+}
+
+.quiz-nav-actions,
+.quiz-result-actions,
+.interview-self-grade,
+.ai-course-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-score {
+  width: 210px;
+  height: 210px;
+  margin: 36px auto 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 12px solid #edf3ff;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.quiz-score > strong {
+  color: #1b3f72;
+  font-size: 50px;
+  letter-spacing: -2px;
+}
+
+.quiz-score > span {
+  color: #7c8796;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quiz-result-actions {
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.quiz-review {
+  margin-top: 54px;
+  text-align: left;
+}
+
+.quiz-review-heading {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.quiz-review-heading h2 {
+  margin: 4px 0 0;
+  color: #172742;
+  font-size: 30px;
+}
+
+.quiz-review article {
+  margin-bottom: 12px;
+  padding: 22px;
+  border: 1px solid #e1e6ed;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.quiz-review article > span {
+  color: #2f6fed;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.quiz-review h3 {
+  margin: 8px 0 14px;
+  color: #273a54;
+}
+
+.quiz-review p {
+  color: #667487;
+  line-height: 1.55;
+}
+
+.quiz-your-answer {
+  color: #865f54 !important;
+}
+
+.quiz-correct-answer {
+  color: #426b56 !important;
+}
+
+/* ==========================================
+   Interview Prep
+========================================== */
+
+.interview-page {
+  padding-bottom: 100px;
+}
+
+.interview-shell {
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding-top: 46px;
+}
+
+.interview-intro {
+  text-align: center;
+}
+
+.interview-intro h1 {
+  max-width: 850px;
+  margin: 8px auto 16px;
+  color: #12213a;
+  font-size: clamp(42px, 7vw, 68px);
+  line-height: 1;
+  letter-spacing: -2.8px;
+}
+
+.interview-mode-grid {
+  margin-top: 42px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.interview-mode-grid article {
+  padding: 28px;
+  border: 1px solid #dfe6ef;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.interview-mode-grid article > span {
+  color: #2f6fed;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.interview-mode-grid h2 {
+  margin: 22px 0 8px;
+  color: #172742;
+  font-size: 28px;
+}
+
+.interview-mode-grid p {
+  color: #6b788a;
+  line-height: 1.6;
+}
+
+.interview-mode-grid label {
+  margin-top: 16px;
+  display: grid;
+  gap: 7px;
+  color: #43576f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.interview-mode-grid select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dce3ec;
+  border-radius: 10px;
+  background: #fbfcfe;
+  color: #32465e;
+}
+
+.interview-mode-grid .primary-button {
+  margin-top: 22px;
+}
+
+.mock-breakdown {
+  margin-top: 23px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-breakdown span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #f1f5fa;
+  color: #52677e;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.interview-review-card {
+  margin-top: 18px;
+}
+
+.interview-hint {
+  margin: 16px 0 0;
+  color: #7d8897;
+  line-height: 1.6;
+}
+
+.interview-answer {
+  width: 100%;
+  min-height: 190px;
+  margin: 26px 0 14px;
+  padding: 18px;
+  resize: vertical;
+  border: 1px solid #dce3ec;
+  border-radius: 14px;
+  background: #fbfcfe;
+  color: #263950;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.interview-answer:focus {
+  outline: none;
+  border-color: #8fb0e5;
+  box-shadow: 0 0 0 4px rgba(47, 111, 237, 0.08);
+}
+
+.interview-answer-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.interview-benchmark {
+  margin-top: 25px;
+  padding: 24px;
+  border: 1px solid #dbe5f0;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.interview-benchmark > p:not(.eyebrow) {
+  color: #4e6177;
+  line-height: 1.75;
+}
+
+.interview-key-points {
+  margin-top: 20px;
+  padding-top: 18px;
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid #e0e7ef;
+}
+
+.interview-key-points strong {
+  margin-bottom: 4px;
+  color: #273c56;
+}
+
+.interview-key-points span {
+  color: #5f7185;
+  font-size: 14px;
+}
+
+.interview-self-grade {
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.interview-self-grade p {
+  margin-right: auto;
+  color: #68788b;
+  font-weight: 700;
+}
+
+.interview-summary {
+  text-align: center;
+}
+
+.interview-summary h1 {
+  margin: 8px 0;
+  color: #172742;
+  font-size: clamp(38px, 6vw, 62px);
+  letter-spacing: -2px;
+}
+
+.interview-summary > p {
+  color: #68788b;
+}
+
+/* ==========================================
+   AI for Banking course
+========================================== */
+
+.ai-course-page {
+  width: min(1040px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 64px 0 100px;
+}
+
+.ai-course-page > .eyebrow,
+.ai-course-page > h1,
+.ai-course-page > .page-intro {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.ai-course-page > h1 {
+  max-width: 850px;
+  margin-top: 8px;
+  margin-bottom: 18px;
+  color: #12213a;
+  font-size: clamp(42px, 7vw, 70px);
+  line-height: 1;
+  letter-spacing: -3px;
+}
+
+.ai-course-actions {
+  max-width: 430px;
+  margin: 30px auto 0;
+  justify-content: center;
+}
+
+.ai-lesson-grid {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.ai-lesson-grid article {
+  min-height: 200px;
+  padding: 23px;
+  border: 1px solid #e0e6ee;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ai-lesson-grid article > span {
+  color: #2f6fed;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.ai-lesson-grid h2 {
+  margin: 20px 0 8px;
+  color: #1c304b;
+  font-size: 20px;
+}
+
+.ai-lesson-grid p {
+  margin: 0;
+  color: #6d7b8d;
+  line-height: 1.6;
+}
+
+.ai-course-page .wide-note {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==========================================
+   New responsive behavior
+========================================== */
+
+@media (max-width: 820px) {
+  .quiz-level-grid,
+  .ai-lesson-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .module-quiz-card,
+  .track-exam-card,
+  .interview-review-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .interview-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-question-card,
+  .interview-question-card {
+    padding: 24px 20px;
+  }
+
+  .quiz-nav-actions,
+  .quiz-result-actions,
+  .interview-answer-tools,
+  .interview-self-grade,
+  .ai-course-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quiz-nav-actions button,
+  .quiz-result-actions button,
+  .interview-answer-tools button,
+  .interview-self-grade button,
+  .ai-course-actions button,
+  .module-quiz-card button,
+  .track-exam-card button,
+  .interview-review-card button {
+    width: 100%;
+  }
+
+  .interview-self-grade p {
+    margin-right: 0;
+    text-align: center;
+  }
+}
