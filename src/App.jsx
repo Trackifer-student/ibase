@@ -560,6 +560,26 @@ function App() {
     })
   }
 
+  const markConceptReviewed = (conceptId) => {
+    setNeedsReview((current) =>
+      current.filter((id) => id !== conceptId),
+    )
+  }
+
+  const curriculumLessonIds = [
+    ...new Set(
+      tracks.flatMap((track) =>
+        (track.modules || []).flatMap((module) =>
+          (module.lessons || []).map((lesson) => lesson.id),
+        ),
+      ),
+    ),
+  ]
+
+  const completedCurriculumCount = curriculumLessonIds.filter(
+    (lessonId) => completedLessons.includes(lessonId),
+  ).length
+
   /*
     Written-answer grading
   */
@@ -680,6 +700,85 @@ function App() {
   }
 
   /*
+    REVIEW QUEUE
+  */
+
+  if (page === 'review') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome}>
+            IBase
+          </button>
+
+          <button className="back-button" onClick={openLearn}>
+            ← Back to curriculum
+          </button>
+        </nav>
+
+        <section className="review-page">
+          <p className="eyebrow">REVIEW QUEUE</p>
+          <h1>Turn weak concepts into strong ones.</h1>
+          <p className="page-intro">
+            Missed quiz concepts, repeated written-answer misses, and skipped
+            questions land here. Review the refresher, then clear the concept
+            when it feels comfortable.
+          </p>
+
+          {needsReview.length ? (
+            <div className="review-grid">
+              {needsReview.map((conceptId) => {
+                const concept = concepts[conceptId]
+
+                if (!concept) return null
+
+                return (
+                  <article key={conceptId}>
+                    <span>NEEDS REVIEW</span>
+                    <h2>{concept.name}</h2>
+                    <p>{concept.definition}</p>
+
+                    <div>
+                      <button
+                        className="secondary-button"
+                        onClick={() => setActiveConcept(conceptId)}
+                      >
+                        Open refresher
+                      </button>
+
+                      <button
+                        className="primary-button"
+                        onClick={() => markConceptReviewed(conceptId)}
+                      >
+                        Mark reviewed
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="review-empty">
+              <h2>Your review queue is clear.</h2>
+              <p>
+                Missed concepts from lessons and quizzes will appear here
+                automatically.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {activeConcept && (
+          <ConceptModal
+            conceptId={activeConcept}
+            onClose={() => setActiveConcept(null)}
+          />
+        )}
+      </main>
+    )
+  }
+
+  /*
     QUIZ PAGE
   */
 
@@ -700,6 +799,7 @@ function App() {
           questionBank={quizConfig.questionBank}
           storageKey={quizConfig.storageKey}
           levelCounts={quizConfig.levelCounts}
+          onMissedConcepts={markConceptsForReview}
           onBack={() => {
             setPage(quizConfig.returnPage)
             scrollTop()
@@ -2198,6 +2298,36 @@ function App() {
             important can be refreshed
             along the way.
           </p>
+
+          <div className="learning-dashboard">
+            <article>
+              <span>CURRICULUM PROGRESS</span>
+              <strong>
+                {completedCurriculumCount} / {curriculumLessonIds.length}
+              </strong>
+              <p>lessons completed</p>
+            </article>
+
+            <article>
+              <span>REVIEW QUEUE</span>
+              <strong>{needsReview.length}</strong>
+              <p>concepts to revisit</p>
+              <button
+                onClick={() => {
+                  setPage('review')
+                  scrollTop()
+                }}
+              >
+                Open review queue →
+              </button>
+            </article>
+
+            <article>
+              <span>XP</span>
+              <strong>{xp}</strong>
+              <p>earned on this device</p>
+            </article>
+          </div>
 
           <div className="track-list">
             {tracks.map((track) => (
