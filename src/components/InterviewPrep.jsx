@@ -15,6 +15,7 @@ function InterviewPrep({ onBack }) {
   const [revealed, setRevealed] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [listening, setListening] = useState(false)
+  const [reviewWeakMode, setReviewWeakMode] = useState(false)
 
   const [weakIds, setWeakIds] = useState(() => {
     try {
@@ -63,6 +64,7 @@ function InterviewPrep({ onBack }) {
   }
 
   const startPractice = () => {
+    setReviewWeakMode(false)
     setScreen('practice')
     pickPracticeQuestion()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -75,6 +77,7 @@ function InterviewPrep({ onBack }) {
 
     if (!pool.length) return
 
+    setReviewWeakMode(true)
     setScreen('practice')
     setCurrentQuestion(shuffle(pool)[0])
     resetAnswer()
@@ -183,14 +186,30 @@ function InterviewPrep({ onBack }) {
       return
     }
 
-    const pool =
-      screen === 'practice' && weakIds.includes(currentQuestion.id)
-        ? interviewQuestions.filter((question) =>
-            weakIds.includes(question.id),
-          )
-        : filteredQuestions
+    if (reviewWeakMode) {
+      const nextWeakIds =
+        rating === 'strong'
+          ? weakIds.filter((id) => id !== currentQuestion.id)
+          : [...new Set([...weakIds, currentQuestion.id])]
 
-    pickPracticeQuestion(pool.length ? pool : filteredQuestions)
+      const pool = interviewQuestions.filter((question) =>
+        nextWeakIds.includes(question.id),
+      )
+
+      if (!pool.length) {
+        setReviewWeakMode(false)
+        setScreen('home')
+        setCurrentQuestion(null)
+        resetAnswer()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+
+      pickPracticeQuestion(pool)
+      return
+    }
+
+    pickPracticeQuestion(filteredQuestions)
   }
 
   if (screen === 'mock-summary') {
@@ -250,7 +269,13 @@ function InterviewPrep({ onBack }) {
       <section className="interview-page">
         <div className="interview-shell">
           <div className="interview-runner-top">
-            <button className="back-button" onClick={() => setScreen('home')}>
+            <button
+              className="back-button"
+              onClick={() => {
+                setReviewWeakMode(false)
+                setScreen('home')
+              }}
+            >
               ← Exit
             </button>
 
