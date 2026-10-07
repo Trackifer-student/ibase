@@ -15,6 +15,7 @@ export const extractModuleQuestions = (module) => {
         options: step.options,
         correctIndex: step.correctIndex,
         explanation: step.correctText || step.wrongText || '',
+        reviewConcepts: step.reviewConcepts || lesson.concepts || [],
       })),
   )
 }
