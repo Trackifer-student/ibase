@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { tracks } from './data/curriculum'
 import { concepts } from './data/concepts'
 import { gradeWrittenAnswer } from './utils/writtenGrader'
+import { interviewTopics, allInterviewQuestions } from './data/interviewPrep'
+import { aiBankingLessons } from './data/aiBanking'
 import './App.css'
 
 function RichText({ children, onConcept }) {
@@ -88,6 +90,316 @@ function ConceptModal({
         </div>
       </div>
     </div>
+  )
+}
+
+
+const shuffle = (items) => {
+  const copy = [...items]
+
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1))
+    ;[copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]]
+  }
+
+  return copy
+}
+
+const quizQuestionsFromModules = (modules = []) =>
+  modules.flatMap((module) =>
+    (module.lessons || []).flatMap((lesson) =>
+      (lesson.steps || [])
+        .filter((step) => step.type === 'mcq')
+        .map((step) => ({
+          id: `${module.id}-${lesson.id}-${step.title}`,
+          module: module.title,
+          lesson: lesson.title,
+          question: step.title,
+          options: step.options,
+          correctIndex: step.correctIndex,
+          explanation: step.correctText || step.explanation || '',
+        })),
+    ),
+  )
+
+function QuizExperience({ config, onExit }) {
+  const [index, setIndex] = useState(0)
+  const [selected, setSelected] = useState(null)
+  const [answers, setAnswers] = useState([])
+  const [finished, setFinished] = useState(false)
+
+  const question = config.questions[index]
+  const score = answers.filter((answer) => answer.correct).length
+  const total = config.questions.length
+  const percent = total ? Math.round((score / total) * 100) : 0
+
+  const submitAnswer = () => {
+    if (selected === null) return
+
+    const nextAnswer = {
+      question,
+      selected,
+      correct: selected === question.correctIndex,
+    }
+
+    const nextAnswers = [...answers, nextAnswer]
+    setAnswers(nextAnswers)
+
+    if (index >= total - 1) {
+      setFinished(true)
+      return
+    }
+
+    setIndex((current) => current + 1)
+    setSelected(null)
+  }
+
+  if (finished) {
+    const missed = answers.filter((answer) => !answer.correct)
+
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={onExit}>IBase</button>
+          <button className="back-button" onClick={onExit}>← Exit quiz</button>
+        </nav>
+
+        <section className="quiz-shell">
+          <p className="eyebrow">{config.level}</p>
+          <h1>{config.title}</h1>
+          <p className="quiz-score">{score} / {total} · {percent}%</p>
+          <p className="page-intro">
+            {percent >= 80
+              ? 'Strong result. Review anything you missed, then keep moving.'
+              : 'Good diagnostic. Review the misses below before retaking it.'}
+          </p>
+
+          <div className="quiz-review-list">
+            {missed.length === 0 ? (
+              <div className="quiz-review-card correct">
+                <strong>Perfect score.</strong>
+                <p>You did not miss a question.</p>
+              </div>
+            ) : (
+              missed.map((answer) => (
+                <div className="quiz-review-card" key={answer.question.id}>
+                  <span>{answer.question.module}</span>
+                  <h3>{answer.question.question}</h3>
+                  <p>
+                    <strong>Correct answer:</strong>{' '}
+                    {answer.question.options[answer.question.correctIndex]}
+                  </p>
+                  {answer.question.explanation && (
+                    <p>{answer.question.explanation}</p>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+
+          <button className="primary-button" onClick={onExit}>
+            Back to curriculum →
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  return (
+    <main>
+      <nav className="site-nav">
+        <button className="brand-button" onClick={onExit}>IBase</button>
+        <button className="back-button" onClick={onExit}>← Exit quiz</button>
+      </nav>
+
+      <section className="quiz-shell">
+        <div className="quiz-topline">
+          <div>
+            <p className="eyebrow">{config.level}</p>
+            <h1>{config.title}</h1>
+          </div>
+          <span>{index + 1} / {total}</span>
+        </div>
+
+        <div className="progress-track">
+          <div
+            className="progress-fill"
+            style={{ width: `${((index + 1) / total) * 100}%` }}
+          />
+        </div>
+
+        <div className="lesson-card quiz-question-card">
+          <p className="quiz-context">
+            {question.module} · {question.lesson}
+          </p>
+          <h2>{question.question}</h2>
+
+          <div className="answer-list">
+            {question.options.map((option, optionIndex) => (
+              <button
+                key={option}
+                className={
+                  selected === optionIndex
+                    ? 'answer-option selected'
+                    : 'answer-option'
+                }
+                onClick={() => setSelected(optionIndex)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          <button
+            className="primary-button"
+            disabled={selected === null}
+            onClick={submitAnswer}
+          >
+            {index === total - 1 ? 'Finish quiz' : 'Next question →'}
+          </button>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function InterviewPractice({ config, onExit }) {
+  const [index, setIndex] = useState(0)
+  const [answer, setAnswer] = useState('')
+  const [revealed, setRevealed] = useState(false)
+  const [ratings, setRatings] = useState([])
+
+  const item = config.questions[index]
+  const finished = index >= config.questions.length
+
+  if (finished) {
+    const strong = ratings.filter((rating) => rating === 'got-it').length
+
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={onExit}>IBase</button>
+          <button className="back-button" onClick={onExit}>← Interview Prep</button>
+        </nav>
+
+        <section className="quiz-shell">
+          <p className="eyebrow">SELF REVIEW</p>
+          <h1>{config.title} complete.</h1>
+          <p className="quiz-score">{strong} / {ratings.length} felt strong</p>
+          <p className="page-intro">
+            The point is not to pretend a weak answer was fine. Revisit the questions
+            you marked Needs work, tighten the structure, and run them again.
+          </p>
+          <button className="primary-button" onClick={onExit}>
+            Back to Interview Prep →
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  const rateAndContinue = (rating) => {
+    setRatings((current) => [...current, rating])
+    setIndex((current) => current + 1)
+    setAnswer('')
+    setRevealed(false)
+  }
+
+  return (
+    <main>
+      <nav className="site-nav">
+        <button className="brand-button" onClick={onExit}>IBase</button>
+        <button className="back-button" onClick={onExit}>← Exit practice</button>
+      </nav>
+
+      <section className="quiz-shell">
+        <div className="quiz-topline">
+          <div>
+            <p className="eyebrow">{config.mode}</p>
+            <h1>{config.title}</h1>
+          </div>
+          <span>{index + 1} / {config.questions.length}</span>
+        </div>
+
+        <div className="lesson-card">
+          <p className="quiz-context">{item.topic}</p>
+          <h2>{item.question}</h2>
+
+          <textarea
+            className="practice-answer"
+            value={answer}
+            onChange={(event) => setAnswer(event.target.value)}
+            placeholder="Answer like you are speaking to an interviewer..."
+          />
+
+          {!revealed ? (
+            <button
+              className="primary-button"
+              onClick={() => setRevealed(true)}
+            >
+              Reveal strong-answer points
+            </button>
+          ) : (
+            <>
+              <div className="practice-keypoints">
+                <span>Strong answer should cover</span>
+                <ul>
+                  {item.keyPoints.map((point) => <li key={point}>{point}</li>)}
+                </ul>
+              </div>
+
+              <div className="practice-rating">
+                <button
+                  className="secondary-button"
+                  onClick={() => rateAndContinue('needs-work')}
+                >
+                  Needs work
+                </button>
+                <button
+                  className="primary-button"
+                  onClick={() => rateAndContinue('got-it')}
+                >
+                  Got it →
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function AiLessonView({ lesson, onExit }) {
+  return (
+    <main>
+      <nav className="site-nav">
+        <button className="brand-button" onClick={onExit}>IBase</button>
+        <button className="back-button" onClick={onExit}>← AI for Banking</button>
+      </nav>
+
+      <section className="ai-lesson-page">
+        <p className="eyebrow">AI FOR BANKING</p>
+        <h1>{lesson.title}</h1>
+        <p className="page-intro">{lesson.summary}</p>
+
+        <div className="ai-section-stack">
+          {lesson.sections.map(([title, body]) => (
+            <article key={title}>
+              <h2>{title}</h2>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="ai-checklist">
+          <span>Before you use it</span>
+          <ul>
+            {lesson.checklist.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+      </section>
+    </main>
   )
 }
 
@@ -221,6 +533,15 @@ function App() {
     }
   })
 
+  const [activeQuiz, setActiveQuiz] =
+    useState(null)
+
+  const [activePractice, setActivePractice] =
+    useState(null)
+
+  const [activeAiLesson, setActiveAiLesson] =
+    useState(null)
+
   /*
     Persist local data
   */
@@ -285,6 +606,9 @@ function App() {
   }
 
   const openLearn = () => {
+    setActiveTrack(null)
+    setActiveModule(null)
+    setActiveLesson(null)
     setPage('learn')
     scrollTop()
   }
@@ -598,6 +922,93 @@ function App() {
           )}
         </div>
       </div>
+    )
+  }
+
+  const openQuiz = (title, level, modules, count) => {
+    const available = quizQuestionsFromModules(modules)
+    const questions = shuffle(available).slice(
+      0,
+      Math.min(count, available.length),
+    )
+
+    if (!questions.length) return
+
+    setActiveQuiz({
+      title,
+      level,
+      questions,
+    })
+    setPage('quiz')
+    scrollTop()
+  }
+
+  const openTopicPractice = (topic) => {
+    setActivePractice({
+      title: `${topic.title} Practice`,
+      mode: 'TARGETED PRACTICE',
+      questions: shuffle(
+        topic.questions.map(([question, keyPoints], index) => ({
+          id: `${topic.id}-${index}`,
+          topic: topic.title,
+          question,
+          keyPoints,
+        })),
+      ),
+    })
+    setPage('practice')
+    scrollTop()
+  }
+
+  const openMockInterview = () => {
+    setActivePractice({
+      title: 'Full Mock Interview',
+      mode: 'MOCK INTERVIEW',
+      questions: shuffle(allInterviewQuestions).slice(0, 12),
+    })
+    setPage('practice')
+    scrollTop()
+  }
+
+  const openAiLesson = (lesson) => {
+    setActiveAiLesson(lesson)
+    setPage('ai-lesson')
+    scrollTop()
+  }
+
+  if (page === 'quiz' && activeQuiz) {
+    return (
+      <QuizExperience
+        config={activeQuiz}
+        onExit={() => {
+          setPage(activeModule ? 'module' : 'learn')
+          scrollTop()
+        }}
+      />
+    )
+  }
+
+  if (page === 'practice' && activePractice) {
+    return (
+      <InterviewPractice
+        config={activePractice}
+        onExit={() => {
+          setPage('interview')
+          scrollTop()
+        }}
+      />
+    )
+  }
+
+  if (page === 'ai-lesson' && activeAiLesson) {
+    return (
+      <AiLessonView
+        lesson={activeAiLesson}
+        onExit={() => {
+          setPage('ai')
+          scrollTop()
+        }}
+      />
     )
   }
 
@@ -1905,6 +2316,59 @@ function App() {
               ),
             )}
           </div>
+
+          <div className="quiz-ladder">
+            <div>
+              <p className="eyebrow">END-OF-MODULE QUIZZES</p>
+              <h2>Test it at three levels.</h2>
+              <p>
+                Start with recall, then move into a longer module test once the
+                ideas feel automatic.
+              </p>
+            </div>
+
+            <button
+              onClick={() =>
+                openQuiz(
+                  `${activeModule.title} Quick Check`,
+                  'LEVEL 1 · QUICK CHECK',
+                  [activeModule],
+                  5,
+                )
+              }
+            >
+              <span>Level 1</span>
+              <strong>5 questions</strong>
+            </button>
+
+            <button
+              onClick={() =>
+                openQuiz(
+                  `${activeModule.title} Module Quiz`,
+                  'LEVEL 2 · MODULE QUIZ',
+                  [activeModule],
+                  10,
+                )
+              }
+            >
+              <span>Level 2</span>
+              <strong>10 questions</strong>
+            </button>
+
+            <button
+              onClick={() =>
+                openQuiz(
+                  `${activeModule.title} Mastery Test`,
+                  'LEVEL 3 · MASTERY',
+                  [activeModule],
+                  20,
+                )
+              }
+            >
+              <span>Level 3</span>
+              <strong>Up to 20 questions</strong>
+            </button>
+          </div>
         </section>
       </main>
     )
@@ -2007,6 +2471,28 @@ function App() {
               ),
             )}
           </div>
+
+          <div className="track-exam-card">
+            <p className="eyebrow">TRACK EXAM</p>
+            <h2>Mix the modules together.</h2>
+            <p>
+              Longer quizzes remove the chapter-by-chapter cues and make you
+              identify the concept on your own.
+            </p>
+            <button
+              className="primary-button"
+              onClick={() =>
+                openQuiz(
+                  `${activeTrack.title} Exam`,
+                  'TRACK EXAM',
+                  activeTrack.modules.filter((module) => module.lessons),
+                  25,
+                )
+              }
+            >
+              Start 25-question exam →
+            </button>
+          </div>
         </section>
       </main>
     )
@@ -2107,6 +2593,30 @@ function App() {
               assumed.
             </p>
           </div>
+
+          <div className="track-exam-card final-exam-card">
+            <p className="eyebrow">IBASE FINAL EXAM</p>
+            <h2>When you are ready, mix everything.</h2>
+            <p>
+              Forty questions pulled across every live module. This is the
+              highest quiz level on the site.
+            </p>
+            <button
+              className="primary-button"
+              onClick={() =>
+                openQuiz(
+                  'IBase Comprehensive Exam',
+                  'LEVEL 4 · COMPREHENSIVE',
+                  tracks.flatMap((track) =>
+                    track.modules.filter((module) => module.lessons),
+                  ),
+                  40,
+                )
+              }
+            >
+              Start comprehensive exam →
+            </button>
+          </div>
         </section>
       </main>
     )
@@ -2120,81 +2630,44 @@ function App() {
     return (
       <main>
         <nav className="site-nav">
-          <button
-            className="brand-button"
-            onClick={goHome}
-          >
-            IBase
-          </button>
-
-          <button
-            className="back-button"
-            onClick={goHome}
-          >
-            ← Back Home
-          </button>
+          <button className="brand-button" onClick={goHome}>IBase</button>
+          <button className="back-button" onClick={goHome}>← Back Home</button>
         </nav>
 
-        <section className="coming-page">
-          <p className="eyebrow">
-            INTERVIEW PREP
-          </p>
-
-          <h1>
-            Practice like someone is
-            actually across the table.
-          </h1>
-
+        <section className="coming-page interview-page">
+          <p className="eyebrow">INTERVIEW PREP</p>
+          <h1>Practice without the training wheels.</h1>
           <p className="page-intro">
-            Learn the material first.
-            Then use Interview Prep to
-            practice answering without
-            the training wheels.
+            Answer first. Reveal the strong-answer points second. Then mark
+            yourself honestly and repeat the weak areas.
           </p>
 
-          <div className="preview-grid">
-            <article>
-              <span>01</span>
+          <div className="interview-hero-actions">
+            <button className="primary-button" onClick={openMockInterview}>
+              Start 12-question mock interview →
+            </button>
+            <span>No paid AI. No account. Self-review built in.</span>
+          </div>
 
-              <h2>
-                Practice Mode
-              </h2>
-
-              <p>
-                Drill accounting,
-                valuation, DCF,
-                behavioral, markets,
-                and other topics
-                individually.
-              </p>
-            </article>
-
-            <article>
-              <span>02</span>
-
-              <h2>
-                Mock Interview
-              </h2>
-
-              <p>
-                Complete a full
-                interview and eventually
-                receive feedback on your
-                answers.
-              </p>
-            </article>
+          <div className="interview-topic-grid">
+            {interviewTopics.map((topic) => (
+              <article key={topic.id}>
+                <span>{String(topic.questions.length).padStart(2, '0')} QUESTIONS</span>
+                <h2>{topic.title}</h2>
+                <p>{topic.description}</p>
+                <button onClick={() => openTopicPractice(topic)}>
+                  Practice topic →
+                </button>
+              </article>
+            ))}
           </div>
 
           <div className="editorial-note wide-note">
-            <strong>
-              The difference
-            </strong>
-
+            <strong>How to use this</strong>
             <p>
-              Learn IB teaches you.
-              Interview Prep tests
-              whether you can actually
-              use what you learned.
+              Learn IB teaches the concept. Module quizzes test recognition.
+              Interview Prep makes you produce the answer yourself before you
+              see the key points.
             </p>
           </div>
         </section>
@@ -2210,72 +2683,37 @@ function App() {
     return (
       <main>
         <nav className="site-nav">
-          <button
-            className="brand-button"
-            onClick={goHome}
-          >
-            IBase
-          </button>
-
-          <button
-            className="back-button"
-            onClick={goHome}
-          >
-            ← Back Home
-          </button>
+          <button className="brand-button" onClick={goHome}>IBase</button>
+          <button className="back-button" onClick={goHome}>← Back Home</button>
         </nav>
 
-        <section className="coming-page">
-          <p className="eyebrow">
-            AI FOR BANKING
-          </p>
-
-          <h1>
-            Use AI without becoming
-            useless without it.
-          </h1>
-
+        <section className="coming-page ai-page">
+          <p className="eyebrow">AI FOR BANKING</p>
+          <h1>Use AI without outsourcing your judgment.</h1>
           <p className="page-intro">
-            Practical ways to use AI for
-            research, filings, Excel,
-            checking work, and finance
-            workflows — with
-            verification and
-            confidentiality built in.
+            Practical workflows for research, filings, Excel, model checking,
+            presentations, prompting, verification, and confidentiality.
           </p>
 
-          <div className="ai-topic-list">
-            <span>
-              Company research
-            </span>
+          <div className="ai-lesson-grid">
+            {aiBankingLessons.map((lesson, index) => (
+              <article key={lesson.id}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h2>{lesson.title}</h2>
+                <p>{lesson.summary}</p>
+                <button onClick={() => openAiLesson(lesson)}>
+                  Open lesson →
+                </button>
+              </article>
+            ))}
+          </div>
 
-            <span>
-              Industry research
-            </span>
-
-            <span>SEC filings</span>
-
-            <span>
-              Excel assistance
-            </span>
-
-            <span>
-              Model checking
-            </span>
-
-            <span>
-              Presentation workflows
-            </span>
-
-            <span>Prompting</span>
-
-            <span>
-              Hallucinations
-            </span>
-
-            <span>
-              Confidentiality
-            </span>
+          <div className="editorial-note wide-note">
+            <strong>The non-negotiable rule</strong>
+            <p>
+              Do not paste confidential client, deal, firm, credential, or
+              personally identifying information into an unapproved AI system.
+            </p>
           </div>
         </section>
       </main>
