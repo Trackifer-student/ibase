@@ -29,6 +29,7 @@ function QuizRunner({
   onBack,
   storageKey,
   levelCounts,
+  onMissedConcepts,
 }) {
   const levels = useMemo(
     () =>
@@ -45,6 +46,7 @@ function QuizRunner({
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [finished, setFinished] = useState(false)
+  const [result, setResult] = useState(null)
 
   const [bestScores, setBestScores] = useState(() => {
     try {
@@ -68,6 +70,7 @@ function QuizRunner({
     setQuestionIndex(0)
     setAnswers({})
     setFinished(false)
+    setResult(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -133,30 +136,8 @@ function QuizRunner({
 
   const questions = quiz.questions
 
-  if (finished) {
-    const correctCount = questions.filter(
-      (question, index) => answers[index] === question.correctIndex,
-    ).length
-
-    const score = Math.round((correctCount / questions.length) * 100)
-
-    const wrongQuestions = questions
-      .map((question, index) => ({
-        ...question,
-        selectedIndex: answers[index],
-      }))
-      .filter((question) => question.selectedIndex !== question.correctIndex)
-
-    const best = Math.max(bestScores[quiz.level.id] || 0, score)
-
-    if (bestScores[quiz.level.id] !== best) {
-      setTimeout(() => {
-        setBestScores((current) => ({
-          ...current,
-          [quiz.level.id]: best,
-        }))
-      }, 0)
-    }
+  if (finished && result) {
+    const { correctCount, score, wrongQuestions } = result
 
     return (
       <section className="quiz-page">
@@ -246,6 +227,52 @@ function QuizRunner({
 
   const goNext = () => {
     if (questionIndex >= questions.length - 1) {
+      const correctCount = questions.filter(
+        (question, index) => answers[index] === question.correctIndex,
+      ).length
+
+      const score = Math.round(
+        (correctCount / questions.length) * 100,
+      )
+
+      const wrongQuestions = questions
+        .map((question, index) => ({
+          ...question,
+          selectedIndex: answers[index],
+        }))
+        .filter(
+          (question) =>
+            question.selectedIndex !== question.correctIndex,
+        )
+
+      const missedConcepts = [
+        ...new Set(
+          wrongQuestions.flatMap(
+            (question) => question.reviewConcepts || [],
+          ),
+        ),
+      ]
+
+      const best = Math.max(
+        bestScores[quiz.level.id] || 0,
+        score,
+      )
+
+      setBestScores((current) => ({
+        ...current,
+        [quiz.level.id]: best,
+      }))
+
+      if (missedConcepts.length) {
+        onMissedConcepts?.(missedConcepts)
+      }
+
+      setResult({
+        correctCount,
+        score,
+        wrongQuestions,
+      })
+
       setFinished(true)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
