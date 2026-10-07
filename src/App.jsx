@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
 import { tracks } from './data/curriculum'
 import { concepts } from './data/concepts'
+import { aiBankingModule } from './data/modules/aiBanking'
 import { gradeWrittenAnswer } from './utils/writtenGrader'
+import {
+  extractAllQuestions,
+  extractModuleQuestions,
+  extractTrackQuestions,
+} from './utils/quizBuilder'
+import QuizRunner from './components/QuizRunner'
+import InterviewPrep from './components/InterviewPrep'
 import './App.css'
 
 function RichText({ children, onConcept }) {
@@ -99,6 +107,12 @@ function App() {
     useState(null)
 
   const [activeModule, setActiveModule] =
+    useState(null)
+
+  const [moduleOrigin, setModuleOrigin] =
+    useState('track')
+
+  const [quizConfig, setQuizConfig] =
     useState(null)
 
   const [activeLesson, setActiveLesson] =
@@ -298,16 +312,80 @@ function App() {
     scrollTop()
   }
 
-  const openModule = (module) => {
+  const openModule = (module, origin = 'track') => {
     if (!module.lessons) {
       return
     }
 
     setActiveModule(module)
     setActiveLesson(null)
+    setModuleOrigin(origin)
 
     setPage('module')
     scrollTop()
+  }
+
+  const openQuiz = ({
+    title,
+    description,
+    questionBank,
+    storageKey,
+    returnPage,
+    levelCounts,
+  }) => {
+    setQuizConfig({
+      title,
+      description,
+      questionBank,
+      storageKey,
+      returnPage,
+      levelCounts,
+    })
+
+    setPage('quiz')
+    scrollTop()
+  }
+
+  const openModuleQuiz = (module, returnPage = 'module') => {
+    const questionBank = extractModuleQuestions(module)
+
+    openQuiz({
+      title: module.quizTitle || `${module.title} Quiz`,
+      description:
+        'Use the short version for a quick check, then come back for the longer levels when you want to prove you know the whole module.',
+      questionBank,
+      storageKey: `ibase-quiz-module-${module.id}`,
+      returnPage,
+      levelCounts: [5, 10, Math.min(20, questionBank.length)],
+    })
+  }
+
+  const openTrackQuiz = (track) => {
+    const questionBank = extractTrackQuestions(track)
+
+    openQuiz({
+      title: `${track.title} Exam`,
+      description:
+        'Questions are mixed across every live module in this track. This is the step between learning a section and being able to retrieve it under pressure.',
+      questionBank,
+      storageKey: `ibase-quiz-track-${track.id}`,
+      returnPage: 'track',
+      levelCounts: [10, 20, Math.min(30, questionBank.length)],
+    })
+  }
+
+  const openFinalQuiz = () => {
+    const questionBank = extractAllQuestions(tracks)
+
+    openQuiz({
+      title: 'IBase Cumulative Exam',
+      description:
+        'Mix the entire curriculum together. No section labels are guaranteed to save you. This is the closest quiz mode to proving the knowledge actually sticks.',
+      questionBank,
+      storageKey: 'ibase-quiz-cumulative',
+      returnPage: 'learn',
+      levelCounts: [20, 40, Math.min(60, questionBank.length)],
+    })
   }
 
   const openLesson = (lesson) => {
@@ -482,6 +560,26 @@ function App() {
     })
   }
 
+  const markConceptReviewed = (conceptId) => {
+    setNeedsReview((current) =>
+      current.filter((id) => id !== conceptId),
+    )
+  }
+
+  const curriculumLessonIds = [
+    ...new Set(
+      tracks.flatMap((track) =>
+        (track.modules || []).flatMap((module) =>
+          (module.lessons || []).map((lesson) => lesson.id),
+        ),
+      ),
+    ),
+  ]
+
+  const completedCurriculumCount = curriculumLessonIds.filter(
+    (lessonId) => completedLessons.includes(lessonId),
+  ).length
+
   /*
     Written-answer grading
   */
@@ -598,6 +696,116 @@ function App() {
           )}
         </div>
       </div>
+    )
+  }
+
+  /*
+    REVIEW QUEUE
+  */
+
+  if (page === 'review') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome}>
+            IBase
+          </button>
+
+          <button className="back-button" onClick={openLearn}>
+            ← Back to curriculum
+          </button>
+        </nav>
+
+        <section className="review-page">
+          <p className="eyebrow">REVIEW QUEUE</p>
+          <h1>Turn weak concepts into strong ones.</h1>
+          <p className="page-intro">
+            Missed quiz concepts, repeated written-answer misses, and skipped
+            questions land here. Review the refresher, then clear the concept
+            when it feels comfortable.
+          </p>
+
+          {needsReview.length ? (
+            <div className="review-grid">
+              {needsReview.map((conceptId) => {
+                const concept = concepts[conceptId]
+
+                if (!concept) return null
+
+                return (
+                  <article key={conceptId}>
+                    <span>NEEDS REVIEW</span>
+                    <h2>{concept.name}</h2>
+                    <p>{concept.definition}</p>
+
+                    <div>
+                      <button
+                        className="secondary-button"
+                        onClick={() => setActiveConcept(conceptId)}
+                      >
+                        Open refresher
+                      </button>
+
+                      <button
+                        className="primary-button"
+                        onClick={() => markConceptReviewed(conceptId)}
+                      >
+                        Mark reviewed
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="review-empty">
+              <h2>Your review queue is clear.</h2>
+              <p>
+                Missed concepts from lessons and quizzes will appear here
+                automatically.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {activeConcept && (
+          <ConceptModal
+            conceptId={activeConcept}
+            onClose={() => setActiveConcept(null)}
+          />
+        )}
+      </main>
+    )
+  }
+
+  /*
+    QUIZ PAGE
+  */
+
+  if (page === 'quiz' && quizConfig) {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome}>
+            IBase
+          </button>
+
+          <span className="xp-display">{xp} XP</span>
+        </nav>
+
+        <QuizRunner
+          title={quizConfig.title}
+          description={quizConfig.description}
+          questionBank={quizConfig.questionBank}
+          storageKey={quizConfig.storageKey}
+          levelCounts={quizConfig.levelCounts}
+          onMissedConcepts={markConceptsForReview}
+          onBack={() => {
+            setPage(quizConfig.returnPage)
+            scrollTop()
+          }}
+        />
+      </main>
     )
   }
 
@@ -1839,11 +2047,11 @@ function App() {
           <button
             className="back-button"
             onClick={() => {
-              setPage('track')
+              setPage(moduleOrigin)
               scrollTop()
             }}
           >
-            ← Back to track
+            {moduleOrigin === 'ai' ? '← AI for Banking' : '← Back to track'}
           </button>
         </nav>
 
@@ -1904,6 +2112,24 @@ function App() {
                 </article>
               ),
             )}
+          </div>
+
+          <div className="module-quiz-card">
+            <div>
+              <p className="eyebrow">END OF MODULE</p>
+              <h2>{activeModule.quizTitle || `${activeModule.title} Quiz`}</h2>
+              <p>
+                Test the whole module at three levels: Quick Check, Standard,
+                and Mastery. Questions reshuffle each time.
+              </p>
+            </div>
+
+            <button
+              className="primary-button"
+              onClick={() => openModuleQuiz(activeModule)}
+            >
+              Take module quiz →
+            </button>
           </div>
         </section>
       </main>
@@ -2007,6 +2233,24 @@ function App() {
               ),
             )}
           </div>
+
+          <div className="track-exam-card">
+            <div>
+              <p className="eyebrow">TRACK EXAM</p>
+              <h2>{activeTrack.title} Exam</h2>
+              <p>
+                Mix questions across every module in this track. Use the
+                Mastery level once the individual module quizzes feel easy.
+              </p>
+            </div>
+
+            <button
+              className="primary-button"
+              onClick={() => openTrackQuiz(activeTrack)}
+            >
+              Take track exam →
+            </button>
+          </div>
         </section>
       </main>
     )
@@ -2054,6 +2298,36 @@ function App() {
             important can be refreshed
             along the way.
           </p>
+
+          <div className="learning-dashboard">
+            <article>
+              <span>CURRICULUM PROGRESS</span>
+              <strong>
+                {completedCurriculumCount} / {curriculumLessonIds.length}
+              </strong>
+              <p>lessons completed</p>
+            </article>
+
+            <article>
+              <span>REVIEW QUEUE</span>
+              <strong>{needsReview.length}</strong>
+              <p>concepts to revisit</p>
+              <button
+                onClick={() => {
+                  setPage('review')
+                  scrollTop()
+                }}
+              >
+                Open review queue →
+              </button>
+            </article>
+
+            <article>
+              <span>XP</span>
+              <strong>{xp}</strong>
+              <p>earned on this device</p>
+            </article>
+          </div>
 
           <div className="track-list">
             {tracks.map((track) => (
@@ -2107,6 +2381,19 @@ function App() {
               assumed.
             </p>
           </div>
+
+          <div className="cumulative-exam-card">
+            <p className="eyebrow">CUMULATIVE</p>
+            <h2>IBase Cumulative Exam</h2>
+            <p>
+              When you are ready, mix the entire learning curriculum together
+              instead of relying on section order.
+            </p>
+
+            <button className="primary-button" onClick={openFinalQuiz}>
+              Take cumulative exam →
+            </button>
+          </div>
         </section>
       </main>
     )
@@ -2120,84 +2407,14 @@ function App() {
     return (
       <main>
         <nav className="site-nav">
-          <button
-            className="brand-button"
-            onClick={goHome}
-          >
+          <button className="brand-button" onClick={goHome}>
             IBase
           </button>
 
-          <button
-            className="back-button"
-            onClick={goHome}
-          >
-            ← Back Home
-          </button>
+          <span className="xp-display">{xp} XP</span>
         </nav>
 
-        <section className="coming-page">
-          <p className="eyebrow">
-            INTERVIEW PREP
-          </p>
-
-          <h1>
-            Practice like someone is
-            actually across the table.
-          </h1>
-
-          <p className="page-intro">
-            Learn the material first.
-            Then use Interview Prep to
-            practice answering without
-            the training wheels.
-          </p>
-
-          <div className="preview-grid">
-            <article>
-              <span>01</span>
-
-              <h2>
-                Practice Mode
-              </h2>
-
-              <p>
-                Drill accounting,
-                valuation, DCF,
-                behavioral, markets,
-                and other topics
-                individually.
-              </p>
-            </article>
-
-            <article>
-              <span>02</span>
-
-              <h2>
-                Mock Interview
-              </h2>
-
-              <p>
-                Complete a full
-                interview and eventually
-                receive feedback on your
-                answers.
-              </p>
-            </article>
-          </div>
-
-          <div className="editorial-note wide-note">
-            <strong>
-              The difference
-            </strong>
-
-            <p>
-              Learn IB teaches you.
-              Interview Prep tests
-              whether you can actually
-              use what you learned.
-            </p>
-          </div>
-        </section>
+        <InterviewPrep onBack={goHome} />
       </main>
     )
   }
@@ -2210,72 +2427,60 @@ function App() {
     return (
       <main>
         <nav className="site-nav">
-          <button
-            className="brand-button"
-            onClick={goHome}
-          >
+          <button className="brand-button" onClick={goHome}>
             IBase
           </button>
 
-          <button
-            className="back-button"
-            onClick={goHome}
-          >
+          <button className="back-button" onClick={goHome}>
             ← Back Home
           </button>
         </nav>
 
-        <section className="coming-page">
-          <p className="eyebrow">
-            AI FOR BANKING
-          </p>
+        <section className="ai-course-page">
+          <p className="eyebrow">AI FOR BANKING</p>
 
-          <h1>
-            Use AI without becoming
-            useless without it.
-          </h1>
+          <h1>Use AI without becoming useless without it.</h1>
 
           <p className="page-intro">
-            Practical ways to use AI for
-            research, filings, Excel,
-            checking work, and finance
-            workflows — with
-            verification and
-            confidentiality built in.
+            Nine practical lessons on research, filings, Excel, model
+            checking, presentations, prompting, hallucinations, and
+            confidentiality. The rule is simple: accelerate the work without
+            outsourcing judgment.
           </p>
 
-          <div className="ai-topic-list">
-            <span>
-              Company research
-            </span>
+          <div className="ai-course-actions">
+            <button
+              className="primary-button"
+              onClick={() => openModule(aiBankingModule, 'ai')}
+            >
+              Start AI course →
+            </button>
 
-            <span>
-              Industry research
-            </span>
+            <button
+              className="secondary-button"
+              onClick={() => openModuleQuiz(aiBankingModule, 'ai')}
+            >
+              Take AI quiz
+            </button>
+          </div>
 
-            <span>SEC filings</span>
+          <div className="ai-lesson-grid">
+            {aiBankingModule.lessons.map((lesson, index) => (
+              <article key={lesson.id}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h2>{lesson.title}</h2>
+                <p>{lesson.summary}</p>
+              </article>
+            ))}
+          </div>
 
-            <span>
-              Excel assistance
-            </span>
-
-            <span>
-              Model checking
-            </span>
-
-            <span>
-              Presentation workflows
-            </span>
-
-            <span>Prompting</span>
-
-            <span>
-              Hallucinations
-            </span>
-
-            <span>
-              Confidentiality
-            </span>
+          <div className="editorial-note wide-note">
+            <strong>The non-negotiable</strong>
+            <p>
+              Never put confidential or restricted client information into an
+              unapproved AI tool. Verification and confidentiality matter more
+              than convenience.
+            </p>
           </div>
         </section>
       </main>

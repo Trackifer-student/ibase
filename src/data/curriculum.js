@@ -1,5 +1,28 @@
 import { accountingLessons } from './modules/accounting'
 import { financeZeroModules } from './modules/financeZero'
+import {
+  threeStatementModule,
+  corporateFinanceModule,
+  enterpriseEquityModule,
+} from './modules/technicalCore'
+import {
+  valuationModule,
+  dcfModule,
+  maModule,
+  lboModule,
+} from './modules/technicalAdvanced'
+import { marketsModule } from './modules/markets'
+import {
+  recruitingProcessModule,
+  networkingModule,
+  resumeStoryModule,
+} from './modules/recruiting'
+import {
+  excelModule,
+  modelingModule,
+  powerpointModule,
+  analystWorkModule,
+} from './modules/analyst'
 const whatIsIBLessons = [
   {
     id: 'what-bankers-do',
@@ -1240,7 +1263,7 @@ const dealsLessons = [
 ]
 
 export const tracks = [
-    {
+  {
     id: 'finance-zero',
     number: '00',
     label: 'BEGIN HERE',
@@ -1279,7 +1302,6 @@ export const tracks = [
       },
     ],
   },
-
   {
     id: 'technical',
     number: '02',
@@ -1287,92 +1309,28 @@ export const tracks = [
     title: 'Technical Interview Mastery',
     tagline: 'The stuff you need to know cold.',
     description:
-      'Accounting, valuation, DCFs, M&A, and the concepts that show up again and again in banking interviews.',
+      'Accounting, statement linkages, corporate finance, valuation, DCFs, M&A, LBOs, and markets.',
     modules: [
-     {
-  id: 'accounting',
-  number: '03',
-  title: 'Accounting Foundations',
-  subtitle: 'Three statements. Less scary than they look.',
-  description:
-    'Learn the income statement, balance sheet, cash flow statement, and the logic connecting them.',
-  lessons: accountingLessons,
-},
       {
-        id: 'three-statements',
-        number: '04',
-        title: 'Three-Statement Linkages',
-        subtitle: 'Where memorization stops working.',
+        id: 'accounting',
+        number: '03',
+        title: 'Accounting Foundations',
+        subtitle: 'Three statements. Less scary than they look.',
         description:
-          'Walk through depreciation, CapEx, working capital, debt, impairments, and other interview favorites.',
-        lessonCount: 12,
+          'Learn the income statement, balance sheet, cash flow statement, and the logic connecting them.',
+        quizTitle: 'Accounting Foundations Quiz',
+        lessons: accountingLessons,
       },
-      {
-        id: 'corp-finance',
-        number: '05',
-        title: 'Corporate Finance Foundations',
-        subtitle: 'Why money today is worth more than money later.',
-        description:
-          'Time value of money, risk, return, capital structure, CAPM, beta, and WACC.',
-        lessonCount: 12,
-      },
-      {
-        id: 'ev-equity',
-        number: '06',
-        title: 'Enterprise vs. Equity Value',
-        subtitle: "The interviewer's favorite way to confuse you.",
-        description:
-          'Market cap, debt, cash, preferred stock, NCI, diluted shares, and the EV bridge.',
-        lessonCount: 12,
-      },
-      {
-        id: 'valuation',
-        number: '07',
-        title: 'Valuation',
-        subtitle: "So... what's this company actually worth?",
-        description:
-          'Trading comps, precedent transactions, multiples, private-company valuation, and football fields.',
-        lessonCount: 16,
-      },
-      {
-        id: 'dcf',
-        number: '08',
-        title: 'DCF',
-        subtitle: "You'll get asked this. A lot.",
-        description:
-          'Free cash flow, WACC, terminal value, discounting, sensitivities, and the full DCF walkthrough.',
-        lessonCount: 24,
-      },
-      {
-        id: 'ma',
-        number: '09',
-        title: 'M&A',
-        subtitle: 'What happens when one company buys another.',
-        description:
-          'Accretion/dilution, synergies, purchase accounting, goodwill, consideration, and merger mechanics.',
-        lessonCount: 20,
-      },
-      {
-        id: 'lbo',
-        number: '10',
-        title: 'LBO Fundamentals',
-        subtitle: 'Useful. Just not the first thing to obsess over.',
-        description:
-          'Debt, sources & uses, returns, IRR, MOIC, paper LBOs, and what makes a good LBO candidate.',
-        lessonCount: 12,
-      },
-      {
-        id: 'markets',
-        number: '11',
-        title: 'Markets & Deals',
-        subtitle: 'Sound like someone who actually follows finance.',
-        description:
-          'Rates, inflation, the Fed, equity and credit markets, recent transactions, and discussing a deal intelligently.',
-        lessonCount: 14,
-      },
+      threeStatementModule,
+      corporateFinanceModule,
+      enterpriseEquityModule,
+      valuationModule,
+      dcfModule,
+      maModule,
+      lboModule,
+      marketsModule,
     ],
   },
-
   {
     id: 'recruiting',
     number: '03',
@@ -1382,36 +1340,11 @@ export const tracks = [
     description:
       'Learn how recruiting works, how to network without sounding transactional, and how to tell your story.',
     modules: [
-      {
-        id: 'recruiting-process',
-        number: '12',
-        title: 'IB Recruiting',
-        subtitle: 'Know the process before it starts moving fast.',
-        description:
-          'Timelines, internships, HireVues, first rounds, Superdays, bank types, and choosing groups.',
-        lessonCount: 11,
-      },
-      {
-        id: 'networking',
-        number: '13',
-        title: 'Networking',
-        subtitle: 'How to talk to bankers like a normal person.',
-        description:
-          'Cold emails, alumni outreach, coffee chats, follow-ups, referrals, and the mistakes that kill conversations.',
-        lessonCount: 12,
-      },
-      {
-        id: 'resume-story',
-        number: '14',
-        title: 'Resume & Story',
-        subtitle: 'Make your experience make sense.',
-        description:
-          'Resume bullets, your story, why IB, why this bank, behavioral questions, and building a story bank.',
-        lessonCount: 20,
-      },
+      recruitingProcessModule,
+      networkingModule,
+      resumeStoryModule,
     ],
   },
-
   {
     id: 'analyst',
     number: '04',
@@ -1421,42 +1354,10 @@ export const tracks = [
     description:
       'Learn the tools, habits, and workflows that become important once you actually sit down at the desk.',
     modules: [
-      {
-        id: 'excel',
-        number: '15',
-        title: 'Excel for Banking',
-        subtitle: 'Speed matters more than you think.',
-        description:
-          'Navigation, formatting, formulas, shortcuts, sensitivities, model structure, and error checking.',
-        lessonCount: 15,
-      },
-      {
-        id: 'modeling',
-        number: '16',
-        title: 'Financial Modeling',
-        subtitle: 'Turn the concepts into an actual model.',
-        description:
-          'Revenue builds, schedules, three-statement models, DCFs, merger models, and introductory LBO modeling.',
-        lessonCount: 15,
-      },
-      {
-        id: 'powerpoint',
-        number: '17',
-        title: 'PowerPoint & Pitchbooks',
-        subtitle: 'Yes, alignment actually matters.',
-        description:
-          'Pitchbook structure, charts, valuation pages, formatting, footnotes, proofreading, and storytelling.',
-        lessonCount: 13,
-      },
-      {
-        id: 'analyst-work',
-        number: '18',
-        title: 'Working Like an Analyst',
-        subtitle: 'The stuff nobody puts in the textbook.',
-        description:
-          'Attention to detail, sourcing, version control, comments, research, prioritization, and checking your work.',
-        lessonCount: 14,
-      },
+      excelModule,
+      modelingModule,
+      powerpointModule,
+      analystWorkModule,
     ],
   },
 ]
