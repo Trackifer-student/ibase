@@ -2207,3 +2207,159 @@ main {
     text-align: center;
   }
 }
+
+
+/* ==========================================
+   Learning dashboard + review queue
+========================================== */
+
+.learning-dashboard {
+  max-width: 900px;
+  margin: 34px auto 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.learning-dashboard article {
+  min-height: 165px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dfe6ef;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(29, 47, 76, 0.035);
+}
+
+.learning-dashboard article > span {
+  color: #718096;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.learning-dashboard article > strong {
+  margin-top: 17px;
+  color: #173b72;
+  font-size: 34px;
+  letter-spacing: -1.2px;
+}
+
+.learning-dashboard article > p {
+  margin: 4px 0 0;
+  color: #788596;
+  font-size: 13px;
+}
+
+.learning-dashboard article > button {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 0;
+  background: transparent;
+  color: #2f6fed;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.review-page {
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 62px 0 100px;
+}
+
+.review-page > .eyebrow,
+.review-page > h1,
+.review-page > .page-intro {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.review-page > h1 {
+  max-width: 800px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #12213a;
+  font-size: clamp(42px, 7vw, 68px);
+  line-height: 1;
+  letter-spacing: -2.8px;
+}
+
+.review-grid {
+  margin-top: 42px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.review-grid article {
+  padding: 25px;
+  border: 1px solid #dfe6ef;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.review-grid article > span {
+  color: #c17a52;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.review-grid h2 {
+  margin: 15px 0 9px;
+  color: #1b304b;
+  font-size: 24px;
+}
+
+.review-grid p {
+  margin: 0;
+  color: #68778a;
+  line-height: 1.65;
+}
+
+.review-grid article > div {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.review-empty {
+  max-width: 650px;
+  margin: 44px auto 0;
+  padding: 36px;
+  border: 1px solid #dfe6ef;
+  border-radius: 18px;
+  background: #f8fbff;
+  text-align: center;
+}
+
+.review-empty h2 {
+  margin: 0 0 8px;
+  color: #1a304c;
+  font-size: 28px;
+}
+
+.review-empty p {
+  margin: 0;
+  color: #6d7b8c;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .learning-dashboard,
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-grid article > div {
+    flex-direction: column;
+  }
+
+  .review-grid article > div button {
+    width: 100%;
+  }
+}
