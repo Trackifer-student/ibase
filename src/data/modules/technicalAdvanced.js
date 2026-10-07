@@ -9,7 +9,7 @@ const toId = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-const makeLesson = ({ moduleId, index, title, summary }) => ({
+const makeLesson = ({ moduleId, index, title, summary, options, correctIndex }) => ({
   id: `${moduleId}-${String(index + 1).padStart(2, '0')}-${toId(title)}`,
   title,
   summary,
@@ -62,13 +62,8 @@ const makeLesson = ({ moduleId, index, title, summary }) => ({
       type: 'mcq',
       eyebrow: 'CHECK YOUR UNDERSTANDING',
       title: `Which statement best captures ${title}?`,
-      options: [
-        summary,
-        'It is mainly a presentation convention with no meaningful effect on analysis.',
-        'It only matters after a transaction closes and is not relevant to valuation or financial analysis.',
-        'It can be understood entirely by memorizing a formula without knowing the business logic.',
-      ],
-      correctIndex: 0,
+      options,
+      correctIndex,
       correctTitle: 'Exactly.',
       correctText: summary,
       wrongTitle: 'Go back to the economic story.',
@@ -91,14 +86,23 @@ const makeModule = ([id, number, title, subtitle, description, topics]) => ({
   title,
   subtitle,
   description,
-  lessons: topics.map(([lessonTitle, summary], index) =>
-    makeLesson({
+  lessons: topics.map(([lessonTitle, summary], index) => {
+    const distractors = [1, 2, 3].map(
+      (offset) => topics[(index + offset) % topics.length][1],
+    )
+    const correctIndex = index % 4
+    const options = [...distractors]
+    options.splice(correctIndex, 0, summary)
+
+    return makeLesson({
       moduleId: id,
       index,
       title: lessonTitle,
       summary,
-    }),
-  ),
+      options,
+      correctIndex,
+    })
+  }),
 })
 
 export const technicalAdvancedModules = [
