@@ -458,4 +458,245 @@ export const concepts = {
     whyItMatters:
       'Understanding why companies need financing, transactions, and valuation explains why investment banking exists.',
   },
+
+  costOfGoodsSold: {
+    name: 'Cost of Goods Sold',
+    definition:
+      'The direct costs associated with producing or delivering the goods or services a company sells.',
+    example:
+      'For a retailer, the cost paid to acquire products that were sold during the period is typically part of cost of goods sold.',
+    whyItMatters:
+      'Subtracting cost of goods sold from revenue produces gross profit and helps analysts understand unit economics and margins.',
+  },
+
+  grossProfit: {
+    name: 'Gross Profit',
+    definition:
+      'Revenue minus cost of goods sold.',
+    example:
+      'If revenue is $100 and cost of goods sold is $60, gross profit is $40.',
+    whyItMatters:
+      'Gross profit shows how much value remains after the direct cost of delivering the product or service.',
+  },
+
+  grossMargin: {
+    name: 'Gross Margin',
+    definition:
+      'Gross profit divided by revenue, usually expressed as a percentage.',
+    example:
+      'A company with $40 of gross profit on $100 of revenue has a 40% gross margin.',
+    whyItMatters:
+      'Gross margin helps compare the economics of a company across periods and against peers.',
+  },
+
+  operatingExpense: {
+    name: 'Operating Expense',
+    definition:
+      'A cost of running the business that is not directly included in cost of goods sold.',
+    example:
+      'Selling, general and administrative costs and research and development are common operating expenses.',
+    whyItMatters:
+      'Operating expenses help determine how much gross profit turns into operating profit.',
+  },
+
+  ebit: {
+    name: 'EBIT',
+    definition:
+      'Earnings Before Interest and Taxes, often used as another name for operating income.',
+    example:
+      'If gross profit is $50 and operating expenses are $20, simplified EBIT is $30.',
+    whyItMatters:
+      'EBIT measures profit before financing costs and taxes and is widely used in financial analysis.',
+  },
+
+  operatingMargin: {
+    name: 'Operating Margin',
+    definition:
+      'Operating income or EBIT divided by revenue.',
+    example:
+      'If EBIT is $20 on $100 of revenue, operating margin is 20%.',
+    whyItMatters:
+      'Operating margin shows how much revenue remains after core operating costs.',
+  },
+
+  netMargin: {
+    name: 'Net Margin',
+    definition:
+      'Net income divided by revenue.',
+    example:
+      'If net income is $10 on $100 of revenue, net margin is 10%.',
+    whyItMatters:
+      'Net margin shows the percentage of revenue left as bottom-line accounting profit.',
+  },
+
+  depreciation: {
+    name: 'Depreciation',
+    definition:
+      'An accounting expense that allocates the cost of a tangible long-lived asset over its useful life.',
+    example:
+      'A $100 machine used for five years may create depreciation expense over those years rather than a $100 expense on day one.',
+    whyItMatters:
+      'Depreciation reduces accounting profit without representing a new cash payment in the period it is recorded.',
+  },
+
+  amortization: {
+    name: 'Amortization',
+    definition:
+      'An accounting expense that allocates the cost of certain intangible assets over time.',
+    example:
+      'A finite-lived customer-relationship asset may be amortized over its estimated useful life.',
+    whyItMatters:
+      'Amortization is a non-cash expense that often appears in EBITDA-to-EBIT bridges and acquisition accounting.',
+  },
+
+  ppe: {
+    name: 'Property, Plant & Equipment',
+    definition:
+      'Tangible long-lived assets used to operate a business, such as buildings, machinery, and equipment.',
+    example:
+      'A factory and the machinery inside it are typically recorded in PP&E.',
+    whyItMatters:
+      'PP&E is tied closely to capital expenditures and depreciation.',
+  },
+
+  capex: {
+    name: 'Capital Expenditures',
+    definition:
+      'Cash spent to buy, build, or improve long-lived assets used by the business.',
+    example:
+      'Spending $10 million on a new factory line is a capital expenditure.',
+    whyItMatters:
+      'CapEx is a major investing cash outflow and an important input in free cash flow.',
+  },
+
+  inventory: {
+    name: 'Inventory',
+    definition:
+      'Goods and materials a company holds for sale or for use in producing goods for sale.',
+    example:
+      'Unsold shoes sitting in a retailer’s warehouse are inventory.',
+    whyItMatters:
+      'Inventory ties up cash and is an important working-capital account.',
+  },
+
+  retainedEarnings: {
+    name: 'Retained Earnings',
+    definition:
+      'The cumulative accounting profits a company has kept rather than distributed to shareholders, adjusted for certain items.',
+    example:
+      'If a company earns $20 and pays no dividends, retained earnings generally increase by $20.',
+    whyItMatters:
+      'Net income flows into retained earnings, making it one of the key links between the income statement and balance sheet.',
+  },
+
+  cashFlowFromOperations: {
+    name: 'Cash Flow from Operations',
+    definition:
+      'The section of the cash flow statement that shows cash generated or used by core operations, including non-cash adjustments and working-capital changes.',
+    example:
+      'Net income, depreciation, and changes in receivables can all affect cash flow from operations.',
+    whyItMatters:
+      'It helps analysts understand whether the company’s normal business activities are producing cash.',
+  },
+
+  cashFlowFromInvesting: {
+    name: 'Cash Flow from Investing',
+    definition:
+      'The section of the cash flow statement that captures purchases and sales of long-term assets and certain investments.',
+    example:
+      'Buying equipment with cash is usually an investing cash outflow.',
+    whyItMatters:
+      'CapEx and acquisitions often appear here and can materially affect cash generation.',
+  },
+
+  cashFlowFromFinancing: {
+    name: 'Cash Flow from Financing',
+    definition:
+      'The section of the cash flow statement that captures transactions with lenders and shareholders.',
+    example:
+      'Issuing debt raises financing cash, while repaying debt uses financing cash.',
+    whyItMatters:
+      'It explains how a company raises and returns capital.',
+  },
+
+  stockBasedCompensation: {
+    name: 'Stock-Based Compensation',
+    definition:
+      'Compensation paid to employees using equity awards such as stock or options rather than only cash salary.',
+    example:
+      'A technology company may grant restricted stock units to employees as part of compensation.',
+    whyItMatters:
+      'It reduces accounting earnings, is commonly added back in operating cash flow, and can dilute shareholders over time.',
+  },
+
+  taxExpense: {
+    name: 'Tax Expense',
+    definition:
+      'The accounting expense associated with income taxes for a period.',
+    example:
+      'A company may report $20 of tax expense even if the exact cash taxes paid during the period differ.',
+    whyItMatters:
+      'Tax expense affects net income, while differences between accounting and tax timing can create deferred tax balances.',
+  },
+
+  deferredTax: {
+    name: 'Deferred Tax',
+    definition:
+      'A balance created when accounting rules and tax rules recognize income or expenses at different times.',
+    example:
+      'Accelerated tax depreciation can make cash taxes differ from book tax expense and create a deferred tax balance.',
+    whyItMatters:
+      'Deferred taxes are a common reason tax expense and cash taxes differ and appear in transaction accounting.',
+  },
+
+  goodwill: {
+    name: 'Goodwill',
+    definition:
+      'An acquisition-related asset that generally represents purchase price paid above the fair value of identifiable net assets acquired.',
+    example:
+      'If a buyer pays a premium for a company’s brand, workforce, and expected synergies, part of that premium may be recorded as goodwill.',
+    whyItMatters:
+      'Goodwill is central to purchase accounting and can later be impaired if the acquired business underperforms.',
+  },
+
+  intangibleAsset: {
+    name: 'Intangible Asset',
+    definition:
+      'A non-physical asset with economic value, such as a patent, trademark, software, or customer relationship.',
+    example:
+      'A patent acquired in a transaction may be recorded as an identifiable intangible asset.',
+    whyItMatters:
+      'Intangible assets can affect acquisition accounting and may create amortization expense.',
+  },
+
+  impairment: {
+    name: 'Impairment',
+    definition:
+      'An accounting write-down recorded when the carrying value of an asset is no longer supported by its expected economic value.',
+    example:
+      'A company may record a goodwill impairment after an acquired business performs far worse than expected.',
+    whyItMatters:
+      'Impairments can create large non-cash expenses and are common topics in transaction and accounting analysis.',
+  },
+
+  currentRatio: {
+    name: 'Current Ratio',
+    definition:
+      'Current assets divided by current liabilities.',
+    example:
+      'If current assets are $200 and current liabilities are $100, the current ratio is 2.0x.',
+    whyItMatters:
+      'It is a simple liquidity measure showing the relationship between short-term resources and short-term obligations.',
+  },
+
+  debtToEbitda: {
+    name: 'Debt / EBITDA',
+    definition:
+      'A leverage ratio comparing a company’s debt with its EBITDA.',
+    example:
+      'A company with $300 of debt and $100 of EBITDA has 3.0x Debt / EBITDA.',
+    whyItMatters:
+      'It is a widely used shorthand for leverage and debt capacity, though it does not replace a full cash-flow analysis.',
+  },
+
 }
