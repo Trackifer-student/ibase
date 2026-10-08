@@ -933,7 +933,7 @@ main {
 .ai-topic-list span {
   padding: 11px 15px;
   border: 1px solid #dae2ec;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #fff;
   color: #455970;
   font-size: 14px;
@@ -1989,7 +1989,7 @@ main {
 
 .mock-breakdown span {
   padding: 8px 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #f1f5fa;
   color: #52677e;
   font-size: 12px;
