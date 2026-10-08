@@ -41,6 +41,16 @@ function LegalPage({ type, onBack }) {
           </section>
 
           <section>
+            <h2>Web analytics</h2>
+            <p>
+              IBase uses Cloudflare Web Analytics to understand aggregate page
+              views, visits, and site performance. It does not use advertising
+              cookies or track individual visitors. Analytics is separate from
+              your locally stored learning progress and notes.
+            </p>
+          </section>
+
+          <section>
             <h2>AI features</h2>
             <p>
               The current free version does not send written answers to a paid
