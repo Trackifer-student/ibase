@@ -1593,7 +1593,7 @@ function App() {
                 className="short-response"
                 type="text"
                 value={shortAnswer}
-                placeholder="Type your answer"
+                aria-label="Lesson answer"
                 onChange={(event) => {
                   setShortAnswer(
                     event.target.value,
@@ -1690,10 +1690,7 @@ function App() {
                 type="text"
                 inputMode="decimal"
                 value={numberAnswer}
-                placeholder={
-                  step.placeholder ||
-                  'Enter your answer'
-                }
+                aria-label="Numeric lesson answer"
                 onChange={(event) => {
                   setNumberAnswer(
                     event.target.value,
@@ -1813,9 +1810,7 @@ function App() {
 
               <textarea
                 className="written-response"
-                placeholder={
-                  step.placeholder
-                }
+                aria-label="Written lesson answer"
                 value={writtenAnswer}
                 disabled={
                   gradingWritten
@@ -2132,6 +2127,7 @@ function App() {
               </div>
 
               <textarea
+                aria-label="Lesson notes"
                 value={
                   notes[
                     activeLesson.id
@@ -2142,7 +2138,6 @@ function App() {
                     event.target.value,
                   )
                 }
-                placeholder="Write anything you want to remember..."
               />
 
               <p className="notes-save">
