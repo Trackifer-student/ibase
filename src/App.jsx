@@ -2329,11 +2329,7 @@ function App() {
                   onClick={() =>
                     openModule(module)
                   }
-                  className={
-                    module.lessons
-                      ? 'module-live'
-                      : 'module-preview'
-                  }
+                  className="module-live"
                 >
                   <span>
                     {module.number}
@@ -2361,15 +2357,11 @@ function App() {
 
                   <footer>
                     <small>
-                      {module.lessons
-                        ? `${module.lessons.length} lessons`
-                        : `${module.lessonCount || 0} planned lessons`}
+                      {module.lessons.length} lessons
                     </small>
 
                     <strong>
-                      {module.lessons
-                        ? 'Open module →'
-                        : 'Coming soon'}
+                      Open module →
                     </strong>
                   </footer>
                 </article>
