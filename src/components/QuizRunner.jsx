@@ -71,7 +71,7 @@ function QuizRunner({
     setAnswers({})
     setFinished(false)
     setResult(null)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   if (!questionBank.length) {
@@ -274,18 +274,18 @@ function QuizRunner({
       })
 
       setFinished(true)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'auto' })
       return
     }
 
     setQuestionIndex((currentIndex) => currentIndex + 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const goPrevious = () => {
     if (questionIndex === 0) return
     setQuestionIndex((currentIndex) => currentIndex - 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   return (
