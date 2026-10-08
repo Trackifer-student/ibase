@@ -15,6 +15,7 @@ function InterviewPrep({ onBack }) {
   const [revealed, setRevealed] = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
   const [listening, setListening] = useState(false)
+  const [voiceStatus, setVoiceStatus] = useState('')
   const [reviewWeakMode, setReviewWeakMode] = useState(false)
 
   const [weakIds, setWeakIds] = useState(() => {
@@ -55,6 +56,7 @@ function InterviewPrep({ onBack }) {
     setAnswer('')
     setRevealed(false)
     setListening(false)
+    setVoiceStatus('')
   }
 
   const pickPracticeQuestion = (pool = filteredQuestions) => {
@@ -121,14 +123,20 @@ function InterviewPrep({ onBack }) {
     const Recognition =
       window.SpeechRecognition || window.webkitSpeechRecognition
 
-    if (!Recognition) return
+    if (!Recognition) {
+      setVoiceStatus('Voice input is not available in this browser. Type your answer instead.')
+      return
+    }
 
     const recognition = new Recognition()
     recognition.continuous = false
     recognition.interimResults = false
     recognition.lang = 'en-US'
 
-    recognition.onstart = () => setListening(true)
+    recognition.onstart = () => {
+      setListening(true)
+      setVoiceStatus('Listening...')
+    }
 
     recognition.onresult = (event) => {
       const transcript = event.results?.[0]?.[0]?.transcript || ''
@@ -136,9 +144,14 @@ function InterviewPrep({ onBack }) {
       setAnswer((current) =>
         current ? `${current} ${transcript}` : transcript,
       )
+      setVoiceStatus(transcript ? 'Voice answer added.' : 'No speech was captured.')
     }
 
-    recognition.onerror = () => setListening(false)
+    recognition.onerror = () => {
+      setListening(false)
+      setVoiceStatus('Voice input failed. Type your answer instead.')
+    }
+
     recognition.onend = () => setListening(false)
 
     recognition.start()
@@ -326,6 +339,12 @@ function InterviewPrep({ onBack }) {
                 </button>
               )}
             </div>
+
+            {voiceStatus && (
+              <p className="interview-status" role="status" aria-live="polite">
+                {voiceStatus}
+              </p>
+            )}
 
             {revealed && (
               <div className="interview-benchmark">
