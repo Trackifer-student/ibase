@@ -2508,7 +2508,12 @@ function App() {
                   </p>
                 </div>
 
-                <button>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    openTrack(track)
+                  }}
+                >
                   Explore track →
                 </button>
               </article>
@@ -2694,17 +2699,12 @@ function App() {
             analyst skills.
           </p>
 
-          <button>
+          <button onClick={openLearn}>
             Explore the curriculum
           </button>
         </article>
 
-        <article
-          onClick={() => {
-            setPage('interview')
-            scrollTop()
-          }}
-        >
+        <article onClick={openInterview}>
           <span>02</span>
 
           <h2>
@@ -2717,17 +2717,12 @@ function App() {
             give under pressure.
           </p>
 
-          <button>
+          <button onClick={openInterview}>
             See interview prep
           </button>
         </article>
 
-        <article
-          onClick={() => {
-            setPage('ai')
-            scrollTop()
-          }}
-        >
+        <article onClick={openAI}>
           <span>03</span>
 
           <h2>
@@ -2741,7 +2736,7 @@ function App() {
             it gets dangerous.
           </p>
 
-          <button>
+          <button onClick={openAI}>
             Explore AI for banking
           </button>
         </article>
