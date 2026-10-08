@@ -1891,7 +1891,7 @@ function App() {
                       {writtenResult.understood.map(
                         (item) => (
                           <p key={item}>
-                            ✓ {item}
+                            {item}
                           </p>
                         ),
                       )}
@@ -2247,7 +2247,7 @@ function App() {
                     {completedLessons.includes(
                       lesson.id,
                     )
-                      ? '✓ Review'
+                      ? 'Review'
                       : 'Start →'}
                   </button>
                 </article>
