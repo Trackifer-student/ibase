@@ -1,3 +1,5 @@
+const COPYRIGHT_YEAR = 2026
+
 function SiteFooter({
   onHome,
   onLearn,
@@ -6,9 +8,7 @@ function SiteFooter({
   onPrivacy,
   onTerms,
 }) {
-  const year = new Date().getFullYear()
-
-  return (
+   return (
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
@@ -31,7 +31,7 @@ function SiteFooter({
       </div>
 
       <div className="footer-bottom">
-        <span>© {year} IBase</span>
+        <span>© {COPYRIGHT_YEAR} IBase</span>
         <span>Educational content only. Not financial advice.</span>
       </div>
     </footer>
