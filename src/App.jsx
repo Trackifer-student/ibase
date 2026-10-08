@@ -361,32 +361,32 @@ function App() {
     })
   }
 
-  const useRootPath = () => {
+  const setRootPath = () => {
     if (window.location.pathname !== '/') {
       window.history.pushState({}, '', '/')
     }
   }
 
   const goHome = () => {
-    useRootPath()
+    setRootPath()
     setPage('home')
     scrollTop()
   }
 
   const openLearn = () => {
-    useRootPath()
+    setRootPath()
     setPage('learn')
     scrollTop()
   }
 
   const openInterview = () => {
-    useRootPath()
+    setRootPath()
     setPage('interview')
     scrollTop()
   }
 
   const openAI = () => {
-    useRootPath()
+    setRootPath()
     setPage('ai')
     scrollTop()
   }
