@@ -862,23 +862,6 @@ main {
   background: #F2EFE6;
 }
 
-.completion-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.completion-card::after {
-  content: "";
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  right: -65px;
-  top: -70px;
-  border-radius: 0;
-  border: 22px solid #F2EFE6;
-  pointer-events: none;
-}
-
 /* ------------------------------
    Interview / AI previews
 ------------------------------ */
