@@ -375,11 +375,11 @@ function InterviewPrep({ onBack }) {
         <div className="interview-intro">
           <p className="eyebrow">INTERVIEW PREP</p>
 
-          <h1>Practice like someone is actually across the table.</h1>
+          <h1>Practice investment banking questions by topic and difficulty.</h1>
 
           <p className="page-intro">
-            No paid AI grader. Give the answer yourself, reveal a strong
-            benchmark, and mark what needs work. The weak-question queue stays
+            Answer technical, behavioral, markets, and deal questions yourself,
+            compare with a strong benchmark, and save weak questions for review
             on this device.
           </p>
         </div>
