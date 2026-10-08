@@ -257,7 +257,7 @@ const networkingSpecs = [
   {
     id: 'coffee-chat',
     title: 'Coffee Chats',
-    summary: 'Run a 15–30 minute conversation that feels curious rather than transactional.',
+    summary: 'Run a 15-30 minute conversation that feels curious rather than transactional.',
     core: 'Start with a concise introduction, let the banker explain their path, ask thoughtful follow-ups, and leave time to thank them.',
     detail: 'Do not rapid-fire a list of generic questions. Listen to the answer and let the conversation develop.',
     banker: 'People remember whether talking to you felt easy and intelligent.',
@@ -293,7 +293,7 @@ const networkingSpecs = [
     exampleSteps: ['State school, year, and area of study.', 'Mention one experience that pushed you toward finance.', 'Explain why you wanted to speak with this person.'],
     takeaway: 'Networking intros should orient the other person and move quickly into conversation.',
     question: 'How long should a basic networking introduction usually be?',
-    correct: 'Brief—enough to give context without becoming a long speech',
+    correct: 'Brief-enough to give context without becoming a long speech',
     wrong: ['Ten minutes', 'Your entire resume word for word', 'No introduction at all'],
   },
   {
@@ -315,7 +315,7 @@ const networkingSpecs = [
     title: 'Referrals & Advocacy',
     summary: 'Understand how support is earned rather than demanded.',
     core: 'A referral is strongest when a banker knows enough about you to feel comfortable attaching their reputation to your candidacy.',
-    detail: 'That can come from several good interactions, strong preparation, or an existing relationship—not from asking every new contact immediately.',
+    detail: 'That can come from several good interactions, strong preparation, or an existing relationship-not from asking every new contact immediately.',
     banker: 'Make it easy for someone to advocate by being prepared, professional, and clear about your interests.',
     example: 'A banker says, “Let me know when you apply.”',
     exampleSteps: ['Apply promptly when the role opens.', 'Send the banker a concise update.', 'Include the exact office or role so they can help if they choose.'],
@@ -392,7 +392,7 @@ const storySpecs = [
     banker: 'Formatting is itself evidence of attention to detail.',
     example: 'Two resumes contain the same experience.',
     exampleSteps: ['One has aligned dates and consistent bullets.', 'The other has mixed spacing and styles.', 'The cleaner resume signals better execution before anyone reads deeply.'],
-    takeaway: 'Conventional formatting lets the content—not the template—do the work.',
+    takeaway: 'Conventional formatting lets the content-not the template-do the work.',
     question: 'What is usually the best undergraduate banking resume length?',
     correct: 'One page',
     wrong: ['Five pages', 'As long as possible', 'No page limit because formatting does not matter'],
@@ -524,7 +524,7 @@ const storySpecs = [
     wrong: ['Wanting to pick public stocks all day', 'Wanting the most prestigious job possible', 'Liking money in general'],
     written: {
       question: 'What should a strong “Why investment banking?” answer accomplish?',
-      modelAnswer: 'It should connect real experiences that sparked your interest with specific parts of banking—such as transaction work, company analysis, steep learning, and team-based execution—and explain why those fit your strengths and goals.',
+      modelAnswer: 'It should connect real experiences that sparked your interest with specific parts of banking-such as transaction work, company analysis, steep learning, and team-based execution-and explain why those fit your strengths and goals.',
       criteria: [
         { id: 'experience', label: 'connect motivation to real experiences', keywords: ['experience', 'project', 'class', 'work', 'team', 'learned'] },
         { id: 'job', label: 'reference specific banking work or environment', keywords: ['transactions', 'analysis', 'companies', 'learning', 'team', 'banking'] },
@@ -534,7 +534,7 @@ const storySpecs = [
   {
     id: 'tell-me-about-yourself',
     title: 'Tell Me About Yourself',
-    summary: 'Give a 60–90 second story that explains how you arrived at banking.',
+    summary: 'Give a 60-90 second story that explains how you arrived at banking.',
     core: 'A simple structure is present → past → why banking / why now, or past → present → future.',
     detail: 'Select details that explain your path rather than reciting every resume line.',
     banker: 'The opening answer sets the frame for the rest of the interview.',

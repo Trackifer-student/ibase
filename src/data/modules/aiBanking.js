@@ -61,7 +61,7 @@ const specs = [
     summary: 'Map markets, competitors, drivers, and terminology without confusing a summary with evidence.',
     core: 'AI can help create an initial industry map, explain terminology, identify major competitors, and generate a research checklist.',
     detail: 'Market-size claims, market shares, growth forecasts, and regulatory facts should be traced back to credible industry, government, company, or research sources.',
-    banker: 'A useful industry view explains the actual economic drivers—customers, pricing, volumes, costs, regulation, and competitive structure.',
+    banker: 'A useful industry view explains the actual economic drivers-customers, pricing, volumes, costs, regulation, and competitive structure.',
     example: 'You are assigned a subsector you have never covered.',
     exampleSteps: ['Use AI to build a list of key terms and questions.', 'Find reputable industry and company sources for each major claim.', 'Use AI again to compare sources and highlight disagreements.'],
     takeaway: 'AI is excellent for building the research map; evidence still comes from the underlying sources.',

@@ -13,8 +13,11 @@ function InterviewPrep({ onBack }) {
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
-  const [voiceSupported, setVoiceSupported] = useState(false)
+  const [voiceSupported] = useState(() =>
+    Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+  )
   const [listening, setListening] = useState(false)
+  const [voiceStatus, setVoiceStatus] = useState('')
   const [reviewWeakMode, setReviewWeakMode] = useState(false)
 
   const [weakIds, setWeakIds] = useState(() => {
@@ -28,12 +31,6 @@ function InterviewPrep({ onBack }) {
   const [mockQuestions, setMockQuestions] = useState([])
   const [mockIndex, setMockIndex] = useState(0)
   const [mockRatings, setMockRatings] = useState([])
-
-  useEffect(() => {
-    setVoiceSupported(
-      Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
-    )
-  }, [])
 
   useEffect(() => {
     localStorage.setItem('ibase-interview-review', JSON.stringify(weakIds))
@@ -55,6 +52,7 @@ function InterviewPrep({ onBack }) {
     setAnswer('')
     setRevealed(false)
     setListening(false)
+    setVoiceStatus('')
   }
 
   const pickPracticeQuestion = (pool = filteredQuestions) => {
@@ -67,7 +65,7 @@ function InterviewPrep({ onBack }) {
     setReviewWeakMode(false)
     setScreen('practice')
     pickPracticeQuestion()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startWeakReview = () => {
@@ -81,7 +79,7 @@ function InterviewPrep({ onBack }) {
     setScreen('practice')
     setCurrentQuestion(shuffle(pool)[0])
     resetAnswer()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startMock = () => {
@@ -114,21 +112,27 @@ function InterviewPrep({ onBack }) {
     setCurrentQuestion(questions[0])
     resetAnswer()
     setScreen('mock')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startVoice = () => {
     const Recognition =
       window.SpeechRecognition || window.webkitSpeechRecognition
 
-    if (!Recognition) return
+    if (!Recognition) {
+      setVoiceStatus('Voice input is not available in this browser. Type your answer instead.')
+      return
+    }
 
     const recognition = new Recognition()
     recognition.continuous = false
     recognition.interimResults = false
     recognition.lang = 'en-US'
 
-    recognition.onstart = () => setListening(true)
+    recognition.onstart = () => {
+      setListening(true)
+      setVoiceStatus('Listening...')
+    }
 
     recognition.onresult = (event) => {
       const transcript = event.results?.[0]?.[0]?.transcript || ''
@@ -136,9 +140,14 @@ function InterviewPrep({ onBack }) {
       setAnswer((current) =>
         current ? `${current} ${transcript}` : transcript,
       )
+      setVoiceStatus(transcript ? 'Voice answer added.' : 'No speech was captured.')
     }
 
-    recognition.onerror = () => setListening(false)
+    recognition.onerror = () => {
+      setListening(false)
+      setVoiceStatus('Voice input failed. Type your answer instead.')
+    }
+
     recognition.onend = () => setListening(false)
 
     recognition.start()
@@ -174,7 +183,7 @@ function InterviewPrep({ onBack }) {
 
       if (mockIndex >= mockQuestions.length - 1) {
         setScreen('mock-summary')
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'auto' })
         return
       }
 
@@ -182,7 +191,7 @@ function InterviewPrep({ onBack }) {
       setMockIndex(nextIndex)
       setCurrentQuestion(mockQuestions[nextIndex])
       resetAnswer()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'auto' })
       return
     }
 
@@ -201,7 +210,7 @@ function InterviewPrep({ onBack }) {
         setScreen('home')
         setCurrentQuestion(null)
         resetAnswer()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'auto' })
         return
       }
 
@@ -303,7 +312,7 @@ function InterviewPrep({ onBack }) {
               className="interview-answer"
               value={answer}
               onChange={(event) => setAnswer(event.target.value)}
-              placeholder="Type your answer here..."
+              aria-label="Interview answer"
             />
 
             <div className="interview-answer-tools">
@@ -313,7 +322,7 @@ function InterviewPrep({ onBack }) {
                   onClick={startVoice}
                   disabled={listening}
                 >
-                  {listening ? 'Listening…' : '🎙 Say answer'}
+                  {listening ? 'Listening...' : 'Say answer'}
                 </button>
               )}
 
@@ -327,6 +336,12 @@ function InterviewPrep({ onBack }) {
               )}
             </div>
 
+            {voiceStatus && (
+              <p className="interview-status" role="status" aria-live="polite">
+                {voiceStatus}
+              </p>
+            )}
+
             {revealed && (
               <div className="interview-benchmark">
                 <p className="eyebrow">STRONG ANSWER</p>
@@ -336,7 +351,7 @@ function InterviewPrep({ onBack }) {
                   <strong>Key points</strong>
 
                   {currentQuestion.keyPoints.map((point) => (
-                    <span key={point}>✓ {point}</span>
+                    <span key={point}>{point}</span>
                   ))}
                 </div>
 
@@ -375,11 +390,11 @@ function InterviewPrep({ onBack }) {
         <div className="interview-intro">
           <p className="eyebrow">INTERVIEW PREP</p>
 
-          <h1>Practice like someone is actually across the table.</h1>
+          <h1>Practice investment banking questions by topic and difficulty.</h1>
 
           <p className="page-intro">
-            No paid AI grader. Give the answer yourself, reveal a strong
-            benchmark, and mark what needs work. The weak-question queue stays
+            Answer technical, behavioral, markets, and deal questions yourself,
+            compare with a strong benchmark, and save weak questions for review
             on this device.
           </p>
         </div>
