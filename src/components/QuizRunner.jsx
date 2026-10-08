@@ -321,6 +321,7 @@ function QuizRunner({
           {current.options.map((option, index) => (
             <button
               key={`${option}-${index}`}
+              aria-pressed={selected === index}
               className={
                 selected === index
                   ? 'quiz-answer selected'

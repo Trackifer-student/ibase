@@ -14,6 +14,8 @@ import HomeNav from './components/HomeNav'
 import SiteFooter from './components/SiteFooter'
 import LegalPage from './components/LegalPage'
 import NotFound from './components/NotFound'
+import StudyDialog from './components/StudyDialog'
+import PixelIcon from './components/PixelIcon'
 import './App.css'
 
 function RichText({ children, onConcept }) {
@@ -66,14 +68,9 @@ function ConceptModal({
       className="concept-overlay"
       onClick={onClose}
     >
-      <div
-        className="concept-modal"
-        onClick={(event) =>
-          event.stopPropagation()
-        }
-      >
+      <StudyDialog className="concept-modal" label="Concept definition" onClose={onClose}>
         <button
-          className="concept-close"
+          className="concept-close" aria-label="Close definition"
           onClick={onClose}
         >
           ×
@@ -98,39 +95,65 @@ function ConceptModal({
           <strong>Why it matters</strong>
           <p>{concept.whyItMatters}</p>
         </div>
-      </div>
+      </StudyDialog>
     </div>
   )
 }
 
-const pageFromPath = () => {
+const lessonEntries = tracks.flatMap(track => track.modules.flatMap(module =>
+  module.lessons.map(lesson => ({ track, module, lesson }))))
+const allEntries = [...lessonEntries, ...aiBankingModule.lessons.map(lesson =>
+  ({ track: null, module: aiBankingModule, lesson }))]
+const routeFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
-
-  if (path === '/') return 'home'
-  if (path === '/privacy') return 'privacy'
-  if (path === '/terms') return 'terms'
-
-  return 'not-found'
+  const pages = { '/': 'home', '/learn': 'learn', '/interview': 'interview',
+    '/ai': 'ai', '/review': 'review', '/privacy': 'privacy', '/terms': 'terms' }
+  if (pages[path]) return { page: pages[path] }
+  if (!/^\/(lesson|track|module)\/[^/]+$/.test(path)) return { page: 'not-found' }
+  const [kind, id] = path.slice(1).split('/')
+  if (kind === 'lesson') {
+    const entry = allEntries.find(e => e.lesson.id === id)
+    if (entry) return { ...entry, page: 'lesson' }
+  }
+  if (kind === 'track') {
+    const track = tracks.find(t => t.id === id)
+    if (track) return { track, page: 'track' }
+  }
+  if (kind === 'module') {
+    const entry = allEntries.find(e => e.module.id === id)
+    if (entry) return { ...entry, page: 'module' }
+  }
+  return { page: 'not-found' }
 }
+const followLink = (event, action) => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
+  event.preventDefault()
+  action()
+}
+const initialRoute = routeFromPath()
+const pageFromPath = () => routeFromPath().page
 
 function App() {
+  const [search, setSearch] = useState('')
+  const [outlineOpen, setOutlineOpen] = useState(() => window.matchMedia('(min-width: 701px)').matches)
+
   const [page, setPage] =
     useState(pageFromPath)
 
   const [activeTrack, setActiveTrack] =
-    useState(null)
+    useState(initialRoute.track || null)
 
   const [activeModule, setActiveModule] =
-    useState(null)
+    useState(initialRoute.module || null)
 
   const [moduleOrigin, setModuleOrigin] =
-    useState('track')
+    useState(initialRoute.module === aiBankingModule ? 'ai' : 'track')
 
   const [quizConfig, setQuizConfig] =
     useState(null)
 
   const [activeLesson, setActiveLesson] =
-    useState(null)
+    useState(initialRoute.lesson || null)
 
   const [lessonStep, setLessonStep] =
     useState(0)
@@ -284,7 +307,17 @@ function App() {
   }, [needsReview])
 
   useEffect(() => {
-    const onPopState = () => setPage(pageFromPath())
+    const onPopState = () => {
+      const route = routeFromPath()
+      setActiveTrack(route.track || null)
+      setActiveModule(route.module || null)
+      setActiveLesson(route.lesson || null)
+      setModuleOrigin(route.module === aiBankingModule ? 'ai' : 'track')
+      setLessonStep(0)
+      setSelectedAnswer(null)
+      setShowFeedback(false)
+      setPage(route.page)
+    }
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
@@ -337,6 +370,28 @@ function App() {
     }
   }, [page, activeTrack, activeModule, activeLesson, quizConfig])
 
+  useEffect(() => {
+    const paths = { home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
+      review: '/review', privacy: '/privacy', terms: '/terms' }
+    const path = page === 'lesson' && activeLesson ? `/lesson/${activeLesson.id}`
+      : page === 'module' && activeModule ? `/module/${activeModule.id}`
+      : page === 'track' && activeTrack ? `/track/${activeTrack.id}` : paths[page]
+    if (path && window.location.pathname !== path) window.history.pushState({}, '', path)
+  }, [page, activeLesson, activeModule, activeTrack])
+
+  useEffect(() => {
+    const heading = document.querySelector('.lesson-card h1') || document.querySelector('main h1')
+    if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }) }
+  }, [page, lessonStep])
+
+  useEffect(() => {
+    const onEscape = event => {
+      if (event.key === 'Escape') { setNotesOpen(false); setActiveConcept(null) }
+    }
+    window.addEventListener('keydown', onEscape)
+    return () => window.removeEventListener('keydown', onEscape)
+  }, [])
+
   /*
     General helpers
   */
@@ -361,32 +416,22 @@ function App() {
     })
   }
 
-  const setRootPath = () => {
-    if (window.location.pathname !== '/') {
-      window.history.pushState({}, '', '/')
-    }
-  }
-
   const goHome = () => {
-    setRootPath()
     setPage('home')
     scrollTop()
   }
 
   const openLearn = () => {
-    setRootPath()
     setPage('learn')
     scrollTop()
   }
 
   const openInterview = () => {
-    setRootPath()
     setPage('interview')
     scrollTop()
   }
 
   const openAI = () => {
-    setRootPath()
     setPage('ai')
     scrollTop()
   }
@@ -508,6 +553,16 @@ function App() {
     setPage('lesson')
     scrollTop()
   }
+
+  const startEntry = ({ track, module, lesson }) => {
+    setActiveTrack(track)
+    setActiveModule(module)
+    setModuleOrigin(module === aiBankingModule ? 'ai' : 'track')
+    openLesson(lesson)
+  }
+  const nextEntry = lessonEntries.find(entry => !completedLessons.includes(entry.lesson.id))
+  const matchingEntries = lessonEntries.filter(entry =>
+    entry.lesson.title.toLowerCase().includes(search.trim().toLowerCase()))
 
   const changeLessonStep = (
     newStep,
@@ -995,7 +1050,21 @@ function App() {
           </button>
         </nav>
 
-        <section className="lesson-shell">
+        <section className={`lesson-shell ${outlineOpen ? 'outline-open' : ''}`}>
+          <nav className="breadcrumbs" aria-label="Breadcrumb">
+            <button onClick={openLearn}>Curriculum</button><span>/</span>
+            <button onClick={() => { setPage('module'); scrollTop() }}>{activeModule.title}</button>
+          </nav>
+          <button className="outline-toggle" aria-expanded={outlineOpen} aria-controls="lesson-outline"
+            onClick={() => setOutlineOpen(value => !value)}>{outlineOpen ? 'Hide outline' : 'Show outline'}</button>
+          {outlineOpen && <aside id="lesson-outline" className="lesson-outline">
+            <p className="eyebrow">LESSON OUTLINE</p>
+            <ol>{activeLesson.steps.map((item, index) => <li key={index} aria-current={index === lessonStep ? 'step' : undefined}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <span>{item.title || item.eyebrow || item.type}</span>
+              {index === lessonStep && <strong>Current</strong>}
+            </li>)}</ol>
+          </aside>}
           <div className="lesson-topline">
             <div>
               <p className="lesson-kicker">
@@ -1037,7 +1106,7 @@ function App() {
             </div>
           </div>
 
-          <div className="progress-track">
+          <div className="progress-track" role="progressbar" aria-label="Lesson progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}>
             <div
               className="progress-fill"
               style={{
@@ -1477,6 +1546,7 @@ function App() {
                   (option, index) => (
                     <button
                       key={`${option}-${index}`}
+                      aria-pressed={selectedAnswer === index}
                       className={
                         selectedAnswer ===
                         index
@@ -1501,6 +1571,7 @@ function App() {
 
               {showFeedback && (
                 <div
+                  role="status"
                   className={
                     selectedAnswer ===
                     step.correctIndex
@@ -2098,12 +2169,7 @@ function App() {
               setNotesOpen(false)
             }
           >
-            <aside
-              className="notes-panel"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
-            >
+            <StudyDialog className="notes-panel" label="Lesson notes" returnFocus=".notes-button" onClose={() => setNotesOpen(false)}>
               <div className="notes-header">
                 <div>
                   <p className="eyebrow">
@@ -2118,6 +2184,7 @@ function App() {
                 </div>
 
                 <button
+                  aria-label="Close lesson notes"
                   onClick={() =>
                     setNotesOpen(false)
                   }
@@ -2144,7 +2211,7 @@ function App() {
                 Saved automatically on
                 this device.
               </p>
-            </aside>
+            </StudyDialog>
           </div>
         )}
 
@@ -2233,6 +2300,7 @@ function App() {
                   </div>
 
                   <button
+                    aria-label={`${completedLessons.includes(lesson.id) ? 'Review' : 'Start'} ${lesson.title}`}
                     onClick={() =>
                       openLesson(
                         lesson,
@@ -2321,9 +2389,6 @@ function App() {
               (module) => (
                 <article
                   key={module.id}
-                  onClick={() =>
-                    openModule(module)
-                  }
                   className="module-live"
                 >
                   <span>
@@ -2355,9 +2420,7 @@ function App() {
                       {module.lessons.length} lessons
                     </small>
 
-                    <strong>
-                      Open module →
-                    </strong>
+                    <button onClick={() => openModule(module)}>Open module →</button>
                   </footer>
                 </article>
               ),
@@ -2417,9 +2480,7 @@ function App() {
           </p>
 
           <h1>
-            From zero finance
-            knowledge to investment
-            banking.
+            Curriculum index.
           </h1>
 
           <p className="page-intro">
@@ -2461,51 +2522,44 @@ function App() {
             </article>
           </div>
 
-          <div className="track-list">
-            {tracks.map((track) => (
-              <article
-                className="track-card"
-                key={track.id}
-                onClick={() =>
-                  openTrack(track)
-                }
-              >
-                <div className="track-number">
-                  {track.number}
-                </div>
-
-                <div className="track-copy">
-                  <span>
-                    {track.label ||
-                      `TRACK ${track.number}`}
-                  </span>
-
-                  <h2>
-                    {track.title}
-                  </h2>
-
-                  {track.tagline && (
-                    <h3>
-                      {track.tagline}
-                    </h3>
-                  )}
-
-                  <p>
-                    {track.description}
-                  </p>
-                </div>
-
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    openTrack(track)
-                  }}
-                >
-                  Explore track →
-                </button>
-              </article>
-            ))}
+          <div className="resume-strip">
+            <div><span className="eyebrow">{completedCurriculumCount ? 'CONTINUE LEARNING' : 'BEGIN HERE'}</span>
+              <p>{completedCurriculumCount ? 'Pick up with your next unfinished lesson.' : 'Start with Finance From Zero. Then follow the index in order.'}</p>
+              <small>Progress and notes are saved in this browser on this device. No account required.</small></div>
+            {nextEntry ? <button className="primary-button" onClick={() => startEntry(nextEntry)}>{nextEntry.lesson.title} →</button>
+              : <strong>Curriculum complete. Use the review queue or cumulative exam.</strong>}
           </div>
+          <div className="index-toolbar">
+            <label htmlFor="lesson-search">Search lesson titles</label>
+            <input id="lesson-search" type="search" value={search} placeholder="e.g. cash flow, DCF, networking"
+              onChange={event => setSearch(event.target.value)} />
+            {search && <button onClick={() => setSearch('')}>Clear search</button>}
+          </div>
+          {search.trim() ? <section className="search-results" aria-label="Lesson search results">
+            <p role="status">{matchingEntries.length} matching lessons</p>
+            {matchingEntries.map(entry => <div className="index-row" key={entry.lesson.id}>
+              <span className="module-code">{entry.module.number}</span>
+              <div><h2>{entry.lesson.title}</h2><small>{entry.track.title} / {entry.module.title}</small></div>
+              <span>{completedLessons.includes(entry.lesson.id) ? 'Complete' : 'Unfinished'}</span>
+              <a href={`/lesson/${entry.lesson.id}`} onClick={event => followLink(event, () => { startEntry(entry) })}>Open lesson →</a>
+            </div>)}
+            {!matchingEntries.length && <p>Try another lesson title or clear your search to browse all modules.</p>}
+          </section> : <div className="curriculum-index">
+            {tracks.map(track => <section key={track.id}>
+              <div className="index-heading"><span className="module-code">TRACK {track.number}</span>
+                <h2>{track.title}</h2><button onClick={() => openTrack(track)}>Track & exam →</button></div>
+              <div className="index-columns" aria-hidden="true"><span>CODE</span><span>MODULE</span><span>COMPLETED</span><span>ACTION</span></div>
+              {track.modules.map(module => {
+                const done = module.lessons.filter(lesson => completedLessons.includes(lesson.id)).length
+                return <div className="index-row" key={module.id}>
+                  <span className="module-code">{module.number}</span>
+                  <div><h3>{module.title}</h3><small>{module.lessons.length} lessons</small></div>
+                  <span className="index-completion">{done === module.lessons.length ? '✓ Complete' : `${done} / ${module.lessons.length}`}</span>
+                  <a href={`/module/${module.id}`} onClick={event => followLink(event, () => { setActiveTrack(track); openModule(module) })}>Open module →</a>
+                </div>
+              })}
+            </section>)}
+          </div>}
 
           <div className="curriculum-note">
             <strong>
@@ -2582,7 +2636,7 @@ function App() {
           <h1>Use AI for banking work without outsourcing judgment.</h1>
 
           <p className="page-intro">
-            Nine practical lessons covering company and industry research, SEC
+            {aiBankingModule.lessons.length} practical lessons covering company and industry research, SEC
             filings, Excel, model checking, presentations, prompting,
             verification, and confidentiality.
           </p>
@@ -2609,6 +2663,7 @@ function App() {
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <h2>{lesson.title}</h2>
                 <p>{lesson.summary}</p>
+                <a href={`/lesson/${lesson.id}`} onClick={event => followLink(event, () => { startEntry({ track: null, module: aiBankingModule, lesson }) })}>Open lesson →</a>
               </article>
             ))}
           </div>
@@ -2641,101 +2696,43 @@ function App() {
         onAI={openAI}
       />
 
-      <section className="hero">
-        <p className="eyebrow">
-          FINANCE FROM ZERO. BANKING
-          FROM THERE.
-        </p>
-
-        <h1>
-          Learn investment banking from zero.
-          <br />
-          Practice until you can explain it.
-        </h1>
-
-        <p className="subtitle">
-          Structured finance lessons, technical training, quizzes, interview
-          practice, recruiting guidance, and analyst skills in one free course.
-        </p>
-
-        <button
-          className="primary-button"
-          onClick={openLearn}
-        >
-          Start learning
-        </button>
-
-        <p className="hero-small">
-          Free. No account. Start from
-          zero.
-        </p>
-      </section>
-
-      <section className="paths">
-        <article onClick={openLearn}>
-          <span>01</span>
-
-          <h2>Learn IB</h2>
-
-          <p>
-            Build financial knowledge
-            from the ground up, then
-            move into accounting,
-            valuation, DCFs, M&A, and
-            analyst skills.
-          </p>
-
-          <button onClick={openLearn}>
-            Explore the curriculum
-          </button>
-        </article>
-
-        <article onClick={openInterview}>
-          <span>02</span>
-
-          <h2>
-            Interview Prep
-          </h2>
-
-          <p>
-            Turn what you learned into
-            answers you can actually
-            give under pressure.
-          </p>
-
-          <button onClick={openInterview}>
-            See interview prep
-          </button>
-        </article>
-
-        <article onClick={openAI}>
-          <span>03</span>
-
-          <h2>
-            AI for Banking
-          </h2>
-
-          <p>
-            Learn where AI helps in
-            finance, how to verify its
-            work, and where relying on
-            it gets dangerous.
-          </p>
-
-          <button onClick={openAI}>
-            Explore AI for banking
-          </button>
-        </article>
-      </section>
-
-      <section className="home-aside">
-        <p>
-          <strong>
-            IBase rule #1:
-          </strong>{' '}
-          understand it before you
-          memorize it.
-        </p>
+      <section className="workstation-home">
+        <div className="window-heading"><span><PixelIcon kind="ledger" /> IBASE / LEARNING WORKSTATION</span><span>COURSE DIRECTORY</span></div>
+        <div className="home-opening">
+          <div className="home-introduction">
+            <p className="eyebrow">FINANCE FROM ZERO. BANKING FROM THERE.</p>
+            <h1>Investment banking,<br />from first principles.</h1>
+            <p className="subtitle">Learn finance, accounting, valuation, and the work of an investment banker through ordered lessons, worked examples, and practice questions.</p>
+            <div className="home-actions">
+              <a className="primary-button" href={`/lesson/${lessonEntries[0].lesson.id}`} onClick={event => followLink(event, () => { startEntry(lessonEntries[0]) })}>Start with Finance From Zero →</a>
+              <a className="secondary-button" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>Browse curriculum</a>
+            </div>
+            <p className="access-line">Free · No account required</p>
+            <p className="local-note">Your progress and notes stay in this browser on this device.</p>
+          </div>
+          <aside className="curriculum-preview" aria-label="Curriculum preview">
+            <div className="panel-heading">CONTENTS / FIRST PRINCIPLES</div>
+            {tracks.slice(0, 3).map(track => <div className="preview-track" key={track.id}>
+              <p><span>{track.number}</span><strong>{track.title}</strong></p>
+              {track.modules[0].lessons.slice(0, 2).map(lesson => <a href={`/lesson/${lesson.id}`} key={lesson.id}
+                onClick={event => followLink(event, () => { startEntry({ track, module: track.modules[0], lesson }) })}>{lesson.title} <span aria-hidden="true">↗</span></a>)}
+            </div>)}
+            <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>View all {lessonEntries.length} curriculum lessons →</a>
+          </aside>
+        </div>
+        <section className="area-directory" aria-label="Learning areas">
+          <div className="panel-heading">DIRECTORY / CHOOSE A WORKSPACE</div>
+          {[['ledger', '01', 'Learn IB', 'Follow the curriculum from financial basics to technical interviews, recruiting, and analyst skills.', '/learn', openLearn, 'Open curriculum'],
+            ['practice', '02', 'Interview Prep', 'Practice technical, behavioral, markets, and deal questions under interview conditions.', '/interview', openInterview, 'Open interview prep'],
+            ['tools', '03', 'AI for Banking', 'Learn practical workflows, verification, and confidentiality for banking work.', '/ai', openAI, 'Open AI course']].map(([icon, code, title, body, href, action, label]) =>
+              <div className="directory-row" key={code}><span className="directory-code"><PixelIcon kind={icon} />{code}</span>
+                <h2>{title}</h2><p>{body}</p><a href={href} onClick={event => followLink(event, () => { action() })}>{label} →</a></div>)}
+        </section>
+        <section className="sample-lesson">
+          <div><p className="eyebrow">TRY A LESSON / NO SETUP</p><h2>{lessonEntries[0].lesson.title}</h2>
+            <p>{lessonEntries[0].lesson.summary}</p><small>Read the explanation, work through the example, and check your understanding.</small></div>
+          <a className="secondary-button" href={`/lesson/${lessonEntries[0].lesson.id}`} onClick={event => followLink(event, () => { startEntry(lessonEntries[0]) })}>Open sample lesson →</a>
+        </section>
       </section>
 
       {renderFooter()}

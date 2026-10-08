@@ -411,6 +411,7 @@ function InterviewPrep({ onBack }) {
             <label>
               Topic
               <select
+                aria-label="Topic"
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
               >
@@ -426,6 +427,7 @@ function InterviewPrep({ onBack }) {
             <label>
               Difficulty
               <select
+                aria-label="Difficulty"
                 value={difficulty}
                 onChange={(event) => setDifficulty(event.target.value)}
               >
