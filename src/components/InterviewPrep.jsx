@@ -13,7 +13,9 @@ function InterviewPrep({ onBack }) {
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
-  const [voiceSupported, setVoiceSupported] = useState(false)
+  const [voiceSupported] = useState(() =>
+    Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+  )
   const [listening, setListening] = useState(false)
   const [voiceStatus, setVoiceStatus] = useState('')
   const [reviewWeakMode, setReviewWeakMode] = useState(false)
@@ -29,12 +31,6 @@ function InterviewPrep({ onBack }) {
   const [mockQuestions, setMockQuestions] = useState([])
   const [mockIndex, setMockIndex] = useState(0)
   const [mockRatings, setMockRatings] = useState([])
-
-  useEffect(() => {
-    setVoiceSupported(
-      Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
-    )
-  }, [])
 
   useEffect(() => {
     localStorage.setItem('ibase-interview-review', JSON.stringify(weakIds))
