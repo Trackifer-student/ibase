@@ -2617,3 +2617,11 @@ main {
     flex-wrap: wrap;
   }
 }
+
+
+.interview-status {
+  margin: 12px 0 0;
+  color: #586a80;
+  font-size: 14px;
+  line-height: 1.5;
+}
