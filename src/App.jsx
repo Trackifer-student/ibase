@@ -2720,6 +2720,43 @@ function App() {
             <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>View all {lessonEntries.length} curriculum lessons →</a>
           </aside>
         </div>
+        {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && (
+          <section className="returning-dashboard" aria-label="Your learning dashboard">
+            <div className="panel-heading">YOUR WORKSTATION / RETURNING LEARNER</div>
+            <div className="returning-dashboard-grid">
+              <div>
+                <span className="dashboard-label">PROGRESS</span>
+                <strong>{completedCurriculumCount} / {curriculumLessonIds.length}</strong>
+                <p>curriculum lessons complete</p>
+              </div>
+              <div>
+                <span className="dashboard-label">XP</span>
+                <strong>{xp}</strong>
+                <p>earned on this device</p>
+              </div>
+              <div>
+                <span className="dashboard-label">REVIEW</span>
+                <strong>{needsReview.length}</strong>
+                <p>{needsReview.length === 1 ? 'concept needs attention' : 'concepts need attention'}</p>
+              </div>
+              <div className="returning-dashboard-action">
+                {nextEntry ? (
+                  <button className="primary-button" onClick={() => startEntry(nextEntry)}>
+                    Continue: {nextEntry.lesson.title} →
+                  </button>
+                ) : (
+                  <button className="primary-button" onClick={openLearn}>Open curriculum →</button>
+                )}
+                {needsReview.length > 0 && (
+                  <button className="secondary-button" onClick={() => { setPage('review'); scrollTop() }}>
+                    Review queue →
+                  </button>
+                )}
+              </div>
+            </div>
+            <p className="local-note">Saved locally in this browser on this device. No account required.</p>
+          </section>
+        )}
         <section className="area-directory" aria-label="Learning areas">
           <div className="panel-heading">DIRECTORY / CHOOSE A WORKSPACE</div>
           {[['ledger', '01', 'Learn IB', 'Follow the curriculum from financial basics to technical interviews, recruiting, and analyst skills.', '/learn', openLearn, 'Open curriculum'],
