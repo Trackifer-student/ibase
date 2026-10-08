@@ -3,7 +3,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  overflow-x: hidden;
 }
 
 :root {
@@ -27,6 +28,8 @@ body {
 }
 
 button,
+input,
+select,
 textarea {
   font: inherit;
 }
@@ -36,7 +39,10 @@ button {
 }
 
 button:focus-visible,
-textarea:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
   outline: 3px solid rgba(47, 111, 237, 0.25);
   outline-offset: 3px;
 }
@@ -52,6 +58,7 @@ button:disabled {
 
 main {
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 /* ------------------------------
@@ -2361,5 +2368,252 @@ main {
 
   .review-grid article > div button {
     width: 100%;
+  }
+}
+
+
+/* ------------------------------
+   Launch readiness
+------------------------------ */
+
+.home-nav {
+  position: relative;
+}
+
+.mobile-menu-button {
+  display: none;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #fff;
+  color: #294666;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  position: absolute;
+  z-index: 50;
+  top: 68px;
+  right: 0;
+  width: min(280px, 90vw);
+  padding: 10px;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(29, 47, 76, 0.12);
+}
+
+.mobile-menu button {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: #334b68;
+  font-weight: 750;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-menu button:hover,
+.mobile-menu button:focus-visible {
+  background: #f1f5fa;
+}
+
+.site-footer {
+  margin-top: 72px;
+  border-top: 1px solid #dde4ed;
+  background: #fff;
+}
+
+.footer-inner {
+  width: min(1180px, 90%);
+  margin: 0 auto;
+  padding: 42px 0 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  gap: 60px;
+  align-items: start;
+}
+
+.footer-brand p {
+  max-width: 600px;
+  margin: 14px 0 0;
+  color: #68778a;
+  line-height: 1.65;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+}
+
+.footer-links button {
+  min-height: 40px;
+  padding: 0;
+  background: transparent;
+  color: #445970;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.footer-links button:hover {
+  color: #245fae;
+}
+
+.footer-bottom {
+  width: min(1180px, 90%);
+  margin: 0 auto;
+  padding: 18px 0 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid #edf0f4;
+  color: #7a8796;
+  font-size: 13px;
+}
+
+.legal-page,
+.not-found-page {
+  width: min(840px, 90%);
+  margin: 0 auto;
+  padding: 62px 0 96px;
+}
+
+.legal-page > .eyebrow,
+.legal-page > h1,
+.not-found-page > .eyebrow,
+.not-found-page > h1,
+.not-found-page > p {
+  text-align: center;
+}
+
+.legal-page > h1,
+.not-found-page > h1 {
+  margin: 0;
+  color: #102342;
+  font-size: clamp(42px, 7vw, 66px);
+  line-height: 1.04;
+  letter-spacing: -2.5px;
+}
+
+.legal-updated {
+  margin: 16px 0 42px;
+  color: #7c8998;
+  text-align: center;
+}
+
+.legal-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.legal-copy section {
+  padding: 25px 0;
+  border-top: 1px solid #e2e7ee;
+}
+
+.legal-copy h2 {
+  margin: 0 0 9px;
+  color: #203753;
+  font-size: 21px;
+}
+
+.legal-copy p {
+  margin: 0;
+  color: #617084;
+  line-height: 1.75;
+}
+
+.not-found-page {
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-page > p:not(.eyebrow) {
+  max-width: 600px;
+  margin: 22px auto 28px;
+  color: #657487;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.track-card,
+.module-grid article,
+.lesson-row,
+.paths article,
+.quiz-level-card,
+.interview-mode-grid article,
+.ai-lesson-grid article {
+  min-width: 0;
+}
+
+.track-copy,
+.lesson-row-copy,
+.quiz-question-card,
+.interview-shell,
+.ai-course-page,
+.legal-copy {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 620px) {
+  .home-nav .nav-links {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .legal-page,
+  .not-found-page {
+    padding-top: 42px;
+  }
+
+  .legal-page > h1,
+  .not-found-page > h1 {
+    letter-spacing: -1.8px;
+  }
+
+  .site-nav {
+    width: min(1180px, 92%);
+  }
+
+  .lesson-topline,
+  .quiz-runner-top,
+  .quiz-question-meta,
+  .interview-question-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .lesson-tools {
+    width: 100%;
+    flex-wrap: wrap;
   }
 }
