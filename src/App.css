@@ -2775,3 +2775,80 @@ small { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .concept-grid article p, .worked-step p, .stack-list article p { font-size: 17px; line-height: 1.75; }
 /* Reading headings receive focus after navigation for screen readers. */
 h1[tabindex="-1"]:focus { outline: none; }
+
+
+/* Returning learner dashboard */
+.returning-dashboard {
+  width: min(1180px, 90%);
+  margin: 26px auto 0;
+  padding: 0 0 26px;
+  border-top: 1px solid #b6b6aa;
+}
+
+.returning-dashboard .panel-heading {
+  padding: 15px 0;
+  border-bottom: 1px solid #b6b6aa;
+}
+
+.returning-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(260px, 1.7fr);
+  gap: 0;
+  border-bottom: 1px solid #b6b6aa;
+}
+
+.returning-dashboard-grid > div {
+  min-height: 128px;
+  padding: 20px;
+  border-right: 1px solid #b6b6aa;
+}
+
+.returning-dashboard-grid > div:first-child { padding-left: 0; }
+.returning-dashboard-grid > div:last-child { border-right: 0; }
+
+.dashboard-label {
+  display: block;
+  margin-bottom: 12px;
+  color: #205544;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.6px;
+}
+
+.returning-dashboard-grid strong {
+  display: block;
+  color: #191919;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 25px;
+  font-variant-numeric: tabular-nums;
+}
+
+.returning-dashboard-grid p {
+  margin: 7px 0 0;
+  color: #50534d;
+  font-size: 13px;
+}
+
+.returning-dashboard-action {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.returning-dashboard-action .primary-button,
+.returning-dashboard-action .secondary-button {
+  min-height: 42px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.returning-dashboard > .local-note { margin: 15px 0 0; }
+
+@media (max-width: 760px) {
+  .returning-dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+  .returning-dashboard-grid > div:nth-child(2) { border-right: 0; }
+  .returning-dashboard-grid > div:nth-child(3) { padding-left: 0; border-top: 1px solid #b6b6aa; }
+  .returning-dashboard-grid > div:last-child { grid-column: 1 / -1; border-top: 1px solid #b6b6aa; padding-left: 0; justify-content: flex-start; }
+}
