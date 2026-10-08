@@ -67,7 +67,7 @@ function InterviewPrep({ onBack }) {
     setReviewWeakMode(false)
     setScreen('practice')
     pickPracticeQuestion()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startWeakReview = () => {
@@ -81,7 +81,7 @@ function InterviewPrep({ onBack }) {
     setScreen('practice')
     setCurrentQuestion(shuffle(pool)[0])
     resetAnswer()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startMock = () => {
@@ -114,7 +114,7 @@ function InterviewPrep({ onBack }) {
     setCurrentQuestion(questions[0])
     resetAnswer()
     setScreen('mock')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const startVoice = () => {
@@ -174,7 +174,7 @@ function InterviewPrep({ onBack }) {
 
       if (mockIndex >= mockQuestions.length - 1) {
         setScreen('mock-summary')
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'auto' })
         return
       }
 
@@ -182,7 +182,7 @@ function InterviewPrep({ onBack }) {
       setMockIndex(nextIndex)
       setCurrentQuestion(mockQuestions[nextIndex])
       resetAnswer()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'auto' })
       return
     }
 
@@ -201,7 +201,7 @@ function InterviewPrep({ onBack }) {
         setScreen('home')
         setCurrentQuestion(null)
         resetAnswer()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'auto' })
         return
       }
 
@@ -303,7 +303,7 @@ function InterviewPrep({ onBack }) {
               className="interview-answer"
               value={answer}
               onChange={(event) => setAnswer(event.target.value)}
-              placeholder="Type your answer here..."
+              aria-label="Interview answer"
             />
 
             <div className="interview-answer-tools">
@@ -313,7 +313,7 @@ function InterviewPrep({ onBack }) {
                   onClick={startVoice}
                   disabled={listening}
                 >
-                  {listening ? 'Listening…' : '🎙 Say answer'}
+                  {listening ? 'Listening...' : 'Say answer'}
                 </button>
               )}
 
