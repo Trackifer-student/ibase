@@ -10,6 +10,10 @@ import {
 } from './utils/quizBuilder'
 import QuizRunner from './components/QuizRunner'
 import InterviewPrep from './components/InterviewPrep'
+import HomeNav from './components/HomeNav'
+import SiteFooter from './components/SiteFooter'
+import LegalPage from './components/LegalPage'
+import NotFound from './components/NotFound'
 import './App.css'
 
 function RichText({ children, onConcept }) {
@@ -99,9 +103,19 @@ function ConceptModal({
   )
 }
 
+const pageFromPath = () => {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/'
+
+  if (path === '/') return 'home'
+  if (path === '/privacy') return 'privacy'
+  if (path === '/terms') return 'terms'
+
+  return 'not-found'
+}
+
 function App() {
   const [page, setPage] =
-    useState('home')
+    useState(pageFromPath)
 
   const [activeTrack, setActiveTrack] =
     useState(null)
@@ -269,6 +283,60 @@ function App() {
     )
   }, [needsReview])
 
+  useEffect(() => {
+    const onPopState = () => setPage(pageFromPath())
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  useEffect(() => {
+    const titles = {
+      home: 'IBase | Learn Investment Banking from Zero',
+      learn: 'Investment Banking Curriculum | IBase',
+      interview: 'Investment Banking Interview Prep | IBase',
+      ai: 'AI for Banking Course | IBase',
+      review: 'Review Queue | IBase',
+      quiz: 'Quiz | IBase',
+      privacy: 'Privacy Policy | IBase',
+      terms: 'Terms and Conditions | IBase',
+      'not-found': 'Page Not Found | IBase',
+    }
+
+    let title = titles[page] || 'IBase'
+
+    if (page === 'track' && activeTrack) {
+      title = `${activeTrack.title} | IBase`
+    } else if (page === 'module' && activeModule) {
+      title = `${activeModule.title} | IBase`
+    } else if (page === 'lesson' && activeLesson) {
+      title = `${activeLesson.title} | IBase`
+    } else if (page === 'quiz' && quizConfig?.title) {
+      title = `${quizConfig.title} | IBase`
+    }
+
+    document.title = title
+
+    const descriptions = {
+      home:
+        'Free investment banking lessons, quizzes, interview practice, recruiting guides, and analyst skill training for students starting from zero.',
+      learn:
+        'Learn finance and investment banking from the ground up with structured lessons, worked examples, quizzes, and cumulative exams.',
+      interview:
+        'Practice investment banking technical, behavioral, markets, and deal interview questions by topic and difficulty.',
+      ai:
+        'Learn practical AI workflows for banking research, filings, Excel, model checking, presentations, prompting, verification, and confidentiality.',
+      privacy:
+        'Read how IBase handles local learning data, browser storage, and privacy.',
+      terms:
+        'Read the terms and conditions for using IBase educational content.',
+    }
+
+    const meta = document.querySelector('meta[name="description"]')
+    if (meta) {
+      meta.setAttribute('content', descriptions[page] || descriptions.home)
+    }
+  }, [page, activeTrack, activeModule, activeLesson, quizConfig])
+
   /*
     General helpers
   */
@@ -289,19 +357,62 @@ function App() {
   const scrollTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'auto',
     })
   }
 
+  const useRootPath = () => {
+    if (window.location.pathname !== '/') {
+      window.history.pushState({}, '', '/')
+    }
+  }
+
   const goHome = () => {
+    useRootPath()
     setPage('home')
     scrollTop()
   }
 
   const openLearn = () => {
+    useRootPath()
     setPage('learn')
     scrollTop()
   }
+
+  const openInterview = () => {
+    useRootPath()
+    setPage('interview')
+    scrollTop()
+  }
+
+  const openAI = () => {
+    useRootPath()
+    setPage('ai')
+    scrollTop()
+  }
+
+  const openPrivacy = () => {
+    window.history.pushState({}, '', '/privacy')
+    setPage('privacy')
+    scrollTop()
+  }
+
+  const openTerms = () => {
+    window.history.pushState({}, '', '/terms')
+    setPage('terms')
+    scrollTop()
+  }
+
+  const renderFooter = () => (
+    <SiteFooter
+      onHome={goHome}
+      onLearn={openLearn}
+      onInterview={openInterview}
+      onAI={openAI}
+      onPrivacy={openPrivacy}
+      onTerms={openTerms}
+    />
+  )
 
   const openTrack = (track) => {
     setActiveTrack(track)
@@ -696,6 +807,36 @@ function App() {
           )}
         </div>
       </div>
+    )
+  }
+
+  if (page === 'privacy' || page === 'terms') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome} aria-label="IBase home">
+            IBase
+          </button>
+        </nav>
+
+        <LegalPage type={page} onBack={goHome} />
+        {renderFooter()}
+      </main>
+    )
+  }
+
+  if (page === 'not-found') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome} aria-label="IBase home">
+            IBase
+          </button>
+        </nav>
+
+        <NotFound onHome={goHome} />
+        {renderFooter()}
+      </main>
     )
   }
 
@@ -2132,6 +2273,8 @@ function App() {
             </button>
           </div>
         </section>
+
+        {renderFooter()}
       </main>
     )
   }
@@ -2252,6 +2395,8 @@ function App() {
             </button>
           </div>
         </section>
+
+        {renderFooter()}
       </main>
     )
   }
@@ -2395,6 +2540,8 @@ function App() {
             </button>
           </div>
         </section>
+
+        {renderFooter()}
       </main>
     )
   }
@@ -2415,6 +2562,7 @@ function App() {
         </nav>
 
         <InterviewPrep onBack={goHome} />
+        {renderFooter()}
       </main>
     )
   }
@@ -2483,6 +2631,8 @@ function App() {
             </p>
           </div>
         </section>
+
+        {renderFooter()}
       </main>
     )
   }
@@ -2493,38 +2643,12 @@ function App() {
 
   return (
     <main>
-      <nav className="site-nav">
-        <button
-          className="brand-button"
-          onClick={goHome}
-        >
-          IBase
-        </button>
-
-        <div className="nav-links">
-          <button onClick={openLearn}>
-            Learn IB
-          </button>
-
-          <button
-            onClick={() => {
-              setPage('interview')
-              scrollTop()
-            }}
-          >
-            Interview Prep
-          </button>
-
-          <button
-            onClick={() => {
-              setPage('ai')
-              scrollTop()
-            }}
-          >
-            AI for Banking
-          </button>
-        </div>
-      </nav>
+      <HomeNav
+        onHome={goHome}
+        onLearn={openLearn}
+        onInterview={openInterview}
+        onAI={openAI}
+      />
 
       <section className="hero">
         <p className="eyebrow">
@@ -2533,17 +2657,14 @@ function App() {
         </p>
 
         <h1>
-          Learn the finance.
+          Learn investment banking from zero.
           <br />
-          Understand the why.
+          Practice until you can explain it.
         </h1>
 
         <p className="subtitle">
-          A complete, interactive path
-          from basic financial concepts
-          to investment banking,
-          technical interviews, and
-          analyst skills.
+          Structured finance lessons, technical training, quizzes, interview
+          practice, recruiting guidance, and analyst skills in one free course.
         </p>
 
         <button
@@ -2574,7 +2695,7 @@ function App() {
           </p>
 
           <button>
-            Explore the curriculum →
+            Explore the curriculum
           </button>
         </article>
 
@@ -2597,7 +2718,7 @@ function App() {
           </p>
 
           <button>
-            See interview prep →
+            See interview prep
           </button>
         </article>
 
@@ -2621,7 +2742,7 @@ function App() {
           </p>
 
           <button>
-            Explore AI for banking →
+            Explore AI for banking
           </button>
         </article>
       </section>
@@ -2635,6 +2756,8 @@ function App() {
           memorize it.
         </p>
       </section>
+
+      {renderFooter()}
     </main>
   )
 }
