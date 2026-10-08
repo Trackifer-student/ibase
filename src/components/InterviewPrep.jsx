@@ -336,7 +336,7 @@ function InterviewPrep({ onBack }) {
                   <strong>Key points</strong>
 
                   {currentQuestion.keyPoints.map((point) => (
-                    <span key={point}>✓ {point}</span>
+                    <span key={point}>{point}</span>
                   ))}
                 </div>
 
