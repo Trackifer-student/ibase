@@ -2584,13 +2584,12 @@ function App() {
         <section className="ai-course-page">
           <p className="eyebrow">AI FOR BANKING</p>
 
-          <h1>Use AI without becoming useless without it.</h1>
+          <h1>Use AI for banking work without outsourcing judgment.</h1>
 
           <p className="page-intro">
-            Nine practical lessons on research, filings, Excel, model
-            checking, presentations, prompting, hallucinations, and
-            confidentiality. The rule is simple: accelerate the work without
-            outsourcing judgment.
+            Nine practical lessons covering company and industry research, SEC
+            filings, Excel, model checking, presentations, prompting,
+            verification, and confidentiality.
           </p>
 
           <div className="ai-course-actions">
