@@ -1443,9 +1443,9 @@ main {
 }
 
 .skip-question {
-  position: absolute;
-  top: 24px;
-  right: 26px;
+  display: block;
+  position: static;
+  margin: 0 0 16px auto;
   padding: 7px 10px;
   border: 0;
   background: transparent;
@@ -1571,9 +1571,7 @@ main {
 
 @media (max-width: 620px) {
   .skip-question {
-    position: static;
-    float: right;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
 }
 
