@@ -6,7 +6,7 @@ import {
 } from '../data/interviewQuestions'
 import { shuffle } from '../utils/quizBuilder'
 
-function InterviewPrep({ onBack }) {
+function InterviewPrep({ onBack, onLearn }) {
   const [screen, setScreen] = useState('home')
   const [category, setCategory] = useState('Accounting')
   const [difficulty, setDifficulty] = useState('All')
@@ -399,6 +399,7 @@ function InterviewPrep({ onBack }) {
           </p>
         </div>
 
+        <p className="beginner-caption">New to finance? <button className="inline-course-link" onClick={onLearn}>Learn the basics first →</button> Otherwise, choose a topic below, try an answer, then reveal the example and rate yourself.</p>
         <div className="interview-mode-grid">
           <article>
             <span>01</span>
