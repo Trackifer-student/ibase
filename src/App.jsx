@@ -15,8 +15,8 @@ import SiteFooter from './components/SiteFooter'
 import LegalPage from './components/LegalPage'
 import NotFound from './components/NotFound'
 import StudyDialog from './components/StudyDialog'
-import PixelIcon from './components/PixelIcon'
 import './App.css'
+import './calm.css'
 
 function RichText({ children, onConcept }) {
   if (typeof children !== 'string') {
@@ -2480,7 +2480,7 @@ function App() {
           </p>
 
           <h1>
-            Curriculum index.
+            Your learning path.
           </h1>
 
           <p className="page-intro">
@@ -2546,9 +2546,9 @@ function App() {
             {!matchingEntries.length && <p>Try another lesson title or clear your search to browse all modules.</p>}
           </section> : <div className="curriculum-index">
             {tracks.map(track => <section key={track.id}>
-              <div className="index-heading"><span className="module-code">TRACK {track.number}</span>
-                <h2>{track.title}</h2><button onClick={() => openTrack(track)}>Track & exam →</button></div>
-              <div className="index-columns" aria-hidden="true"><span>CODE</span><span>MODULE</span><span>COMPLETED</span><span>ACTION</span></div>
+              <div className="index-heading"><span className="module-code">Track {track.number}</span>
+                <h2>{track.title}</h2><button onClick={() => openTrack(track)}>View track →</button></div>
+              <div className="index-columns" aria-hidden="true"><span>Code</span><span>Module</span><span>Progress</span><span></span></div>
               {track.modules.map(module => {
                 const done = module.lessons.filter(lesson => completedLessons.includes(lesson.id)).length
                 return <div className="index-row" key={module.id}>
@@ -2697,10 +2697,9 @@ function App() {
       />
 
       <section className="workstation-home">
-        <div className="window-heading"><span><PixelIcon kind="ledger" /> IBASE / LEARNING WORKSTATION</span><span>COURSE DIRECTORY</span></div>
-        <div className="home-opening">
+        {!(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && <div className="home-opening">
           <div className="home-introduction">
-            <p className="eyebrow">FINANCE FROM ZERO. BANKING FROM THERE.</p>
+            <p className="eyebrow">Learn at your own pace</p>
             <h1>Investment banking,<br />from first principles.</h1>
             <p className="subtitle">Learn finance, accounting, valuation, and the work of an investment banker through ordered lessons, worked examples, and practice questions.</p>
             <div className="home-actions">
@@ -2711,21 +2710,21 @@ function App() {
             <p className="local-note">Your progress and notes stay in this browser on this device.</p>
           </div>
           <aside className="curriculum-preview" aria-label="Curriculum preview">
-            <div className="panel-heading">CONTENTS / FIRST PRINCIPLES</div>
-            {tracks.slice(0, 3).map(track => <div className="preview-track" key={track.id}>
-              <p><span>{track.number}</span><strong>{track.title}</strong></p>
-              {track.modules[0].lessons.slice(0, 2).map(lesson => <a href={`/lesson/${lesson.id}`} key={lesson.id}
-                onClick={event => followLink(event, () => { startEntry({ track, module: track.modules[0], lesson }) })}>{lesson.title} <span aria-hidden="true">↗</span></a>)}
+            <h2 className="panel-heading">Your first three lessons</h2>
+            {lessonEntries.slice(0, 3).map((entry, index) => <div className="preview-track" key={entry.lesson.id}>
+              <a href={`/lesson/${entry.lesson.id}`} onClick={event => followLink(event, () => startEntry(entry))}>
+                <span className="lesson-order">{index + 1}</span>{entry.lesson.title}<span aria-hidden="true">→</span>
+              </a>
             </div>)}
             <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>View all {lessonEntries.length} curriculum lessons →</a>
           </aside>
-        </div>
+        </div>}
         {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && (
           <section className="returning-dashboard" aria-label="Your learning dashboard">
-            <div className="panel-heading">YOUR WORKSTATION / RETURNING LEARNER</div>
+            <h1 className="returning-title">Welcome back.</h1>
             <div className="returning-dashboard-grid">
               <div>
-                <span className="dashboard-label">PROGRESS</span>
+                <span className="dashboard-label">Progress</span>
                 <strong>{completedCurriculumCount} / {curriculumLessonIds.length}</strong>
                 <p>curriculum lessons complete</p>
               </div>
@@ -2735,7 +2734,7 @@ function App() {
                 <p>earned on this device</p>
               </div>
               <div>
-                <span className="dashboard-label">REVIEW</span>
+                <span className="dashboard-label">Review</span>
                 <strong>{needsReview.length}</strong>
                 <p>{needsReview.length === 1 ? 'concept needs attention' : 'concepts need attention'}</p>
               </div>
@@ -2758,18 +2757,14 @@ function App() {
           </section>
         )}
         <section className="area-directory" aria-label="Learning areas">
-          <div className="panel-heading">DIRECTORY / CHOOSE A WORKSPACE</div>
+          <h2 className="panel-heading">Explore IBase</h2>
           {[['ledger', '01', 'Learn IB', 'Follow the curriculum from financial basics to technical interviews, recruiting, and analyst skills.', '/learn', openLearn, 'Open curriculum'],
             ['practice', '02', 'Interview Prep', 'Practice technical, behavioral, markets, and deal questions under interview conditions.', '/interview', openInterview, 'Open interview prep'],
-            ['tools', '03', 'AI for Banking', 'Learn practical workflows, verification, and confidentiality for banking work.', '/ai', openAI, 'Open AI course']].map(([icon, code, title, body, href, action, label]) =>
-              <div className="directory-row" key={code}><span className="directory-code"><PixelIcon kind={icon} />{code}</span>
+            ['tools', '03', 'AI for Banking', 'Learn practical workflows, verification, and confidentiality for banking work.', '/ai', openAI, 'Open AI course']].map(([, code, title, body, href, action, label]) =>
+              <div className="directory-row" key={code}>
                 <h2>{title}</h2><p>{body}</p><a href={href} onClick={event => followLink(event, () => { action() })}>{label} →</a></div>)}
         </section>
-        <section className="sample-lesson">
-          <div><p className="eyebrow">TRY A LESSON / NO SETUP</p><h2>{lessonEntries[0].lesson.title}</h2>
-            <p>{lessonEntries[0].lesson.summary}</p><small>Read the explanation, work through the example, and check your understanding.</small></div>
-          <a className="secondary-button" href={`/lesson/${lessonEntries[0].lesson.id}`} onClick={event => followLink(event, () => { startEntry(lessonEntries[0]) })}>Open sample lesson →</a>
-        </section>
+
       </section>
 
       {renderFooter()}
