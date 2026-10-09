@@ -22,9 +22,9 @@ function SiteFooter({
         </div>
 
         <nav className="footer-links" aria-label="Footer navigation">
-          <button onClick={onLearn}>Learn IB</button>
-          <button onClick={onInterview}>Interview Prep</button>
-          <button onClick={onAI}>AI for Banking</button>
+          <button onClick={onLearn}>Courses</button>
+          <button onClick={onInterview}>Interview practice</button>
+          <button onClick={onAI}>AI for banking</button>
           <button onClick={onPrivacy}>Privacy</button>
           <button onClick={onTerms}>Terms</button>
         </nav>

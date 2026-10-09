@@ -1052,7 +1052,7 @@ function App() {
 
         <section className={`lesson-shell ${outlineOpen ? 'outline-open' : ''}`}>
           <nav className="breadcrumbs" aria-label="Breadcrumb">
-            <button onClick={openLearn}>Curriculum</button><span>/</span>
+            <button onClick={openLearn}>All courses</button><span>/</span>
             <button onClick={() => { setPage('module'); scrollTop() }}>{activeModule.title}</button>
           </nav>
           <button className="outline-toggle" aria-expanded={outlineOpen} aria-controls="lesson-outline"
@@ -1115,6 +1115,11 @@ function App() {
             />
           </div>
 
+          {lessonStep === 0 && <details className="getting-started lesson-help">
+            <summary>First lesson? Here’s how it works.</summary>
+            <p>Read each step and use the button below to continue. Try the questions and check the feedback. Notes saves your own reminders. Click highlighted terms for a definition.</p>
+            <p>At the end, choose Next lesson or Back to module to save completion. Completed lessons and notes stay in this browser; reopening a lesson starts it from the beginning.</p>
+          </details>}
           {/* INTRO */}
 
           {step.type === 'intro' && (
@@ -2364,7 +2369,7 @@ function App() {
             className="back-button"
             onClick={openLearn}
           >
-            ← All tracks
+            ← All courses
           </button>
         </nav>
 
@@ -2420,7 +2425,7 @@ function App() {
                       {module.lessons.length} lessons
                     </small>
 
-                    <button onClick={() => openModule(module)}>Open module →</button>
+                    <button onClick={() => openModule(module)}>View lessons →</button>
                   </footer>
                 </article>
               ),
@@ -2484,15 +2489,10 @@ function App() {
           </h1>
 
           <p className="page-intro">
-            Start from the beginning or
-            jump to exactly what you
-            need. Concepts build on each
-            other, and anything
-            important can be refreshed
-            along the way.
+            New to finance? Begin with Finance From Zero below and follow the lessons in order. Each course is divided into modules: small groups of lessons on one topic. Already know the basics? Browse or search for a topic.
           </p>
 
-          <div className="learning-dashboard">
+          {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && <div className="learning-dashboard">
             <article>
               <span>CURRICULUM PROGRESS</span>
               <strong>
@@ -2516,15 +2516,15 @@ function App() {
             </article>
 
             <article>
-              <span>XP</span>
+              <span>Learning points</span>
               <strong>{xp}</strong>
               <p>earned on this device</p>
             </article>
-          </div>
+          </div>}
 
           <div className="resume-strip">
             <div><span className="eyebrow">{completedCurriculumCount ? 'CONTINUE LEARNING' : 'BEGIN HERE'}</span>
-              <p>{completedCurriculumCount ? 'Pick up with your next unfinished lesson.' : 'Start with Finance From Zero. Then follow the index in order.'}</p>
+              <p>{completedCurriculumCount ? 'Pick up with your next unfinished lesson.' : 'Your starting point: What Is a Business? No prior knowledge needed.'}</p>
               <small>Progress and notes are saved in this browser on this device. No account required.</small></div>
             {nextEntry ? <button className="primary-button" onClick={() => startEntry(nextEntry)}>{nextEntry.lesson.title} →</button>
               : <strong>Curriculum complete. Use the review queue or cumulative exam.</strong>}
@@ -2547,7 +2547,7 @@ function App() {
           </section> : <div className="curriculum-index">
             {tracks.map(track => <section key={track.id}>
               <div className="index-heading"><span className="module-code">Track {track.number}</span>
-                <h2>{track.title}</h2><button onClick={() => openTrack(track)}>View track →</button></div>
+                <h2>{track.title}</h2><button onClick={() => openTrack(track)}>View course →</button></div>
               <div className="index-columns" aria-hidden="true"><span>Code</span><span>Module</span><span>Progress</span><span></span></div>
               {track.modules.map(module => {
                 const done = module.lessons.filter(lesson => completedLessons.includes(lesson.id)).length
@@ -2555,7 +2555,7 @@ function App() {
                   <span className="module-code">{module.number}</span>
                   <div><h3>{module.title}</h3><small>{module.lessons.length} lessons</small></div>
                   <span className="index-completion">{done === module.lessons.length ? '✓ Complete' : `${done} / ${module.lessons.length}`}</span>
-                  <a href={`/module/${module.id}`} onClick={event => followLink(event, () => { setActiveTrack(track); openModule(module) })}>Open module →</a>
+                  <a href={`/module/${module.id}`} onClick={event => followLink(event, () => { setActiveTrack(track); openModule(module) })}>View lessons →</a>
                 </div>
               })}
             </section>)}
@@ -2607,7 +2607,7 @@ function App() {
           <span className="xp-display">{xp} XP</span>
         </nav>
 
-        <InterviewPrep onBack={goHome} />
+        <InterviewPrep onBack={goHome} onLearn={openLearn} />
         {renderFooter()}
       </main>
     )
@@ -2633,12 +2633,10 @@ function App() {
         <section className="ai-course-page">
           <p className="eyebrow">AI FOR BANKING</p>
 
-          <h1>Use AI for banking work without outsourcing judgment.</h1>
+          <h1>Learn to use AI in banking.</h1>
 
           <p className="page-intro">
-            {aiBankingModule.lessons.length} practical lessons covering company and industry research, SEC
-            filings, Excel, model checking, presentations, prompting,
-            verification, and confidentiality.
+            {aiBankingModule.lessons.length} lessons on using artificial intelligence for research, spreadsheets, and presentations. Learn how to ask useful questions, check the results, and protect confidential information. New to finance? Start with the main courses first.
           </p>
 
           <div className="ai-course-actions">
@@ -2699,24 +2697,24 @@ function App() {
       <section className="workstation-home">
         {!(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && <div className="home-opening">
           <div className="home-introduction">
-            <p className="eyebrow">Learn at your own pace</p>
-            <h1>Investment banking,<br />from first principles.</h1>
-            <p className="subtitle">Learn finance, accounting, valuation, and the work of an investment banker through ordered lessons, worked examples, and practice questions.</p>
+            <p className="eyebrow">Free finance lessons for complete beginners</p>
+            <h1>Learn finance.<br />Understand investment banking.</h1>
+            <p className="subtitle">IBase teaches you how businesses make money and how investment bankers help companies raise money or buy other businesses. Start with the basics, then build toward job interviews and practical work skills. No finance knowledge needed.</p>
             <div className="home-actions">
-              <a className="primary-button" href={`/lesson/${lessonEntries[0].lesson.id}`} onClick={event => followLink(event, () => { startEntry(lessonEntries[0]) })}>Start with Finance From Zero →</a>
-              <a className="secondary-button" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>Browse curriculum</a>
+              <a className="primary-button" href={`/lesson/${lessonEntries[0].lesson.id}`} onClick={event => followLink(event, () => { startEntry(lessonEntries[0]) })}>Start your first lesson →</a>
+              <a className="secondary-button" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>Browse all courses</a>
             </div>
             <p className="access-line">Free · No account required</p>
-            <p className="local-note">Your progress and notes stay in this browser on this device.</p>
+            <p className="local-note">Progress and notes save automatically in this browser. Use the same browser and device to return to them.</p>
           </div>
           <aside className="curriculum-preview" aria-label="Curriculum preview">
-            <h2 className="panel-heading">Your first three lessons</h2>
+            <h2 className="panel-heading">New here? Start with the basics.</h2><p className="beginner-caption">Take these lessons in order. Each combines an explanation, an example, and questions to try.</p>
             {lessonEntries.slice(0, 3).map((entry, index) => <div className="preview-track" key={entry.lesson.id}>
               <a href={`/lesson/${entry.lesson.id}`} onClick={event => followLink(event, () => startEntry(entry))}>
                 <span className="lesson-order">{index + 1}</span>{entry.lesson.title}<span aria-hidden="true">→</span>
               </a>
             </div>)}
-            <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>View all {lessonEntries.length} curriculum lessons →</a>
+            <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>See all {lessonEntries.length} lessons →</a>
           </aside>
         </div>}
         {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && (
@@ -2729,7 +2727,7 @@ function App() {
                 <p>curriculum lessons complete</p>
               </div>
               <div>
-                <span className="dashboard-label">XP</span>
+                <span className="dashboard-label">Learning points</span>
                 <strong>{xp}</strong>
                 <p>earned on this device</p>
               </div>
@@ -2756,11 +2754,20 @@ function App() {
             <p className="local-note">Saved locally in this browser on this device. No account required.</p>
           </section>
         )}
+        <details className="getting-started">
+          <summary>How does learning on IBase work?</summary>
+          <ol>
+            <li><strong>Read and try.</strong> Work through explanations and examples, then check your understanding with practice questions.</li>
+            <li><strong>Finish the lesson.</strong> Use the final Next lesson or Back to module button to record completion and earn 50 learning points (XP).</li>
+            <li><strong>Come back and review.</strong> Use Continue on the homepage for your next unfinished lesson. Open Review to revisit concepts that need practice.</li>
+          </ol>
+          <p>Notes, scores, and completed lessons stay in this browser on this device. They do not sync to another device, and clearing browser storage removes them.</p>
+        </details>
         <section className="area-directory" aria-label="Learning areas">
-          <h2 className="panel-heading">Explore IBase</h2>
-          {[['ledger', '01', 'Learn IB', 'Follow the curriculum from financial basics to technical interviews, recruiting, and analyst skills.', '/learn', openLearn, 'Open curriculum'],
-            ['practice', '02', 'Interview Prep', 'Practice technical, behavioral, markets, and deal questions under interview conditions.', '/interview', openInterview, 'Open interview prep'],
-            ['tools', '03', 'AI for Banking', 'Learn practical workflows, verification, and confidentiality for banking work.', '/ai', openAI, 'Open AI course']].map(([, code, title, body, href, action, label]) =>
+          <h2 className="panel-heading">What would you like to do?</h2>
+          {[['ledger', '01', 'Learn the basics', 'Start here if finance is new to you. Follow courses on businesses, money, and financial statements, then move on to banking and job skills.', '/learn', openLearn, 'Browse courses'],
+            ['practice', '02', 'Prepare for interviews', 'Already know some finance? Try interview questions, compare your answers with examples, or practice a full mock interview.', '/interview', openInterview, 'Practice interviews'],
+            ['tools', '03', 'Explore AI for banking', 'Learn how artificial intelligence can help with research and everyday banking tasks, and how to check its work. A useful next step after the basics.', '/ai', openAI, 'Explore AI lessons']].map(([, code, title, body, href, action, label]) =>
               <div className="directory-row" key={code}>
                 <h2>{title}</h2><p>{body}</p><a href={href} onClick={event => followLink(event, () => { action() })}>{label} →</a></div>)}
         </section>

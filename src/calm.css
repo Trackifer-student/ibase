@@ -131,3 +131,13 @@ button, .primary-button, .secondary-button { font-weight: 600; }
   .index-toolbar input { min-width: 0; width: 100%; flex-basis: 100%; }
   .lesson-outline { border: 0; border-bottom: 1px solid var(--quiet-rule); padding-right: 0; }
 }
+
+/* Optional orientation: available without crowding the learning path. */
+.beginner-caption { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0 0 20px; }
+.getting-started { margin: 28px 0; max-width: 760px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.getting-started summary { color: var(--green); cursor: pointer; padding: 12px 0; font-weight: 600; }
+.getting-started summary:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+.getting-started ol { padding-left: 22px; }
+.getting-started li { margin: 12px 0; }
+.lesson-help { grid-column: -2 / -1; margin: 0; }
+.inline-course-link { background: transparent; padding: 0; color: var(--green); font: inherit; text-decoration: underline; text-underline-offset: 4px; }
