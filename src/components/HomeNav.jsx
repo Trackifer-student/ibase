@@ -15,9 +15,9 @@ function HomeNav({ onHome, onLearn, onInterview, onAI }) {
       </button>
 
       <div className="nav-links">
-        <button onClick={onLearn}>Learn IB</button>
-        <button onClick={onInterview}>Interview Prep</button>
-        <button onClick={onAI}>AI for Banking</button>
+        <button onClick={onLearn}>Courses</button>
+        <button onClick={onInterview}>Interview practice</button>
+        <button onClick={onAI}>AI for banking</button>
       </div>
 
       <button
@@ -32,9 +32,9 @@ function HomeNav({ onHome, onLearn, onInterview, onAI }) {
 
       {open && (
         <div className="mobile-menu" id="mobile-site-menu">
-          <button onClick={() => run(onLearn)}>Learn IB</button>
-          <button onClick={() => run(onInterview)}>Interview Prep</button>
-          <button onClick={() => run(onAI)}>AI for Banking</button>
+          <button onClick={() => run(onLearn)}>Courses</button>
+          <button onClick={() => run(onInterview)}>Interview practice</button>
+          <button onClick={() => run(onAI)}>AI for banking</button>
         </div>
       )}
     </nav>
