@@ -2,9 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { prepareQuestions, isAnswered, scoreQuiz, formatAnswer, correctAnswer } from '../utils/quizBuilder'
 
 const defaultLevels = [
-  { id: 'easy-v2', difficulty: 'easy', label: 'Easy', description: 'Apply one concept at a time in new examples.' },
-  { id: 'medium-v2', difficulty: 'medium', label: 'Medium', description: 'Connect concepts, interpret scenarios, and work through calculations.' },
-  { id: 'hard-v2', difficulty: 'hard', label: 'Hard', description: 'Solve multi-step problems and evaluate competing conclusions. Some questions have several correct answers.' },
+  { id: 'easy-v2', difficulty: 'easy', label: 'Foundation', description: 'Apply one concept at a time in new examples.' },
+  { id: 'medium-v2', difficulty: 'medium', label: 'Applied', description: 'Connect concepts, interpret scenarios, and work through calculations.' },
+  { id: 'hard-v2', difficulty: 'hard', label: 'Analyst Challenge', description: 'Solve multi-step problems and evaluate competing conclusions. Some questions have several correct answers.' },
 ]
 
 function QuizRunner({ title, description, questionBank, onBack, storageKey, levelCounts, onMissedConcepts }) {
