@@ -538,11 +538,11 @@ function App() {
     openQuiz({
       title: module.quizTitle || `${module.title} Quiz`,
       description:
-        'Use the short version for a quick check, then come back for the longer levels when you want to prove you know the whole module.',
+        'Practice with new questions at Easy, Medium, or Hard difficulty. Each level tests different reasoning, not just more questions.',
       questionBank,
       storageKey: `ibase-quiz-module-${module.id}`,
       returnPage,
-      levelCounts: [5, 10, Math.min(20, questionBank.length)],
+      levelCounts: [3, 3, 3],
     })
   }
 
@@ -556,7 +556,7 @@ function App() {
       questionBank,
       storageKey: `ibase-quiz-track-${track.id}`,
       returnPage: 'track',
-      levelCounts: [10, 20, Math.min(30, questionBank.length)],
+      levelCounts: [10, 10, 10],
     })
   }
 
@@ -566,11 +566,11 @@ function App() {
     openQuiz({
       title: 'IBase Cumulative Exam',
       description:
-        'Mix the entire curriculum together. No section labels are guaranteed to save you. This is the closest quiz mode to proving the knowledge actually sticks.',
+        'Test your understanding across the curriculum with new scenarios and calculations at your chosen difficulty.',
       questionBank,
       storageKey: 'ibase-quiz-cumulative',
       returnPage: 'learn',
-      levelCounts: [20, 40, Math.min(60, questionBank.length)],
+      levelCounts: [20, 20, 20],
     })
   }
 
@@ -2383,8 +2383,8 @@ function App() {
               <p className="eyebrow">END OF MODULE</p>
               <h2>{activeModule.quizTitle || `${activeModule.title} Quiz`}</h2>
               <p>
-                Test the whole module at three levels: Quick Check, Standard,
-                and Mastery. Questions reshuffle each time.
+                Try independent questions at Easy, Medium, or Hard difficulty.
+                Each level uses different questions; their order reshuffles.
               </p>
             </div>
 
@@ -2493,7 +2493,7 @@ function App() {
               <h2>{activeTrack.title} Exam</h2>
               <p>
                 Mix questions across every module in this track. Use the
-                Mastery level once the individual module quizzes feel easy.
+                Hard level once the individual module quizzes feel easy.
               </p>
             </div>
 
