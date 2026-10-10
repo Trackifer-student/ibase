@@ -1,4 +1,5 @@
 import { quizBank } from '../data/quizBank.js'
+import { varyQuestion, chooseVariant } from '../data/quizVariants.js'
 
 export const extractModuleQuestions = module => (quizBank[module?.id] || []).map((question, index) => {
   const lesson = module.lessons.find(item => item.id === question.lessonId)
@@ -26,7 +27,7 @@ export const shuffle = items => {
 
 // Round-robin modules before taking another question from the same module.
 // This keeps track and cumulative exams broad even when banks differ in size.
-export const prepareQuestions = (bank, count, difficulty) => {
+export const prepareQuestions = (bank, count, difficulty, variantHistory = {}) => {
   const groups = new Map()
   for (const question of shuffle(bank.filter(item => item.difficulty === difficulty))) {
     if (!groups.has(question.moduleId)) groups.set(question.moduleId, [])
@@ -40,7 +41,8 @@ export const prepareQuestions = (bank, count, difficulty) => {
       if (pool.length) selected.push(pool.pop())
     }
   }
-  return shuffle(selected).map(question => {
+  return shuffle(selected).map(template => {
+    const question = varyQuestion(template, chooseVariant(variantHistory[template.id]))
     if (question.type === 'number') return { ...question }
     const indices = question.type === 'multiple' ? question.correctIndices : [question.correctIndex]
     const records = shuffle(question.options.map((option, index) => ({ option, correct: indices.includes(index) })))

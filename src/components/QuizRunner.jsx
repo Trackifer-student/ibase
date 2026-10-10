@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { readVariantHistory } from '../data/quizVariants.js'
 import { prepareQuestions, isAnswered, scoreQuiz, formatAnswer, correctAnswer } from '../utils/quizBuilder'
 
 const defaultLevels = [
@@ -17,6 +18,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
   const [result, setResult] = useState(null)
   const [saveError, setSaveError] = useState('')
   const heading = useRef(null)
+  const variantHistory = useRef({})
   const [bestScores, setBestScores] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem(storageKey))
@@ -26,8 +28,15 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
   useEffect(() => { heading.current?.focus({ preventScroll: true }) }, [quiz, questionIndex, result])
 
   const startQuiz = level => {
-    const questions = prepareQuestions(questionBank, level.count, level.difficulty)
+    // Merge persisted history so visits and other mounted quiz instances are respected.
+    let history = variantHistory.current
+    try { history = { ...readVariantHistory(window.localStorage), ...history } } catch { /* In-memory history still supports retries. */ }
+    const questions = prepareQuestions(questionBank, level.count, level.difficulty, history)
     if (!questions.length) return
+    const updatedHistory = { ...history }
+    for (const question of questions) updatedHistory[question.id] = question.variantIndex
+    variantHistory.current = updatedHistory
+    try { localStorage.setItem('ibase-quiz-variants-v1', JSON.stringify(updatedHistory)) } catch { /* Quizzes remain usable without storage. */ }
     setQuiz({ level, questions })
     setQuestionIndex(0)
     setAnswers({})
@@ -52,7 +61,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
       <p className="eyebrow">QUIZ MODE</p>
       <h1 ref={heading} tabIndex={-1}>{title}</h1>
       <p className="page-intro">{description}</p>
-      <p>These questions are separate from the lesson quick checks. Choose a difficulty, not a quiz length. You can use a calculator and scratch paper.</p>
+      <p>New attempts vary the numbers and practice scenarios while testing the same skills at the same difficulty. These questions are separate from lesson quick checks. You can use a calculator and scratch paper.</p>
       <p className="local-note">Best scores save in this browser on this device. New difficulty scores are separate from your previous quiz scores.</p>
       <div className="quiz-level-grid">{levels.map(level => <button className="quiz-level-card" key={level.id} disabled={!level.count} onClick={() => startQuiz(level)}>
         <span>{level.label}</span><strong>{level.count} questions</strong><p>{level.description}</p>
@@ -83,6 +92,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
         <h2>Answer review</h2>
         {result.reviewed.map((question, index) => <article key={question.id}>
           <span>{index + 1}. {question.correct ? 'Correct' : 'Needs review'} · {question.lessonTitle}</span>
+          <p className="local-note">{question.scenario}</p>
           <h3>{question.prompt}</h3>
           <p><strong>Your answer: </strong>{formatAnswer(question, question.selectedAnswer)}</p>
           <p><strong>Correct answer: </strong>{formatAnswer(question, correctAnswer(question))}</p>
@@ -104,6 +114,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
     <div className="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
     <div className="quiz-question-card">
       <div className="quiz-question-meta"><span>{current.moduleTitle}</span><span>Question {questionIndex + 1} / {quiz.questions.length}</span></div>
+      <p className="local-note">{current.scenario}</p>
       <h1 ref={heading} tabIndex={-1}>{current.prompt}</h1>
       {current.type === 'number' ? <div className="quiz-number-answer">
         <label htmlFor="quiz-number">Your answer ({current.unit})</label>

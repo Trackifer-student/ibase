@@ -4,6 +4,7 @@ import { tracks } from '../src/data/curriculum.js'
 import { aiBankingModule } from '../src/data/modules/aiBanking.js'
 import { concepts } from '../src/data/concepts.js'
 import { quizBank } from '../src/data/quizBank.js'
+import { varyQuestion, chooseVariant, readVariantHistory, VARIANT_COUNT } from '../src/data/quizVariants.js'
 import { extractModuleQuestions, extractAllQuestions, extractTrackQuestions, prepareQuestions, parseNumberAnswer, isAnswered, isCorrect, correctAnswer, scoreQuiz } from '../src/utils/quizBuilder.js'
 const modules = [...tracks.flatMap(track => track.modules), aiBankingModule]
 const all = modules.flatMap(extractModuleQuestions)
@@ -99,4 +100,80 @@ test('representative multi-step financial answer keys agree with independent cal
   assert.equal(find('ma','Buyer net income'), 18)
   assert.equal(find('lbo','Entry EV is'), (70*8-180)/200)
   assert.ok(Math.abs(find('lbo','A sponsor doubles')-((2**0.25-1)*100))<0.01)
+})
+
+test('all 1,188 variants preserve format, difficulty, lesson links, and valid scoring without mutating templates', () => {
+  const before = JSON.stringify(all)
+  assert.equal(VARIANT_COUNT, 6)
+  for (const template of all) {
+    const versions = Array.from({ length: VARIANT_COUNT }, (_, index) => varyQuestion(template, index))
+    assert.equal(new Set(versions.map(q => q.prompt + q.scenario)).size, VARIANT_COUNT, template.id)
+    if (template.type === 'number') {
+      assert.equal(new Set(versions.map(q => q.answer)).size, VARIANT_COUNT, template.id)
+      assert.equal(new Set(versions.map(q => q.prompt)).size, VARIANT_COUNT, template.id)
+    }
+    for (const question of versions) {
+      for (const field of ['id', 'type', 'difficulty', 'lessonId', 'moduleId']) assert.equal(question[field], template[field])
+      assert.deepEqual(question.reviewConcepts, template.reviewConcepts)
+      assert.ok(!/undefined|NaN|Infinity/.test(question.prompt + question.explanation))
+      assert.ok(!/^A (illustrator|editor)/.test(question.prompt))
+      assert.ok(isCorrect(question, question.type === 'number' ? String(question.answer) : correctAnswer(question)))
+      if (question.type === 'number') {
+        assert.ok(Number.isFinite(question.answer))
+        assert.ok(!isCorrect(question, String(question.answer + 1)))
+        if (!Number.isInteger(question.answer)) assert.match(question.prompt, /round/i)
+      } else {
+        assert.deepEqual(correctAnswer(question), correctAnswer(template))
+      }
+    }
+  }
+  assert.equal(JSON.stringify(all), before)
+})
+
+test('repeated attempts and reloaded history never choose the previous version of a question', () => {
+  let history = {}
+  for (let attempt = 0; attempt < 12; attempt++) {
+    for (const difficulty of ['easy', 'medium', 'hard']) {
+      const questions = prepareQuestions(all, 1000, difficulty, history)
+      for (const q of questions) {
+        assert.notEqual(q.variantIndex, history[q.id], q.id)
+        history[q.id] = q.variantIndex
+      }
+    }
+    history = readVariantHistory({ getItem: () => JSON.stringify(history) })
+    assert.equal(Object.keys(history).length, 198)
+  }
+  for (let previous = 0; previous < VARIANT_COUNT; previous++) {
+    for (const random of [0, 0.2, 0.4, 0.6, 0.8, 0.99999]) assert.notEqual(chooseVariant(previous, () => random), previous)
+  }
+})
+
+test('variant history tolerates unavailable or malformed storage without touching score data', () => {
+  assert.deepEqual(readVariantHistory({ getItem: () => { throw new Error('blocked') } }), {})
+  for (const text of ['null', '[]', 'false', '{bad', '42']) assert.deepEqual(readVariantHistory({ getItem: () => text }), {})
+  assert.deepEqual(readVariantHistory({ getItem: key => {
+    assert.equal(key, 'ibase-quiz-variants-v1')
+    return JSON.stringify({ 'assessment-v2-valid': 5, 'assessment-v2-negative': -1, 'assessment-v2-large': 6, 'assessment-v2-string': '2', 'best-score': 3 })
+  } }), { 'assessment-v2-valid': 5 })
+})
+
+test('varied financial answers match calculations from the displayed givens', () => {
+  const get = (lesson, difficulty, index) => varyQuestion(all.find(q => q.lessonId === lesson && q.difficulty === difficulty), index)
+  const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 0.011, `${actual} versus ${expected}`)
+  for (let index = 0; index < 6; index++) {
+    let q = get('how-business-makes-money', 'easy', index)
+    near(q.answer, Number(q.prompt.match(/completes (\d+) repairs/)[1]) * 40)
+    q = get('revenue-profit-cash', 'hard', index)
+    const collected = Number(q.prompt.match(/collects only \$([\d,]+)/)[1].replaceAll(',', ''))
+    near(q.answer, 700 + collected - 900 + 1000)
+    q = get('owning-a-company', 'hard', index)
+    const issued = Number(q.prompt.match(/issues (\d+) new shares/)[1])
+    near(q.answer, 25 - 20 / (80 + issued) * 100)
+    q = get('lbo-irr', 'hard', index)
+    const years = Number(q.prompt.match(/(\d+) years/)[1])
+    near(q.answer, (Math.pow(2, 1 / years) - 1) * 100)
+    q = get('paper-lbo', 'hard', index)
+    const debt = Number(q.prompt.match(/net debt is (\d+)/)[1])
+    near(q.answer, (70 * 8 - debt) / 200)
+  }
 })
