@@ -1,362 +1,126 @@
-import { useEffect, useMemo, useState } from 'react'
-import { prepareQuestions } from '../utils/quizBuilder'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { prepareQuestions, isAnswered, scoreQuiz, formatAnswer, correctAnswer } from '../utils/quizBuilder'
 
 const defaultLevels = [
-  {
-    id: 'quick',
-    label: 'Quick Check',
-    description: 'A short pulse check before you move on.',
-    count: 5,
-  },
-  {
-    id: 'standard',
-    label: 'Standard Quiz',
-    description: 'A fuller test across the section.',
-    count: 10,
-  },
-  {
-    id: 'mastery',
-    label: 'Mastery',
-    description: 'The longest version. Mix everything together.',
-    count: 20,
-  },
+  { id: 'easy-v2', difficulty: 'easy', label: 'Easy', description: 'Apply one concept at a time in new examples.' },
+  { id: 'medium-v2', difficulty: 'medium', label: 'Medium', description: 'Connect concepts, interpret scenarios, and work through calculations.' },
+  { id: 'hard-v2', difficulty: 'hard', label: 'Hard', description: 'Solve multi-step problems and evaluate competing conclusions. Some questions have several correct answers.' },
 ]
 
-function QuizRunner({
-  title,
-  description,
-  questionBank,
-  onBack,
-  storageKey,
-  levelCounts,
-  onMissedConcepts,
-}) {
-  const levels = useMemo(
-    () =>
-      defaultLevels.map((level, index) => ({
-        ...level,
-        count:
-          levelCounts?.[index] ??
-          Math.min(level.count, questionBank.length),
-      })),
-    [levelCounts, questionBank.length],
-  )
-
+function QuizRunner({ title, description, questionBank, onBack, storageKey, levelCounts, onMissedConcepts }) {
+  const levels = useMemo(() => defaultLevels.map((level, index) => ({ ...level,
+    count: Math.min(levelCounts?.[index] ?? 10, questionBank.filter(question => question.difficulty === level.difficulty).length),
+  })), [levelCounts, questionBank])
   const [quiz, setQuiz] = useState(null)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
-  const [finished, setFinished] = useState(false)
   const [result, setResult] = useState(null)
-
+  const [saveError, setSaveError] = useState('')
+  const heading = useRef(null)
   const [bestScores, setBestScores] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(storageKey)) || {}
-    } catch {
-      return {}
-    }
+      const stored = JSON.parse(localStorage.getItem(storageKey))
+      return stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {}
+    } catch { return {} }
   })
+  useEffect(() => { heading.current?.focus({ preventScroll: true }) }, [quiz, questionIndex, result])
 
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(bestScores))
-  }, [bestScores, storageKey])
-
-  const startQuiz = (level) => {
-    const prepared = prepareQuestions(questionBank, level.count)
-
-    setQuiz({
-      level,
-      questions: prepared,
-    })
+  const startQuiz = level => {
+    const questions = prepareQuestions(questionBank, level.count, level.difficulty)
+    if (!questions.length) return
+    setQuiz({ level, questions })
     setQuestionIndex(0)
     setAnswers({})
-    setFinished(false)
     setResult(null)
+    setSaveError('')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }
+  const finishQuiz = () => {
+    const scored = scoreQuiz(quiz.questions, answers)
+    const best = { ...bestScores, [quiz.level.id]: Math.max(bestScores[quiz.level.id] || 0, scored.score) }
+    setBestScores(best)
+    try { localStorage.setItem(storageKey, JSON.stringify(best)) }
+    catch { setSaveError('Your score is shown below, but this browser could not save it for your next visit.') }
+    if (scored.missedConcepts.length) onMissedConcepts?.(scored.missedConcepts)
+    setResult(scored)
     window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
-  if (!questionBank.length) {
-    return (
-      <section className="quiz-page">
-        <button className="back-button" onClick={onBack}>
-          ← Back
-        </button>
+  if (!quiz) return <section className="quiz-page">
+    <button className="back-button" onClick={onBack}>← Back</button>
+    <div className="quiz-intro">
+      <p className="eyebrow">QUIZ MODE</p>
+      <h1 ref={heading} tabIndex={-1}>{title}</h1>
+      <p className="page-intro">{description}</p>
+      <p>These questions are separate from the lesson quick checks. Choose a difficulty, not a quiz length. You can use a calculator and scratch paper.</p>
+      <p className="local-note">Best scores save in this browser on this device. New difficulty scores are separate from your previous quiz scores.</p>
+      <div className="quiz-level-grid">{levels.map(level => <button className="quiz-level-card" key={level.id} disabled={!level.count} onClick={() => startQuiz(level)}>
+        <span>{level.label}</span><strong>{level.count} questions</strong><p>{level.description}</p>
+        {typeof bestScores[level.id] === 'number' && <small>Best: {bestScores[level.id]}%</small>}
+      </button>)}</div>
+      {!questionBank.length && <p>No quiz questions are available here yet.</p>}
+      {['quick', 'standard', 'mastery'].some(id => typeof bestScores[id] === 'number') && <details className="getting-started">
+        <summary>Previous quiz scores</summary>
+        <p>These were earned on the earlier lesson-question quizzes and are kept for reference.</p>
+        {['quick', 'standard', 'mastery'].map((id, index) => typeof bestScores[id] === 'number' && <p key={id}>{['Quick Check', 'Standard', 'Mastery'][index]}: {bestScores[id]}%</p>)}
+      </details>}
+    </div>
+  </section>
 
-        <div className="quiz-empty">
-          <p className="eyebrow">QUIZ</p>
-          <h1>{title}</h1>
-          <p>No quiz questions are available here yet.</p>
-        </div>
-      </section>
-    )
-  }
+  if (result) return <section className="quiz-page">
+    <button className="back-button" onClick={onBack}>← Back</button>
+    <div className="quiz-results">
+      <p className="eyebrow">{quiz.level.label} · {title}</p>
+      <h1 ref={heading} tabIndex={-1}>{result.score >= 90 ? 'Strong work. Review your reasoning.' : 'Review your answers, then try again.'}</h1>
+      <div className="quiz-score"><strong>{result.score}%</strong><span>{result.correctCount} / {quiz.questions.length} correct</span></div>
+      {saveError && <p role="alert">{saveError}</p>}
+      <p>Each question is worth one point. For questions with several correct answers, select all correct choices and no others.</p>
+      <div className="quiz-result-actions">
+        <button className="secondary-button" onClick={() => setQuiz(null)}>Change level</button>
+        <button className="primary-button" onClick={() => startQuiz(quiz.level)}>Try again</button>
+      </div>
+      <div className="quiz-review">
+        <h2>Answer review</h2>
+        {result.reviewed.map((question, index) => <article key={question.id}>
+          <span>{index + 1}. {question.correct ? 'Correct' : 'Needs review'} · {question.lessonTitle}</span>
+          <h3>{question.prompt}</h3>
+          <p><strong>Your answer: </strong>{formatAnswer(question, question.selectedAnswer)}</p>
+          <p><strong>Correct answer: </strong>{formatAnswer(question, correctAnswer(question))}</p>
+          <p>{question.explanation}</p>
+          <a href={`/lesson/${question.lessonId}`}>Review lesson: {question.lessonTitle} →</a>
+        </article>)}
+      </div>
+    </div>
+  </section>
 
-  if (!quiz) {
-    return (
-      <section className="quiz-page">
-        <button className="back-button" onClick={onBack}>
-          ← Back
-        </button>
-
-        <div className="quiz-intro">
-          <p className="eyebrow">QUIZ MODE</p>
-          <h1>{title}</h1>
-          <p className="page-intro">{description}</p>
-
-          <div className="quiz-level-grid">
-            {levels.map((level) => {
-              const actualCount = Math.min(level.count, questionBank.length)
-              const best = bestScores[level.id]
-
-              return (
-                <button
-                  className="quiz-level-card"
-                  key={level.id}
-                  onClick={() =>
-                    startQuiz({
-                      ...level,
-                      count: actualCount,
-                    })
-                  }
-                >
-                  <span>{level.label}</span>
-                  <strong>{actualCount} questions</strong>
-                  <p>{level.description}</p>
-
-                  {typeof best === 'number' && (
-                    <small>Best: {best}%</small>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  const questions = quiz.questions
-
-  if (finished && result) {
-    const { correctCount, score, wrongQuestions } = result
-
-    return (
-      <section className="quiz-page">
-        <button className="back-button" onClick={onBack}>
-          ← Back
-        </button>
-
-        <div className="quiz-results">
-          <p className="eyebrow">{quiz.level.label.toUpperCase()}</p>
-
-          <h1>
-            {score >= 90
-              ? 'You know this cold.'
-              : score >= 75
-                ? 'Strong. Clean up the misses.'
-                : score >= 60
-                  ? 'You have the base. Keep drilling.'
-                  : 'Review the weak spots, then run it again.'}
-          </h1>
-
-          <div className="quiz-score">
-            <strong>{score}%</strong>
-            <span>
-              {correctCount} / {questions.length} correct
-            </span>
-          </div>
-
-          <div className="quiz-result-actions">
-            <button
-              className="secondary-button"
-              onClick={() => setQuiz(null)}
-            >
-              Change level
-            </button>
-
-            <button
-              className="primary-button"
-              onClick={() => startQuiz(quiz.level)}
-            >
-              Try again
-            </button>
-          </div>
-
-          {wrongQuestions.length > 0 && (
-            <div className="quiz-review">
-              <div className="quiz-review-heading">
-                <p className="eyebrow">REVIEW</p>
-                <h2>Questions to revisit</h2>
-              </div>
-
-              {wrongQuestions.map((question) => (
-                <article key={question.id}>
-                  <span>{question.lessonTitle}</span>
-                  <h3>{question.prompt}</h3>
-
-                  <p className="quiz-your-answer">
-                    <strong>Your answer:</strong>{' '}
-                    {question.options[question.selectedIndex] || 'No answer'}
-                  </p>
-
-                  <p className="quiz-correct-answer">
-                    <strong>Correct:</strong>{' '}
-                    {question.options[question.correctIndex]}
-                  </p>
-
-                  {question.explanation && <p>{question.explanation}</p>}
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-    )
-  }
-
-  const current = questions[questionIndex]
+  const current = quiz.questions[questionIndex]
   const selected = answers[questionIndex]
-  const answeredCount = Object.keys(answers).length
-  const progress = ((questionIndex + 1) / questions.length) * 100
-
-  const chooseAnswer = (index) => {
-    setAnswers((currentAnswers) => ({
-      ...currentAnswers,
-      [questionIndex]: index,
-    }))
-  }
-
-  const goNext = () => {
-    if (questionIndex >= questions.length - 1) {
-      const correctCount = questions.filter(
-        (question, index) => answers[index] === question.correctIndex,
-      ).length
-
-      const score = Math.round(
-        (correctCount / questions.length) * 100,
-      )
-
-      const wrongQuestions = questions
-        .map((question, index) => ({
-          ...question,
-          selectedIndex: answers[index],
-        }))
-        .filter(
-          (question) =>
-            question.selectedIndex !== question.correctIndex,
-        )
-
-      const missedConcepts = [
-        ...new Set(
-          wrongQuestions.flatMap(
-            (question) => question.reviewConcepts || [],
-          ),
-        ),
-      ]
-
-      const best = Math.max(
-        bestScores[quiz.level.id] || 0,
-        score,
-      )
-
-      setBestScores((current) => ({
-        ...current,
-        [quiz.level.id]: best,
-      }))
-
-      if (missedConcepts.length) {
-        onMissedConcepts?.(missedConcepts)
-      }
-
-      setResult({
-        correctCount,
-        score,
-        wrongQuestions,
-      })
-
-      setFinished(true)
-      window.scrollTo({ top: 0, behavior: 'auto' })
-      return
-    }
-
-    setQuestionIndex((currentIndex) => currentIndex + 1)
-    window.scrollTo({ top: 0, behavior: 'auto' })
-  }
-
-  const goPrevious = () => {
-    if (questionIndex === 0) return
-    setQuestionIndex((currentIndex) => currentIndex - 1)
-    window.scrollTo({ top: 0, behavior: 'auto' })
-  }
-
-  return (
-    <section className="quiz-page">
-      <div className="quiz-runner-top">
-        <button className="back-button" onClick={onBack}>
-          ← Exit quiz
-        </button>
-
-        <span>
-          {answeredCount} / {questions.length} answered
-        </span>
+  const answeredCount = quiz.questions.filter((question, index) => isAnswered(question, answers[index])).length
+  const select = value => setAnswers(previous => ({ ...previous, [questionIndex]: value }))
+  const move = offset => { setQuestionIndex(index => index + offset); window.scrollTo({ top: 0, behavior: 'auto' }) }
+  const progress = Math.round((questionIndex + 1) / quiz.questions.length * 100)
+  return <section className="quiz-page">
+    <div className="quiz-runner-top"><button className="back-button" onClick={onBack}>← Exit quiz</button><span>{quiz.level.label} · {answeredCount} / {quiz.questions.length} answered</span></div>
+    <div className="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
+    <div className="quiz-question-card">
+      <div className="quiz-question-meta"><span>{current.moduleTitle}</span><span>Question {questionIndex + 1} / {quiz.questions.length}</span></div>
+      <h1 ref={heading} tabIndex={-1}>{current.prompt}</h1>
+      {current.type === 'number' ? <div className="quiz-number-answer">
+        <label htmlFor="quiz-number">Your answer ({current.unit})</label>
+        <p id="quiz-number-hint">Enter a number only; a minus sign and decimal point are allowed. Use the units above. Round only when the question asks you to.</p>
+        <input id="quiz-number" type="text" inputMode="decimal" autoComplete="off" aria-describedby="quiz-number-hint" value={selected ?? ''} onChange={event => select(event.target.value)} />
+        {selected?.trim() && !isAnswered(current, selected) && <p role="status">Enter a valid number, such as 12.5 or -8, without a currency or percent symbol.</p>}
+      </div> : current.type === 'multiple' ? <fieldset className="quiz-multiple-answer">
+        <legend>Select all that apply. All correct choices and no incorrect choices are required.</legend>
+        <div className="quiz-answer-grid">{current.options.map((option, index) => <label key={index} className={`quiz-answer quiz-checkbox ${selected?.includes(index) ? 'selected' : ''}`}>
+          <input type="checkbox" checked={selected?.includes(index) || false} onChange={() => select(selected?.includes(index) ? selected.filter(item => item !== index) : [...(selected || []), index])} /><span>{option}</span>
+        </label>)}</div>
+      </fieldset> : <div className="quiz-answer-grid" role="group" aria-label="Choose one answer">{current.options.map((option, index) => <button key={index} aria-pressed={selected === index} className={`quiz-answer ${selected === index ? 'selected' : ''}`} onClick={() => select(index)}><span>{String.fromCharCode(65 + index)}</span><p>{option}</p></button>)}</div>}
+      <div className="quiz-nav-actions">
+        <button className="secondary-button" onClick={() => move(-1)} disabled={questionIndex === 0}>← Previous</button>
+        <button className="primary-button" disabled={!isAnswered(current, selected)} onClick={() => questionIndex === quiz.questions.length - 1 ? finishQuiz() : move(1)}>{questionIndex === quiz.questions.length - 1 ? 'Finish quiz' : 'Next question →'}</button>
       </div>
-
-      <div className="progress-track">
-        <div
-          className="progress-fill"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      <div className="quiz-question-card">
-        <div className="quiz-question-meta">
-          <span>{current.moduleTitle}</span>
-          <span>
-            Question {questionIndex + 1} / {questions.length}
-          </span>
-        </div>
-
-        <h1>{current.prompt}</h1>
-
-        <div className="quiz-answer-grid">
-          {current.options.map((option, index) => (
-            <button
-              key={`${option}-${index}`}
-              aria-pressed={selected === index}
-              className={
-                selected === index
-                  ? 'quiz-answer selected'
-                  : 'quiz-answer'
-              }
-              onClick={() => chooseAnswer(index)}
-            >
-              <span>{String.fromCharCode(65 + index)}</span>
-              <p>{option}</p>
-            </button>
-          ))}
-        </div>
-
-        <div className="quiz-nav-actions">
-          <button
-            className="secondary-button"
-            onClick={goPrevious}
-            disabled={questionIndex === 0}
-          >
-            ← Previous
-          </button>
-
-          <button
-            className="primary-button"
-            onClick={goNext}
-            disabled={selected === undefined}
-          >
-            {questionIndex === questions.length - 1
-              ? 'Finish quiz'
-              : 'Next question →'}
-          </button>
-        </div>
-      </div>
-    </section>
-  )
+    </div>
+  </section>
 }
-
 export default QuizRunner
