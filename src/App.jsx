@@ -15,6 +15,7 @@ import SiteFooter from './components/SiteFooter'
 import LegalPage from './components/LegalPage'
 import NotFound from './components/NotFound'
 import StudyDialog from './components/StudyDialog'
+import SavedVocabulary from './components/SavedVocabulary'
 import './App.css'
 import './calm.css'
 
@@ -55,6 +56,9 @@ function RichText({ children, onConcept }) {
 
 function ConceptModal({
   conceptId,
+  saved,
+  onToggle,
+  storageError,
   onClose,
 }) {
   const concept = concepts[conceptId]
@@ -81,6 +85,10 @@ function ConceptModal({
         </p>
 
         <h2>{concept.name}</h2>
+        <button className="secondary-button vocabulary-save" aria-pressed={saved} onClick={() => onToggle(conceptId)}>
+          {saved ? 'Saved · Remove term' : 'Save term'}
+        </button>
+        {storageError && <p role="alert">{storageError}</p>}
 
         <p className="concept-definition">
           {concept.definition}
@@ -107,7 +115,7 @@ const allEntries = [...lessonEntries, ...aiBankingModule.lessons.map(lesson =>
 const routeFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const pages = { '/': 'home', '/learn': 'learn', '/interview': 'interview',
-    '/ai': 'ai', '/review': 'review', '/privacy': 'privacy', '/terms': 'terms' }
+    '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/privacy': 'privacy', '/terms': 'terms' }
   if (pages[path]) return { page: pages[path] }
   if (!/^\/(lesson|track|module)\/[^/]+$/.test(path)) return { page: 'not-found' }
   const [kind, id] = path.slice(1).split('/')
@@ -134,6 +142,24 @@ const initialRoute = routeFromPath()
 const pageFromPath = () => routeFromPath().page
 
 function App() {
+  const [savedTerms, setSavedTerms] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('ibase-saved-vocabulary') || '[]')
+      return Array.isArray(stored) ? [...new Set(stored.filter(id => typeof id === 'string' && Object.hasOwn(concepts, id)))] : []
+    } catch { return [] }
+  })
+  const [vocabularyOpen, setVocabularyOpen] = useState(false)
+  const [vocabularyError, setVocabularyError] = useState('')
+  const toggleSavedTerm = id => {
+    const next = savedTerms.includes(id) ? savedTerms.filter(term => term !== id) : [...savedTerms, id]
+    try {
+      localStorage.setItem('ibase-saved-vocabulary', JSON.stringify(next))
+      setSavedTerms(next)
+      setVocabularyError('')
+    } catch {
+      setVocabularyError('Your browser could not save this change. Check that browser storage is available and try again.')
+    }
+  }
   const [search, setSearch] = useState('')
   const [outlineOpen, setOutlineOpen] = useState(() => window.matchMedia('(min-width: 701px)').matches)
 
@@ -328,6 +354,7 @@ function App() {
       learn: 'Investment Banking Curriculum | IBase',
       interview: 'Investment Banking Interview Prep | IBase',
       ai: 'AI for Banking Course | IBase',
+      vocabulary: 'Saved vocabulary | IBase',
       review: 'Review Queue | IBase',
       quiz: 'Quiz | IBase',
       privacy: 'Privacy Policy | IBase',
@@ -372,7 +399,7 @@ function App() {
 
   useEffect(() => {
     const paths = { home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
-      review: '/review', privacy: '/privacy', terms: '/terms' }
+      vocabulary: '/vocabulary', review: '/review', privacy: '/privacy', terms: '/terms' }
     const path = page === 'lesson' && activeLesson ? `/lesson/${activeLesson.id}`
       : page === 'module' && activeModule ? `/module/${activeModule.id}`
       : page === 'track' && activeTrack ? `/track/${activeTrack.id}` : paths[page]
@@ -421,6 +448,8 @@ function App() {
     scrollTop()
   }
 
+  const openVocabulary = () => { setPage('vocabulary'); scrollTop() }
+
   const openLearn = () => {
     setPage('learn')
     scrollTop()
@@ -454,6 +483,7 @@ function App() {
       onLearn={openLearn}
       onInterview={openInterview}
       onAI={openAI}
+      onVocabulary={openVocabulary}
       onPrivacy={openPrivacy}
       onTerms={openTerms}
     />
@@ -865,6 +895,17 @@ function App() {
     )
   }
 
+  if (page === 'vocabulary') {
+    return <main>
+      <HomeNav onHome={goHome} onLearn={openLearn} onInterview={openInterview} onAI={openAI} onVocabulary={openVocabulary} />
+      <section className="vocabulary-page">
+        <SavedVocabulary savedTerms={savedTerms} onRemove={toggleSavedTerm} storageError={vocabularyError} />
+        <button className="secondary-button" onClick={openLearn}>Browse courses →</button>
+      </section>
+      {renderFooter()}
+    </main>
+  }
+
   if (page === 'privacy' || page === 'terms') {
     return (
       <main>
@@ -967,6 +1008,9 @@ function App() {
         {activeConcept && (
           <ConceptModal
             conceptId={activeConcept}
+            saved={savedTerms.includes(activeConcept)}
+            onToggle={toggleSavedTerm}
+            storageError={vocabularyError}
             onClose={() => setActiveConcept(null)}
           />
         )}
@@ -1083,6 +1127,7 @@ function App() {
             </div>
 
             <div className="lesson-tools">
+              <button onClick={() => setVocabularyOpen(true)}>Saved vocabulary</button>
               <button
                 className="notes-button"
                 onClick={() =>
@@ -2220,11 +2265,21 @@ function App() {
           </div>
         )}
 
+        {vocabularyOpen && <div className="notes-overlay" onClick={() => setVocabularyOpen(false)}>
+          <StudyDialog className="vocabulary-dialog" label="Saved vocabulary" onClose={() => setVocabularyOpen(false)}>
+            <button className="secondary-button" onClick={() => setVocabularyOpen(false)}>Back to lesson</button>
+            <SavedVocabulary savedTerms={savedTerms} onRemove={toggleSavedTerm} storageError={vocabularyError} />
+          </StudyDialog>
+        </div>}
+
         {/* CONCEPT POPUP */}
 
         {activeConcept && (
           <ConceptModal
             conceptId={activeConcept}
+            saved={savedTerms.includes(activeConcept)}
+            onToggle={toggleSavedTerm}
+            storageError={vocabularyError}
             onClose={() =>
               setActiveConcept(null)
             }
@@ -2692,6 +2747,7 @@ function App() {
         onLearn={openLearn}
         onInterview={openInterview}
         onAI={openAI}
+        onVocabulary={openVocabulary}
       />
 
       <section className="workstation-home">
