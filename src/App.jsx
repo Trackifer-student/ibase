@@ -538,7 +538,7 @@ function App() {
     openQuiz({
       title: module.quizTitle || `${module.title} Quiz`,
       description:
-        'Practice with new questions at Easy, Medium, or Hard difficulty. Each level tests different reasoning, not just more questions.',
+        'Practice with new questions at Foundation, Applied, or Analyst Challenge difficulty. Each level tests different reasoning, not just more questions.',
       questionBank,
       storageKey: `ibase-quiz-module-${module.id}`,
       returnPage,
@@ -2383,7 +2383,7 @@ function App() {
               <p className="eyebrow">END OF MODULE</p>
               <h2>{activeModule.quizTitle || `${activeModule.title} Quiz`}</h2>
               <p>
-                Try independent questions at Easy, Medium, or Hard difficulty.
+                Try independent questions at Foundation, Applied, or Analyst Challenge difficulty.
                 Each level uses different questions; their order reshuffles.
               </p>
             </div>
@@ -2493,7 +2493,7 @@ function App() {
               <h2>{activeTrack.title} Exam</h2>
               <p>
                 Mix questions across every module in this track. Use the
-                Hard level once the individual module quizzes feel easy.
+                Analyst Challenge level once the individual module quizzes feel comfortable.
               </p>
             </div>
 
