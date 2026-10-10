@@ -116,6 +116,7 @@ test('all 1,188 variants preserve format, difficulty, lesson links, and valid sc
       for (const field of ['id', 'type', 'difficulty', 'lessonId', 'moduleId']) assert.equal(question[field], template[field])
       assert.deepEqual(question.reviewConcepts, template.reviewConcepts)
       assert.ok(!/undefined|NaN|Infinity/.test(question.prompt + question.explanation))
+      assert.ok(!/^A (illustrator|editor)/.test(question.prompt))
       assert.ok(isCorrect(question, question.type === 'number' ? String(question.answer) : correctAnswer(question)))
       if (question.type === 'number') {
         assert.ok(Number.isFinite(question.answer))
