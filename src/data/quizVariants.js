@@ -110,7 +110,7 @@ export const varyQuestion = (question, variantIndex) => {
   }
   if (question.lessonId === 'revenue-profit-cash' && question.difficulty === 'medium') {
     const roles = ['freelancer', 'illustrator', 'copywriter', 'photographer', 'translator', 'editor']
-    next.prompt = next.prompt.replaceAll('designer', roles[variantIndex])
+    next.prompt = next.prompt.replaceAll('designer', roles[variantIndex]).replace(/^A ([aeiou])/i, 'An $1')
   }
   // A clearly labeled hypothetical case varies the company/industry without
   // changing the original question's correct reasoning or introducing facts.
