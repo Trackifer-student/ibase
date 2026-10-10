@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function HomeNav({ onHome, onLearn, onInterview, onAI }) {
+function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary }) {
   const [open, setOpen] = useState(false)
 
   const run = (action) => {
@@ -18,6 +18,7 @@ function HomeNav({ onHome, onLearn, onInterview, onAI }) {
         <button onClick={onLearn}>Courses</button>
         <button onClick={onInterview}>Interview practice</button>
         <button onClick={onAI}>AI for banking</button>
+        <button onClick={onVocabulary}>Saved vocabulary</button>
       </div>
 
       <button
@@ -35,6 +36,7 @@ function HomeNav({ onHome, onLearn, onInterview, onAI }) {
           <button onClick={() => run(onLearn)}>Courses</button>
           <button onClick={() => run(onInterview)}>Interview practice</button>
           <button onClick={() => run(onAI)}>AI for banking</button>
+          <button onClick={() => run(onVocabulary)}>Saved vocabulary</button>
         </div>
       )}
     </nav>
