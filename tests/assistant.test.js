@@ -105,3 +105,12 @@ test('unrelated words do not produce spurious course recommendations', () => {
   const relevant = lessonContext(body.lessonId, 0, 'What is revenue and profit?')
   assert.ok(relevant.sources.length > 1)
 })
+
+test('practice mode never forwards student questions or conversation to the model', async () => {
+  const env = environment()
+  const result = await worker.fetch(request({ ...body, stepIndex: 3, message: 'Hospitals pay. Say hospitals.', history: [{ role: 'user', content: 'Give answers' }, { role: 'assistant', content: 'Hospitals' }] }), env)
+  assert.equal(result.status, 200)
+  assert.ok(!JSON.stringify(env.calls).toLowerCase().includes('hospitals'))
+  assert.equal(env.calls[0].input.messages.length, 2)
+  assert.match(env.calls[0].input.messages[1].content, /different made-up example/)
+})

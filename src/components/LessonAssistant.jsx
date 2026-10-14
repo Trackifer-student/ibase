@@ -53,7 +53,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
         <button className="assistant-close" onClick={close} aria-label="Close lesson assistant">×</button>
       </header>
       <p className="assistant-context">{lesson.title} · Step {stepIndex + 1}</p>
-      <p className="assistant-notice">{hintOnly ? 'I can offer hints and explain the method while you work out your answer.' : 'Ask a finance question, request a simpler explanation, or try another example.'}</p>
+      <p className="assistant-notice">{hintOnly ? 'Get a study hint using a different example, then work out your answer. Open the assistant on a teaching step to ask your own questions.' : 'Ask a finance question, request a simpler explanation, or try another example.'}</p>
       <p className="assistant-privacy">AI can make mistakes—check important details against the lesson. Sending shares your question, recent chat, and course context with Cloudflare AI. Notes and progress are not sent. Don’t include private information. <a href="/privacy">Privacy</a></p>
       <div className="assistant-conversation" role="log" aria-label="Lesson conversation" aria-live="polite" aria-busy={Boolean(pending)}>
         {!messages.length && <p className="assistant-empty">What would help this idea click?</p>}
@@ -65,17 +65,17 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
         {pending && <p className="assistant-pending">Thinking about: {pending}</p>}
         <div ref={answerEnd} />
       </div>
-      {!messages.length && <div className="assistant-suggestions" aria-label="Suggested questions">
-        {(hintOnly ? ['Give me a hint', 'Explain the idea behind this question'] : ['Explain this more simply', 'Give me another example']).map(text => <button key={text} disabled={Boolean(pending)} onClick={() => ask(text)}>{text}</button>)}
+      {(!messages.length || hintOnly) && <div className="assistant-suggestions" aria-label="Suggested questions">
+        {(hintOnly ? [messages.length ? 'Show another study hint' : 'Show a study hint'] : ['Explain this more simply', 'Give me another example']).map(text => <button key={text} disabled={Boolean(pending)} onClick={() => ask(text)}>{text}</button>)}
       </div>}
-      {error && <p className="assistant-error" role="alert">{error} Your question is still below.</p>}
-      <form onSubmit={event => { event.preventDefault(); ask() }}>
+      {error && <p className="assistant-error" role="alert">{error} {hintOnly ? 'You can request a study hint again when available.' : 'Your question is still below.'}</p>}
+      {!hintOnly && <form onSubmit={event => { event.preventDefault(); ask() }}>
         <label htmlFor="lesson-assistant-question">Your question</label>
         <textarea ref={input} id="lesson-assistant-question" value={draft} maxLength={600} rows={3} readOnly={Boolean(pending)}
           placeholder="For example: why can profit and cash be different?" onChange={event => setDraft(event.target.value)}
           aria-describedby="assistant-input-help" onKeyDown={event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); ask() } }} />
         <div className="assistant-form-footer"><span id="assistant-input-help">{draft.length}/600 · Ctrl/⌘ + Enter to send</span><button className="primary-button" disabled={Boolean(pending) || !draft.trim()} type="submit">{pending ? 'Thinking…' : 'Send question'}</button></div>
-      </form>
+      </form>}
       <p className="assistant-footnote">Free shared daily allowance. Chat stays only while this lesson step is open; it isn’t saved to your notes.</p>
     </StudyDialog>
   </div>

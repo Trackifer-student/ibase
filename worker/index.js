@@ -46,8 +46,9 @@ export default {
     let input
     try { input = validateInput(await readBody(request)) } catch (error) { return response({ error: error.message === 'large' ? 'Please send a shorter question.' : 'The question could not be read.' }, error.message === 'large' ? 413 : 400) }
     if (!input) return response({ error: 'Ask a question of up to 600 characters from a lesson.' }, 400)
-    const context = lessonContext(input.lessonId, input.stepIndex, input.message)
+    let context = lessonContext(input.lessonId, input.stepIndex, '')
     if (!context) return response({ error: 'This lesson or step was not found. Reload the lesson and try again.' }, 400)
+    if (!context.hintOnly) context = lessonContext(input.lessonId, input.stepIndex, input.message)
     try {
       // Anonymous site: an IP-based throttle can also affect students on the same network.
       // Hash with the UTC date rather than retaining a raw IP in the counter key.
@@ -62,8 +63,8 @@ export default {
       const output = await Promise.race([
         env.AI.run(MODEL, { messages: [
           { role: 'system', content: `${context.text}\n\nAssistant rules (apply to every reply):\n${systemPrompt}` },
-          ...input.history,
-          { role: 'user', content: input.message },
+          ...(context.hintOnly ? [] : input.history),
+          { role: 'user', content: context.hintOnly ? 'Explain the key idea of this lesson with a short, different made-up example. End with a question that helps me apply the method myself.' : input.message },
         ], max_tokens: 400, temperature: 0.3 }),
         new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('timeout')), 25000) }),
       ])
