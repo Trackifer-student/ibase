@@ -17,16 +17,16 @@ export const lessons = [...tracks.flatMap(track => track.modules), aiBankingModu
 const index = new Map(lessons.map(lesson => [lesson.id, {
   lesson,
   text: lesson.steps.filter(step => teachingTypes.has(step.type)).map(teachingText).join('\n').slice(0, 5500),
-  search: `${lesson.title} ${lesson.summary} ${(lesson.concepts || []).join(' ')}`.toLowerCase(),
+  search: new Set(`${lesson.title} ${lesson.summary} ${(lesson.concepts || []).join(' ')}`.toLowerCase().match(/[a-z]{4,}/g) || []),
 }]))
 export function lessonContext(lessonId, stepIndex, question) {
   const entry = index.get(lessonId)
   if (!entry || !Number.isInteger(stepIndex) || !entry.lesson.steps[stepIndex]) return null
   const step = entry.lesson.steps[stepIndex]
   const hintOnly = questionTypes.has(step.type)
-  const words = [...new Set(question.toLowerCase().match(/[a-z]{4,}/g) || [])].filter(word => !['this', 'that', 'what', 'with', 'from', 'does', 'explain', 'please', 'about', 'give', 'example', 'lesson', 'another'].includes(word))
+  const words = [...new Set(question.toLowerCase().match(/[a-z]{4,}/g) || [])].filter(word => !['this', 'that', 'what', 'with', 'from', 'does', 'explain', 'please', 'about', 'give', 'example', 'lesson', 'another', 'write', 'long', 'short', 'course', 'ignore', 'would', 'could', 'should', 'have', 'they', 'their', 'there', 'then', 'than', 'your', 'more', 'make', 'help', 'understand', 'question'].includes(word))
   const related = [...index.values()].filter(item => item !== entry)
-    .map(item => ({ ...item, score: words.reduce((sum, word) => sum + (item.search.includes(word) ? 1 : 0), 0) }))
+    .map(item => ({ ...item, score: words.reduce((sum, word) => sum + (item.search.has(word) ? 1 : 0), 0) }))
     .filter(item => item.score >= 2).sort((a, b) => b.score - a.score).slice(0, 2)
   const definitions = (entry.lesson.concepts || []).map(id => concepts[id]).filter(Boolean)
     .map(concept => `${concept.name}: ${concept.definition}`).join('\n').slice(0, 1000)

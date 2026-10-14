@@ -8,7 +8,7 @@ On October 14, 2026 the account's Cloudflare Workers plans page showed **Free / 
 
 `ASSISTANT_ENABLED=true` enables the endpoint. Set it to `false` to disable inference. Before changing the account plan, adding AI Gateway billing, or changing the fixed model, disable the assistant and reassess costs. This flag is an operational switch, not automatic billing-plan detection. The regional rate limiter is an abuse throttle, not a global billing cap. Cloudflare Free is the hard cost boundary. Availability and prices can change.
 
-- Fixed model: `@cf/meta/llama-3.1-8b-instruct-fp8-fast`.
+- Fixed model: `@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
 - Maximum 400 output tokens, 600 characters per student question, 8 KiB request body, two previous turns.
 - Five requests per minute per network at each Cloudflare location. Anonymous users sharing a network may share the limit.
 - No automatic retries, fallback models, paid databases, embeddings, or third-party inference.

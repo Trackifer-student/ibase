@@ -97,3 +97,10 @@ test('empty model answers are treated as errors; recent conversation preserves r
   assert.deepEqual(env.calls[0].input.messages.slice(1, 3), history)
   assert.equal(env.calls[0].input.messages.at(-1).content, 'And profit?')
 })
+
+test('unrelated words do not produce spurious course recommendations', () => {
+  const context = lessonContext(body.lessonId, 0, 'Ignore the finance course and write me a long fantasy story about dragons.')
+  assert.equal(context.sources.length, 1)
+  const relevant = lessonContext(body.lessonId, 0, 'What is revenue and profit?')
+  assert.ok(relevant.sources.length > 1)
+})
