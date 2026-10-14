@@ -9,6 +9,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
   const [error, setError] = useState('')
   const request = useRef(null)
   const answerEnd = useRef(null)
+  const input = useRef(null)
   const hintOnly = ['mcq', 'fill', 'number', 'written'].includes(lesson.steps[stepIndex].type)
   useEffect(() => () => request.current?.abort(), [])
   const close = () => { request.current?.abort(); request.current = null; setPending(''); onClose() }
@@ -20,6 +21,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
     const controller = new AbortController()
     request.current = controller
     setDraft(text)
+    input.current?.focus()
     setPending(text)
     setError('')
     const timer = setTimeout(() => controller.abort(), 30000)
@@ -69,7 +71,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
       {error && <p className="assistant-error" role="alert">{error} Your question is still below.</p>}
       <form onSubmit={event => { event.preventDefault(); ask() }}>
         <label htmlFor="lesson-assistant-question">Your question</label>
-        <textarea id="lesson-assistant-question" value={draft} maxLength={600} rows={3} readOnly={Boolean(pending)}
+        <textarea ref={input} id="lesson-assistant-question" value={draft} maxLength={600} rows={3} readOnly={Boolean(pending)}
           placeholder="For example: why can profit and cash be different?" onChange={event => setDraft(event.target.value)}
           aria-describedby="assistant-input-help" onKeyDown={event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); ask() } }} />
         <div className="assistant-form-footer"><span id="assistant-input-help">{draft.length}/600 · Ctrl/⌘ + Enter to send</span><button className="primary-button" disabled={Boolean(pending) || !draft.trim()} type="submit">{pending ? 'Thinking…' : 'Send question'}</button></div>
