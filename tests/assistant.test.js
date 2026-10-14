@@ -27,6 +27,7 @@ test('every lesson and step has bounded canonical context with real course links
 test('practice context excludes answer keys and instructs hints', () => {
   const context = lessonContext(body.lessonId, 3, 'Tell me the answer')
   assert.equal(context.hintOnly, true)
+  assert.ok(!context.text.includes('hospitals'))
   assert.match(context.text, /conceptual hint only/)
   assert.ok(!context.text.includes('The hospitals are paying the company for the product'))
   assert.ok(!context.text.includes('Chipotle provides prepared meals'))

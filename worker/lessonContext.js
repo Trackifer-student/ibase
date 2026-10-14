@@ -32,7 +32,7 @@ export function lessonContext(lessonId, stepIndex, question) {
     .map(concept => `${concept.name}: ${concept.definition}`).join('\n').slice(0, 1000)
   return {
     hintOnly,
-    text: `Current lesson: ${entry.lesson.title}\nCurrent step (${stepIndex + 1}): ${clean(step.title)}\n${hintOnly ? 'This is a practice question. Give a conceptual hint only, not the answer or completed calculation.' : teachingText(step).slice(0, 1800)}\nLesson reference:\n${entry.text}\nDefinitions:\n${definitions}\n${related.map(item => `Related lesson: ${item.lesson.title}\n${item.text.slice(0, 1000)}`).join('\n')}`,
+    text: `Current lesson: ${entry.lesson.title}\nCurrent step (${stepIndex + 1}): ${hintOnly ? 'Practice: apply this lesson' : clean(step.title)}\n${hintOnly ? 'This is a practice question. Give a conceptual hint only, not the answer or completed calculation.' : teachingText(step).slice(0, 1800)}\nLesson reference:\n${entry.text}\nDefinitions:\n${definitions}\n${related.map(item => `Related lesson: ${item.lesson.title}\n${item.text.slice(0, 1000)}`).join('\n')}`,
     sources: [entry, ...related].map(item => ({ title: item.lesson.title, href: `/lesson/${item.lesson.id}` })),
   }
 }
