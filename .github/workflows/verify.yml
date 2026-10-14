@@ -33,5 +33,11 @@ jobs:
       - name: Quiz bank and scoring tests
         run: npm run test:quizzes
 
+      - name: Lesson assistant tests
+        run: npm run test:assistant
+
       - name: Build
         run: npm run build
+
+      - name: Validate Worker bundle
+        run: npx wrangler deploy --dry-run

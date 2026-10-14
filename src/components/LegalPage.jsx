@@ -9,7 +9,7 @@ function LegalPage({ type, onBack }) {
 
       <p className="eyebrow">{privacy ? 'PRIVACY' : 'TERMS'}</p>
       <h1>{privacy ? 'Privacy Policy' : 'Terms and Conditions'}</h1>
-      <p className="legal-updated">Last updated October 7, 2026</p>
+      <p className="legal-updated">Last updated October 14, 2026</p>
 
       {privacy ? (
         <div className="legal-copy">
@@ -53,9 +53,23 @@ function LegalPage({ type, onBack }) {
           <section>
             <h2>AI features</h2>
             <p>
-              The current free version does not send written answers to a paid
-              AI grading service. Written-answer checks run locally in the
-              browser using predefined grading rules.
+              Written-answer checks still run locally in your browser using predefined rules.
+              The optional lesson assistant sends the question you submit, up to two recent
+              conversation turns, and relevant course material to Cloudflare Workers AI to
+              generate a reply. Your saved notes, scores, vocabulary, and learning progress
+              are not included. Do not submit private or sensitive information.
+            </p>
+            <p>
+              Assistant conversations are held in page memory and are not saved by IBase
+              to local storage or a chat database. They reset when you leave or refresh
+              the lesson step. Cloudflare processes requests and routine technical data
+              under its own policies. An IP-derived daily identifier is used to limit
+              requests; people on the same network may share a limit.
+            </p>
+            <p>
+              Replies can be inaccurate and are for education only. The assistant has no
+              live market feed. A shared daily free allowance limits availability.
+              See <a href="https://developers.cloudflare.com/workers-ai/platform/data-usage/">Cloudflare AI data usage</a>.
             </p>
           </section>
 
