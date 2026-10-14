@@ -10,7 +10,24 @@
       "/api/*"
     ]
   },
-  "previews": {},
+  "previews": {
+    "vars": {
+      "ASSISTANT_ENABLED": "true"
+    },
+    "ai": {
+      "binding": "AI"
+    },
+    "ratelimits": [
+      {
+        "name": "ASSISTANT_LIMITER",
+        "namespace_id": "2026101402",
+        "simple": {
+          "limit": 5,
+          "period": 60
+        }
+      }
+    ]
+  },
   "main": "worker/index.js",
   "ai": {
     "binding": "AI"
