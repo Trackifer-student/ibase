@@ -4,7 +4,45 @@
   "compatibility_date": "2026-10-08",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
   },
-  "previews": {}
+  "previews": {
+    "vars": {
+      "ASSISTANT_ENABLED": "true"
+    },
+    "ai": {
+      "binding": "AI"
+    },
+    "ratelimits": [
+      {
+        "name": "ASSISTANT_LIMITER",
+        "namespace_id": "2026101402",
+        "simple": {
+          "limit": 5,
+          "period": 60
+        }
+      }
+    ]
+  },
+  "main": "worker/index.js",
+  "ai": {
+    "binding": "AI"
+  },
+  "vars": {
+    "ASSISTANT_ENABLED": "true"
+  },
+  "ratelimits": [
+    {
+      "name": "ASSISTANT_LIMITER",
+      "namespace_id": "2026101401",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
+    }
+  ]
 }

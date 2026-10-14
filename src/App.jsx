@@ -16,6 +16,7 @@ import LegalPage from './components/LegalPage'
 import NotFound from './components/NotFound'
 import StudyDialog from './components/StudyDialog'
 import SavedVocabulary from './components/SavedVocabulary'
+import LessonAssistant from './components/LessonAssistant'
 import './App.css'
 import './calm.css'
 
@@ -231,6 +232,7 @@ function App() {
     setActiveConcept,
   ] = useState(null)
 
+  const [assistantOpen, setAssistantOpen] = useState(false)
   const [notesOpen, setNotesOpen] =
     useState(false)
 
@@ -1127,6 +1129,7 @@ function App() {
             </div>
 
             <div className="lesson-tools">
+              <button className="assistant-button" onClick={() => setAssistantOpen(true)}>Ask about this lesson</button>
               <button onClick={() => setVocabularyOpen(true)}>Saved vocabulary</button>
               <button
                 className="notes-button"
@@ -2209,6 +2212,8 @@ function App() {
             </div>
           )}
         </section>
+
+        <LessonAssistant key={`${activeLesson.id}-${lessonStep}`} lesson={activeLesson} stepIndex={lessonStep} open={assistantOpen} onClose={() => setAssistantOpen(false)} />
 
         {/* NOTES PANEL */}
 
