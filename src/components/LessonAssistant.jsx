@@ -10,6 +10,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
   const request = useRef(null)
   const answerEnd = useRef(null)
   const input = useRef(null)
+  const closeButton = useRef(null)
   const hintOnly = ['mcq', 'fill', 'number', 'written'].includes(lesson.steps[stepIndex].type)
   useEffect(() => () => request.current?.abort(), [])
   const close = () => { request.current?.abort(); request.current = null; setPending(''); onClose() }
@@ -21,7 +22,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
     const controller = new AbortController()
     request.current = controller
     setDraft(text)
-    input.current?.focus()
+    ;(input.current || closeButton.current)?.focus()
     setPending(text)
     setError('')
     const timer = setTimeout(() => controller.abort(), 30000)
@@ -50,7 +51,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
     <StudyDialog className="lesson-assistant" label="Ask about this lesson" returnFocus=".assistant-button" onClose={close}>
       <header className="assistant-header">
         <div><p className="eyebrow">YOUR STUDY ASSISTANT</p><h2>Ask about this lesson</h2></div>
-        <button className="assistant-close" onClick={close} aria-label="Close lesson assistant">×</button>
+        <button ref={closeButton} className="assistant-close" onClick={close} aria-label="Close lesson assistant">×</button>
       </header>
       <p className="assistant-context">{lesson.title} · Step {stepIndex + 1}</p>
       <p className="assistant-notice">{hintOnly ? 'Get a study hint using a different example, then work out your answer. Open the assistant on a teaching step to ask your own questions.' : 'Ask a finance question, request a simpler explanation, or try another example.'}</p>
