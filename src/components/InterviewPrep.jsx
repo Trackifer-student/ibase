@@ -6,11 +6,12 @@ import {
 } from '../data/interviewQuestions'
 import { shuffle } from '../utils/quizBuilder'
 
-function InterviewPrep({ onBack, onLearn }) {
-  const [screen, setScreen] = useState('home')
+function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
+  const initialQuestion = interviewQuestions.find((item) => item.id === initialQuestionId) || null
+  const [screen, setScreen] = useState(initialQuestion ? 'practice' : 'home')
   const [category, setCategory] = useState('Accounting')
   const [difficulty, setDifficulty] = useState('All')
-  const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [currentQuestion, setCurrentQuestion] = useState(initialQuestion)
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
   const [coveredPoints, setCoveredPoints] = useState([])
