@@ -23,6 +23,7 @@ import {
   powerpointModule,
   analystWorkModule,
 } from './modules/analyst'
+import { advancedTechnicalsModule } from './modules/advancedTechnicals'
 const whatIsIBLessons = [
   {
     id: 'what-bankers-do',
@@ -1358,6 +1359,7 @@ export const tracks = [
       modelingModule,
       powerpointModule,
       analystWorkModule,
+      advancedTechnicalsModule,
     ],
   },
 ]
