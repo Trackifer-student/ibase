@@ -1,3 +1,5 @@
+import { interviewQuestionExpansion } from './interviewQuestionExpansion'
+
 export const interviewQuestions = [
   {
     id: 'acct-1',
@@ -276,7 +278,7 @@ export const interviewQuestions = [
     prompt: 'What happens to bond prices when market yields rise?',
     strongAnswer:
       'Existing fixed-rate bond prices generally fall when market yields rise because their fixed coupons become less attractive relative to newly issued bonds offering higher yields. The reverse is generally true when market yields fall.',
-    keyPoints: ['Prices and yields move inversely', 'Fixed coupons become more or less attractive'],
+    keyPoints: ['Prices and yields move inversely', 'Existing bonds have fixed coupons', 'New bonds offer higher yields when market yields rise'],
   },
   {
     id: 'market-2',
@@ -368,6 +370,7 @@ export const interviewQuestions = [
       'Higher rates raise debt financing costs, reduce how much leverage buyers can support, and increase discount rates, which can pressure valuations. That can make some deals less accretive or reduce sponsor returns. However, the effect varies by buyer balance sheet, strategic rationale, seller expectations, and whether valuation multiples adjust.',
     keyPoints: ['Higher financing cost', 'Lower debt capacity', 'Higher discount rates', 'Pressure on valuations and sponsor returns', 'Company-specific effects'],
   },
+  ...interviewQuestionExpansion,
 ]
 
 export const interviewCategories = [

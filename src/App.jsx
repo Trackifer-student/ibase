@@ -10,6 +10,8 @@ import {
 } from './utils/quizBuilder'
 import QuizRunner from './components/QuizRunner'
 import InterviewPrep from './components/InterviewPrep'
+import GlobalSearchPage from './components/GlobalSearchPage'
+import ProgressBackup from './components/ProgressBackup'
 import HomeNav from './components/HomeNav'
 import SiteFooter from './components/SiteFooter'
 import LegalPage from './components/LegalPage'
@@ -116,7 +118,7 @@ const allEntries = [...lessonEntries, ...aiBankingModule.lessons.map(lesson =>
 const routeFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const pages = { '/': 'home', '/learn': 'learn', '/interview': 'interview',
-    '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/privacy': 'privacy', '/terms': 'terms' }
+    '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/search': 'search', '/backup': 'backup', '/privacy': 'privacy', '/terms': 'terms' }
   if (pages[path]) return { page: pages[path] }
   if (!/^\/(lesson|track|module)\/[^/]+$/.test(path)) return { page: 'not-found' }
   const [kind, id] = path.slice(1).split('/')
@@ -162,6 +164,7 @@ function App() {
     }
   }
   const [search, setSearch] = useState('')
+  const [interviewQuestionId, setInterviewQuestionId] = useState(null)
   const [outlineOpen, setOutlineOpen] = useState(() => window.matchMedia('(min-width: 701px)').matches)
 
   const [page, setPage] =
@@ -342,6 +345,7 @@ function App() {
       setActiveLesson(route.lesson || null)
       setModuleOrigin(route.module === aiBankingModule ? 'ai' : 'track')
       setLessonStep(0)
+      setInterviewQuestionId(null)
       setSelectedAnswer(null)
       setShowFeedback(false)
       setPage(route.page)
@@ -355,6 +359,8 @@ function App() {
       home: 'IBase | Learn Investment Banking from Zero',
       learn: 'Investment Banking Curriculum | IBase',
       interview: 'Investment Banking Interview Prep | IBase',
+      search: 'Search Lessons and Interview Questions | IBase',
+      backup: 'Back Up Learning Progress | IBase',
       ai: 'AI for Banking Course | IBase',
       vocabulary: 'Saved vocabulary | IBase',
       review: 'Review Queue | IBase',
@@ -385,6 +391,10 @@ function App() {
         'Learn finance and investment banking from the ground up with structured lessons, worked examples, quizzes, and cumulative exams.',
       interview:
         'Practice investment banking technical, behavioral, markets, and deal interview questions by topic and difficulty.',
+      search:
+        'Search IBase finance lessons, definitions, and interview questions.',
+      backup:
+        'Export or import your IBase lesson progress, notes, quiz scores, and interview review queue without an account.',
       ai:
         'Learn practical AI workflows for banking research, filings, Excel, model checking, presentations, prompting, verification, and confidentiality.',
       privacy:
@@ -401,7 +411,7 @@ function App() {
 
   useEffect(() => {
     const paths = { home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
-      vocabulary: '/vocabulary', review: '/review', privacy: '/privacy', terms: '/terms' }
+      vocabulary: '/vocabulary', review: '/review', search: '/search', backup: '/backup', privacy: '/privacy', terms: '/terms' }
     const path = page === 'lesson' && activeLesson ? `/lesson/${activeLesson.id}`
       : page === 'module' && activeModule ? `/module/${activeModule.id}`
       : page === 'track' && activeTrack ? `/track/${activeTrack.id}` : paths[page]
@@ -409,9 +419,23 @@ function App() {
   }, [page, activeLesson, activeModule, activeTrack])
 
   useEffect(() => {
+    if (page === 'search') return
     const heading = document.querySelector('.lesson-card h1') || document.querySelector('main h1')
     if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }) }
   }, [page, lessonStep])
+
+  useEffect(() => {
+    const onSearchShortcut = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setActiveConcept(null)
+        setPage('search')
+        window.scrollTo({ top: 0, behavior: 'auto' })
+      }
+    }
+    window.addEventListener('keydown', onSearchShortcut)
+    return () => window.removeEventListener('keydown', onSearchShortcut)
+  }, [])
 
   useEffect(() => {
     const onEscape = event => {
@@ -451,6 +475,8 @@ function App() {
   }
 
   const openVocabulary = () => { setPage('vocabulary'); scrollTop() }
+  const openSearch = () => { setActiveConcept(null); setPage('search'); scrollTop() }
+  const openBackup = () => { setPage('backup'); scrollTop() }
 
   const openLearn = () => {
     setPage('learn')
@@ -458,6 +484,13 @@ function App() {
   }
 
   const openInterview = () => {
+    setInterviewQuestionId(null)
+    setPage('interview')
+    scrollTop()
+  }
+
+  const openInterviewQuestion = (questionId) => {
+    setInterviewQuestionId(questionId)
     setPage('interview')
     scrollTop()
   }
@@ -486,6 +519,8 @@ function App() {
       onInterview={openInterview}
       onAI={openAI}
       onVocabulary={openVocabulary}
+      onSearch={openSearch}
+      onBackup={openBackup}
       onPrivacy={openPrivacy}
       onTerms={openTerms}
     />
@@ -897,9 +932,49 @@ function App() {
     )
   }
 
+  if (page === 'search') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome} aria-label="IBase home">IBase</button>
+          <button className="back-button" onClick={openBackup}>Back up progress</button>
+        </nav>
+        <GlobalSearchPage
+          onBack={goHome}
+          onLesson={startEntry}
+          onConcept={setActiveConcept}
+          onInterviewQuestion={openInterviewQuestion}
+        />
+        {activeConcept && (
+          <ConceptModal
+            conceptId={activeConcept}
+            saved={savedTerms.includes(activeConcept)}
+            onToggle={toggleSavedTerm}
+            storageError={vocabularyError}
+            onClose={() => setActiveConcept(null)}
+          />
+        )}
+        {renderFooter()}
+      </main>
+    )
+  }
+
+  if (page === 'backup') {
+    return (
+      <main>
+        <nav className="site-nav">
+          <button className="brand-button" onClick={goHome} aria-label="IBase home">IBase</button>
+          <button className="back-button" onClick={openSearch}>Search IBase</button>
+        </nav>
+        <ProgressBackup onBack={goHome} />
+        {renderFooter()}
+      </main>
+    )
+  }
+
   if (page === 'vocabulary') {
     return <main>
-      <HomeNav onHome={goHome} onLearn={openLearn} onInterview={openInterview} onAI={openAI} onVocabulary={openVocabulary} />
+      <HomeNav onHome={goHome} onLearn={openLearn} onInterview={openInterview} onAI={openAI} onVocabulary={openVocabulary} onSearch={openSearch} onBackup={openBackup} />
       <section className="vocabulary-page">
         <SavedVocabulary savedTerms={savedTerms} onRemove={toggleSavedTerm} storageError={vocabularyError} />
         <button className="secondary-button" onClick={openLearn}>Browse courses →</button>
@@ -2589,6 +2664,10 @@ function App() {
             {nextEntry ? <button className="primary-button" onClick={() => startEntry(nextEntry)}>{nextEntry.lesson.title} →</button>
               : <strong>Curriculum complete. Use the review queue or cumulative exam.</strong>}
           </div>
+          <div className="curriculum-utilities">
+            <button className="secondary-button" onClick={openSearch}>Search all lessons, definitions &amp; interview questions →</button>
+            <button className="secondary-button" onClick={openBackup}>Export or import progress →</button>
+          </div>
           <div className="index-toolbar">
             <label htmlFor="lesson-search">Search lesson titles</label>
             <input id="lesson-search" type="search" value={search} placeholder="e.g. cash flow, DCF, networking"
@@ -2667,7 +2746,7 @@ function App() {
           <span className="xp-display">{xp} XP</span>
         </nav>
 
-        <InterviewPrep onBack={goHome} onLearn={openLearn} />
+        <InterviewPrep onBack={goHome} onLearn={openLearn} initialQuestionId={interviewQuestionId} />
         {renderFooter()}
       </main>
     )
@@ -2753,6 +2832,8 @@ function App() {
         onInterview={openInterview}
         onAI={openAI}
         onVocabulary={openVocabulary}
+        onSearch={openSearch}
+        onBackup={openBackup}
       />
 
       <section className="workstation-home">

@@ -6,6 +6,8 @@ function SiteFooter({
   onInterview,
   onAI,
   onVocabulary,
+  onSearch,
+  onBackup,
   onPrivacy,
   onTerms,
 }) {
@@ -27,6 +29,8 @@ function SiteFooter({
           <button onClick={onInterview}>Interview practice</button>
           <button onClick={onAI}>AI for banking</button>
           <button onClick={onVocabulary}>Saved vocabulary</button>
+          <button onClick={onSearch}>Search IBase</button>
+          <button onClick={onBackup}>Back up progress</button>
           <button onClick={onPrivacy}>Privacy</button>
           <button onClick={onTerms}>Terms</button>
         </nav>

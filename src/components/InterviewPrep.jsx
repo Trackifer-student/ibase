@@ -6,13 +6,15 @@ import {
 } from '../data/interviewQuestions'
 import { shuffle } from '../utils/quizBuilder'
 
-function InterviewPrep({ onBack, onLearn }) {
-  const [screen, setScreen] = useState('home')
-  const [category, setCategory] = useState('Accounting')
-  const [difficulty, setDifficulty] = useState('All')
-  const [currentQuestion, setCurrentQuestion] = useState(null)
+function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
+  const initialQuestion = interviewQuestions.find((item) => item.id === initialQuestionId) || null
+  const [screen, setScreen] = useState(initialQuestion ? 'practice' : 'home')
+  const [category, setCategory] = useState(initialQuestion?.category || 'Accounting')
+  const [difficulty, setDifficulty] = useState(initialQuestion?.difficulty || 'All')
+  const [currentQuestion, setCurrentQuestion] = useState(initialQuestion)
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
+  const [coveredPoints, setCoveredPoints] = useState([])
   const [voiceSupported] = useState(() =>
     Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
   )
@@ -51,6 +53,7 @@ function InterviewPrep({ onBack, onLearn }) {
   const resetAnswer = () => {
     setAnswer('')
     setRevealed(false)
+    setCoveredPoints([])
     setListening(false)
     setVoiceStatus('')
   }
@@ -161,8 +164,14 @@ function InterviewPrep({ onBack, onLearn }) {
     setWeakIds((current) => current.filter((id) => id !== questionId))
   }
 
-  const rateQuestion = (rating) => {
+  const rateQuestion = () => {
     if (!currentQuestion) return
+
+    // Learners check each rubric point themselves after comparing the benchmark.
+    // This is a structured self-assessment, not automated AI grading.
+    const total = currentQuestion.keyPoints.length
+    const covered = coveredPoints.length
+    const rating = total > 0 && covered / total >= 0.75 ? 'strong' : 'weak'
 
     if (rating === 'weak') {
       markWeak(currentQuestion.id)
@@ -176,6 +185,8 @@ function InterviewPrep({ onBack, onLearn }) {
         {
           questionId: currentQuestion.id,
           rating,
+          covered,
+          total,
         },
       ]
 
@@ -222,9 +233,9 @@ function InterviewPrep({ onBack, onLearn }) {
   }
 
   if (screen === 'mock-summary') {
-    const strongCount = mockRatings.filter(
-      (rating) => rating.rating === 'strong',
-    ).length
+    const covered = mockRatings.reduce((sum, item) => sum + item.covered, 0)
+    const total = mockRatings.reduce((sum, item) => sum + item.total, 0)
+    const percent = total ? Math.round((covered / total) * 100) : 0
 
     return (
       <section className="interview-page">
@@ -236,23 +247,23 @@ function InterviewPrep({ onBack, onLearn }) {
           <div className="interview-summary">
             <p className="eyebrow">MOCK COMPLETE</p>
             <h1>
-              {strongCount >= 7
-                ? 'Strong round.'
-                : strongCount >= 5
+              {percent >= 85
+                ? 'Strong rubric coverage.'
+                : percent >= 70
                   ? 'Good base. Tighten the misses.'
-                  : 'Run it again after reviewing.'}
+                  : 'Review the missed points and try again.'}
             </h1>
 
             <div className="quiz-score">
               <strong>
-                {strongCount} / {mockQuestions.length}
+                {covered} / {total}
               </strong>
-              <span>self-rated strong</span>
+              <span>rubric points covered ({percent}%)</span>
             </div>
 
             <p>
-              Questions you marked “Needs work” were added to your review
-              queue.
+              Questions below 75% rubric coverage were added to your review
+              queue. Scores are based on the points you checked, not automatic grading.
             </p>
 
             <div className="quiz-result-actions">
@@ -304,8 +315,9 @@ function InterviewPrep({ onBack, onLearn }) {
             <h1>{currentQuestion.prompt}</h1>
 
             <p className="interview-hint">
-              Answer like you are actually in the interview. Then reveal the
-              benchmark and grade yourself.
+              Answer as if you are in the interview. Reveal the benchmark, then
+              check the specific points you actually covered. This is a guided
+              self-assessment, not AI grading.
             </p>
 
             <textarea
@@ -347,29 +359,42 @@ function InterviewPrep({ onBack, onLearn }) {
                 <p className="eyebrow">STRONG ANSWER</p>
                 <p>{currentQuestion.strongAnswer}</p>
 
-                <div className="interview-key-points">
-                  <strong>Key points</strong>
-
-                  {currentQuestion.keyPoints.map((point) => (
-                    <span key={point}>{point}</span>
+                <fieldset className="interview-rubric">
+                  <legend>Which points did your answer actually cover?</legend>
+                  <p>Compare your answer with the benchmark. Check only the points you explained correctly.</p>
+                  {currentQuestion.keyPoints.map((point, index) => (
+                    <label key={point} className="interview-rubric-point">
+                      <input
+                        type="checkbox"
+                        checked={coveredPoints.includes(index)}
+                        onChange={() => setCoveredPoints((current) =>
+                          current.includes(index)
+                            ? current.filter((item) => item !== index)
+                            : [...current, index],
+                        )}
+                      />
+                      <span>{point}</span>
+                    </label>
                   ))}
-                </div>
+                  <div className="interview-rubric-score" role="status" aria-live="polite">
+                    <strong>{coveredPoints.length} / {currentQuestion.keyPoints.length}</strong>
+                    <span>
+                      {Math.round((coveredPoints.length / currentQuestion.keyPoints.length) * 100)}% covered
+                      {' · '}
+                      {coveredPoints.length / currentQuestion.keyPoints.length >= 0.75
+                        ? 'Meets review threshold'
+                        : 'Add to review queue'}
+                    </span>
+                  </div>
+                </fieldset>
 
                 <div className="interview-self-grade">
-                  <p>How did your answer compare?</p>
-
-                  <button
-                    className="secondary-button"
-                    onClick={() => rateQuestion('weak')}
-                  >
-                    Needs work
-                  </button>
-
+                  <p>Use the checklist to decide what to revisit. A score of 75% or more clears this question from your review queue.</p>
                   <button
                     className="primary-button"
-                    onClick={() => rateQuestion('strong')}
+                    onClick={rateQuestion}
                   >
-                    Got it
+                    Save rubric score &amp; {screen === 'mock' ? 'continue' : 'next question'} →
                   </button>
                 </div>
               </div>
@@ -394,8 +419,8 @@ function InterviewPrep({ onBack, onLearn }) {
 
           <p className="page-intro">
             Answer technical, behavioral, markets, and deal questions yourself,
-            compare with a strong benchmark, and save weak questions for review
-            on this device.
+            compare with a strong benchmark, and score each answer against a
+            point-by-point rubric. Progress is saved on this device.
           </p>
         </div>
 
@@ -405,8 +430,8 @@ function InterviewPrep({ onBack, onLearn }) {
             <span>01</span>
             <h2>Practice Mode</h2>
             <p>
-              Drill a specific topic and difficulty until the answer comes out
-              naturally.
+              Drill a specific topic and difficulty. Check each answer against
+              a rubric so you know exactly what to improve.
             </p>
 
             <label>
@@ -471,8 +496,8 @@ function InterviewPrep({ onBack, onLearn }) {
             <p className="eyebrow">REVIEW QUEUE</p>
             <h2>{weakIds.length} questions need work</h2>
             <p>
-              Anything you mark “Needs work” stays here until you later mark it
-              “Got it.”
+              Questions scoring below 75% stay here until you cover enough
+              of their rubric points in a later attempt.
             </p>
           </div>
 
