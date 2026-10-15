@@ -39,6 +39,9 @@ jobs:
       - name: Interview and progress backup tests
         run: npm run test:interview
 
+      - name: Modeling labs and advanced casework tests
+        run: npm run test:labs
+
       - name: Build
         run: npm run build
 

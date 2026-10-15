@@ -12,6 +12,7 @@ import QuizRunner from './components/QuizRunner'
 import InterviewPrep from './components/InterviewPrep'
 import GlobalSearchPage from './components/GlobalSearchPage'
 import ProgressBackup from './components/ProgressBackup'
+import ModelingLabs from './components/ModelingLabs'
 import HomeNav from './components/HomeNav'
 import SiteFooter from './components/SiteFooter'
 import LegalPage from './components/LegalPage'
@@ -118,7 +119,7 @@ const allEntries = [...lessonEntries, ...aiBankingModule.lessons.map(lesson =>
 const routeFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const pages = { '/': 'home', '/learn': 'learn', '/interview': 'interview',
-    '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/search': 'search', '/backup': 'backup', '/privacy': 'privacy', '/terms': 'terms' }
+    '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/search': 'search', '/backup': 'backup', '/labs': 'labs', '/privacy': 'privacy', '/terms': 'terms' }
   if (pages[path]) return { page: pages[path] }
   if (!/^\/(lesson|track|module)\/[^/]+$/.test(path)) return { page: 'not-found' }
   const [kind, id] = path.slice(1).split('/')
@@ -165,6 +166,7 @@ function App() {
   }
   const [search, setSearch] = useState('')
   const [interviewQuestionId, setInterviewQuestionId] = useState(null)
+  const [modelingLabId, setModelingLabId] = useState(null)
   const [outlineOpen, setOutlineOpen] = useState(() => window.matchMedia('(min-width: 701px)').matches)
 
   const [page, setPage] =
@@ -361,6 +363,7 @@ function App() {
       interview: 'Investment Banking Interview Prep | IBase',
       search: 'Search Lessons and Interview Questions | IBase',
       backup: 'Back Up Learning Progress | IBase',
+      labs: 'Investment Banking Modeling Labs | IBase',
       ai: 'AI for Banking Course | IBase',
       vocabulary: 'Saved vocabulary | IBase',
       review: 'Review Queue | IBase',
@@ -395,6 +398,8 @@ function App() {
         'Search IBase finance lessons, definitions, and interview questions.',
       backup:
         'Export or import your IBase lesson progress, notes, quiz scores, and interview review queue without an account.',
+      labs:
+        'Practice DCF, merger accretion and dilution, and LBO modeling with guided cases and downloadable Excel-compatible templates.',
       ai:
         'Learn practical AI workflows for banking research, filings, Excel, model checking, presentations, prompting, verification, and confidentiality.',
       privacy:
@@ -411,7 +416,7 @@ function App() {
 
   useEffect(() => {
     const paths = { home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
-      vocabulary: '/vocabulary', review: '/review', search: '/search', backup: '/backup', privacy: '/privacy', terms: '/terms' }
+      vocabulary: '/vocabulary', review: '/review', search: '/search', backup: '/backup', labs: '/labs', privacy: '/privacy', terms: '/terms' }
     const path = page === 'lesson' && activeLesson ? `/lesson/${activeLesson.id}`
       : page === 'module' && activeModule ? `/module/${activeModule.id}`
       : page === 'track' && activeTrack ? `/track/${activeTrack.id}` : paths[page]
@@ -477,6 +482,8 @@ function App() {
   const openVocabulary = () => { setPage('vocabulary'); scrollTop() }
   const openSearch = () => { setActiveConcept(null); setPage('search'); scrollTop() }
   const openBackup = () => { setPage('backup'); scrollTop() }
+  const openLabs = () => { setModelingLabId(null); setPage('labs'); scrollTop() }
+  const openLab = (labId) => { setModelingLabId(labId); setPage('labs'); scrollTop() }
 
   const openLearn = () => {
     setPage('learn')
@@ -521,6 +528,7 @@ function App() {
       onVocabulary={openVocabulary}
       onSearch={openSearch}
       onBackup={openBackup}
+      onLabs={openLabs}
       onPrivacy={openPrivacy}
       onTerms={openTerms}
     />
@@ -944,6 +952,7 @@ function App() {
           onLesson={startEntry}
           onConcept={setActiveConcept}
           onInterviewQuestion={openInterviewQuestion}
+          onLab={openLab}
         />
         {activeConcept && (
           <ConceptModal
@@ -972,9 +981,28 @@ function App() {
     )
   }
 
+  if (page === 'labs') {
+    return (
+      <main>
+        <HomeNav
+          onHome={goHome}
+          onLearn={openLearn}
+          onInterview={openInterview}
+          onAI={openAI}
+          onVocabulary={openVocabulary}
+          onSearch={openSearch}
+          onBackup={openBackup}
+          onLabs={openLabs}
+        />
+        <ModelingLabs onBack={goHome} onLearn={openLearn} initialLabId={modelingLabId} />
+        {renderFooter()}
+      </main>
+    )
+  }
+
   if (page === 'vocabulary') {
     return <main>
-      <HomeNav onHome={goHome} onLearn={openLearn} onInterview={openInterview} onAI={openAI} onVocabulary={openVocabulary} onSearch={openSearch} onBackup={openBackup} />
+      <HomeNav onHome={goHome} onLearn={openLearn} onInterview={openInterview} onAI={openAI} onVocabulary={openVocabulary} onSearch={openSearch} onBackup={openBackup} onLabs={openLabs} />
       <section className="vocabulary-page">
         <SavedVocabulary savedTerms={savedTerms} onRemove={toggleSavedTerm} storageError={vocabularyError} />
         <button className="secondary-button" onClick={openLearn}>Browse courses →</button>
@@ -2834,6 +2862,7 @@ function App() {
         onVocabulary={openVocabulary}
         onSearch={openSearch}
         onBackup={openBackup}
+        onLabs={openLabs}
       />
 
       <section className="workstation-home">
@@ -2909,7 +2938,8 @@ function App() {
           <h2 className="panel-heading">What would you like to do?</h2>
           {[['ledger', '01', 'Learn the basics', 'Start here if finance is new to you. Follow courses on businesses, money, and financial statements, then move on to banking and job skills.', '/learn', openLearn, 'Browse courses'],
             ['practice', '02', 'Prepare for interviews', 'Already know some finance? Try interview questions, compare your answers with examples, or practice a full mock interview.', '/interview', openInterview, 'Practice interviews'],
-            ['tools', '03', 'Explore AI for banking', 'Learn how artificial intelligence can help with research and everyday banking tasks, and how to check its work. A useful next step after the basics.', '/ai', openAI, 'Explore AI lessons']].map(([, code, title, body, href, action, label]) =>
+            ['model', '03', 'Build modeling cases', 'Practice a DCF, merger accretion and dilution, and an LBO in a spreadsheet. Download a starter file, build it yourself, then check your work.', '/labs', openLabs, 'Open modeling labs'],
+            ['tools', '04', 'Explore AI for banking', 'Learn how artificial intelligence can help with research and everyday banking tasks, and how to check its work. A useful next step after the basics.', '/ai', openAI, 'Explore AI lessons']].map(([, code, title, body, href, action, label]) =>
               <div className="directory-row" key={code}>
                 <h2>{title}</h2><p>{body}</p><a href={href} onClick={event => followLink(event, () => { action() })}>{label} →</a></div>)}
         </section>
