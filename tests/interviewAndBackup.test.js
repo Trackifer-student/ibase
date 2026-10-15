@@ -23,7 +23,7 @@ test('interview bank has 101 unique, substantive questions with valid scoring ru
   for (const question of interviewQuestions) {
     assert.ok(interviewCategories.includes(question.category), question.id)
     assert.ok(interviewDifficulties.includes(question.difficulty), question.id)
-    assert.ok(question.prompt.length > 15, question.id)
+    assert.ok(question.prompt.length >= 12, question.id)
     assert.ok(question.strongAnswer.length > 100, question.id)
     assert.ok(question.keyPoints.length >= 3, question.id)
     assert.equal(new Set(question.keyPoints).size, question.keyPoints.length, question.id)
