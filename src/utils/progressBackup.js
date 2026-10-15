@@ -8,6 +8,7 @@ const fixedKeys = new Set([
   'ibase-needs-review',
   'ibase-saved-vocabulary',
   'ibase-interview-review',
+  'ibase-completed-labs',
   'ibase-quiz-variants-v1',
   'ibase-quiz-cumulative',
 ])
