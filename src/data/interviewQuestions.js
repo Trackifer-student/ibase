@@ -278,7 +278,7 @@ export const interviewQuestions = [
     prompt: 'What happens to bond prices when market yields rise?',
     strongAnswer:
       'Existing fixed-rate bond prices generally fall when market yields rise because their fixed coupons become less attractive relative to newly issued bonds offering higher yields. The reverse is generally true when market yields fall.',
-    keyPoints: ['Prices and yields move inversely', 'Fixed coupons become more or less attractive'],
+    keyPoints: ['Prices and yields move inversely', 'Existing bonds have fixed coupons', 'New bonds offer higher yields when market yields rise'],
   },
   {
     id: 'market-2',
