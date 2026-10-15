@@ -36,6 +36,9 @@ jobs:
       - name: Lesson assistant tests
         run: npm run test:assistant
 
+      - name: Interview and progress backup tests
+        run: npm run test:interview
+
       - name: Build
         run: npm run build
 
