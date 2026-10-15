@@ -9,8 +9,8 @@ import { shuffle } from '../utils/quizBuilder'
 function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
   const initialQuestion = interviewQuestions.find((item) => item.id === initialQuestionId) || null
   const [screen, setScreen] = useState(initialQuestion ? 'practice' : 'home')
-  const [category, setCategory] = useState('Accounting')
-  const [difficulty, setDifficulty] = useState('All')
+  const [category, setCategory] = useState(initialQuestion?.category || 'Accounting')
+  const [difficulty, setDifficulty] = useState(initialQuestion?.difficulty || 'All')
   const [currentQuestion, setCurrentQuestion] = useState(initialQuestion)
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
