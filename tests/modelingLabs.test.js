@@ -27,6 +27,7 @@ test('default DCF lab calculates forecast, terminal value, and equity bridge cor
   closeTo(result.equityValue, 868.538424)
   closeTo(result.impliedSharePrice, 17.370768)
   assert.equal(calculateDcf({ ...dcfDefaults, waccPct: 2, terminalGrowthPct: 3 }).valid, false)
+  assert.equal(calculateDcf({ ...dcfDefaults, taxRatePct: 150 }).valid, false)
 })
 
 test('default merger lab builds financing, pro forma EPS, and accretion correctly', () => {
@@ -39,6 +40,7 @@ test('default merger lab builds financing, pro forma EPS, and accretion correctl
   closeTo(result.proFormaNetIncome, 379.5)
   closeTo(result.proFormaEps, 3.388392857)
   closeTo(result.accretionPct, 12.94642857)
+  assert.equal(calculateMerger({ ...mergerDefaults, targetPurchaseEquity: -1 }).valid, false)
 })
 
 test('default LBO lab builds debt paydown and sponsor returns correctly', () => {
@@ -52,6 +54,7 @@ test('default LBO lab builds debt paydown and sponsor returns correctly', () => 
   closeTo(result.exitEquityValue, 1140.982721)
   closeTo(result.moic, 2.852456804)
   closeTo(result.irrPct, 23.3229245)
+  assert.equal(calculateLbo({ ...lboDefaults, debtAtEntry: -10 }).valid, false)
 })
 
 test('lab downloads provide blank starter files and formula solution files', () => {
@@ -66,7 +69,10 @@ test('lab downloads provide blank starter files and formula solution files', () 
     assert.equal(starter.includes('=MIN('), false)
     assert.ok(solution.includes('='), id + ' solution should contain formulas')
     assert.ok(solution.length > starter.length, id + ' solution should add formulas')
+    assert.match(starter, /\d+(?:\.\d+)?%/, id + ' inputs should display percentages')
   }
+  const tenYear = buildLabCsv('lbo', { ...lboDefaults, holdYears: 10 }, true)
+  assert.match(tenYear, /=K17\*\$B\$10/)
 })
 
 test('modeling lab metadata and advanced curriculum are complete and linked', () => {
