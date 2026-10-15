@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary, onSearch, onBackup }) {
+function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary, onSearch, onBackup, onLabs }) {
   const [open, setOpen] = useState(false)
 
   const run = (action) => {
@@ -16,7 +16,7 @@ function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary, onSearch, o
 
       <div className="nav-links">
         <button onClick={onLearn}>Courses</button>
-        <button onClick={onInterview}>Interview practice</button>
+        <button onClick={onInterview}>Interview practice</button>\n        <button onClick={onLabs}>Modeling labs</button>
         <button onClick={onAI}>AI for banking</button>
         <button onClick={onVocabulary}>Saved vocabulary</button>
         <button onClick={onSearch}>Search</button>
@@ -36,7 +36,7 @@ function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary, onSearch, o
       {open && (
         <div className="mobile-menu" id="mobile-site-menu">
           <button onClick={() => run(onLearn)}>Courses</button>
-          <button onClick={() => run(onInterview)}>Interview practice</button>
+          <button onClick={() => run(onInterview)}>Interview practice</button>\n          <button onClick={() => run(onLabs)}>Modeling labs</button>
           <button onClick={() => run(onAI)}>AI for banking</button>
           <button onClick={() => run(onVocabulary)}>Saved vocabulary</button>
           <button onClick={() => run(onSearch)}>Search</button>
