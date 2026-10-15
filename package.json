@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test:quizzes": "node --experimental-loader ./tests/resolveJs.mjs --test tests/quizzes.test.js",
     "test:assistant": "node --experimental-loader ./tests/resolveJs.mjs --test tests/assistant.test.js",
-    "preview:assistant": "wrangler dev --port 5180"
+    "preview:assistant": "wrangler dev --port 5180",
+    "test:interview": "node --experimental-loader ./tests/resolveJs.mjs --test tests/interviewAndBackup.test.js"
   },
   "dependencies": {
     "react": "^19.2.8",
