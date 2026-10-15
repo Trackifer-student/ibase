@@ -69,10 +69,10 @@ test('lab downloads provide blank starter files and formula solution files', () 
     assert.equal(starter.includes('=MIN('), false)
     assert.ok(solution.includes('='), id + ' solution should contain formulas')
     assert.ok(solution.length > starter.length, id + ' solution should add formulas')
-    assert.match(starter, /\\d+(?:\\.\\d+)?%/, id + ' inputs should display percentages')
+    assert.match(starter, /\d+(?:\.\d+)?%/, id + ' inputs should display percentages')
   }
   const tenYear = buildLabCsv('lbo', { ...lboDefaults, holdYears: 10 }, true)
-  assert.match(tenYear, /=K17\\*\\$B\\$10/)
+  assert.match(tenYear, /=K17\*\$B\$10/)
 })
 
 test('modeling lab metadata and advanced curriculum are complete and linked', () => {
