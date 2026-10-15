@@ -166,6 +166,7 @@ function App() {
   }
   const [search, setSearch] = useState('')
   const [interviewQuestionId, setInterviewQuestionId] = useState(null)
+  const [modelingLabId, setModelingLabId] = useState(null)
   const [outlineOpen, setOutlineOpen] = useState(() => window.matchMedia('(min-width: 701px)').matches)
 
   const [page, setPage] =
@@ -481,7 +482,8 @@ function App() {
   const openVocabulary = () => { setPage('vocabulary'); scrollTop() }
   const openSearch = () => { setActiveConcept(null); setPage('search'); scrollTop() }
   const openBackup = () => { setPage('backup'); scrollTop() }
-  const openLabs = () => { setPage('labs'); scrollTop() }
+  const openLabs = () => { setModelingLabId(null); setPage('labs'); scrollTop() }
+  const openLab = (labId) => { setModelingLabId(labId); setPage('labs'); scrollTop() }
 
   const openLearn = () => {
     setPage('learn')
@@ -950,6 +952,7 @@ function App() {
           onLesson={startEntry}
           onConcept={setActiveConcept}
           onInterviewQuestion={openInterviewQuestion}
+          onLab={openLab}
         />
         {activeConcept && (
           <ConceptModal
@@ -991,7 +994,7 @@ function App() {
           onBackup={openBackup}
           onLabs={openLabs}
         />
-        <ModelingLabs onBack={goHome} onLearn={openLearn} />
+        <ModelingLabs onBack={goHome} onLearn={openLearn} initialLabId={modelingLabId} />
         {renderFooter()}
       </main>
     )
