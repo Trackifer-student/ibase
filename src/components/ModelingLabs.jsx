@@ -216,8 +216,10 @@ function LboLab({ inputs, setInputs, revealed }) {
   )
 }
 
-function ModelingLabs({ onBack, onLearn }) {
-  const [activeId, setActiveId] = useState('dcf')
+function ModelingLabs({ onBack, onLearn, initialLabId = null }) {
+  const [activeId, setActiveId] = useState(
+    LABS.some((lab) => lab.id === initialLabId) ? initialLabId : 'dcf',
+  )
   const [dcfInputs, setDcfInputs] = useState(dcfDefaults)
   const [mergerInputs, setMergerInputs] = useState(mergerDefaults)
   const [lboInputs, setLboInputs] = useState(lboDefaults)
