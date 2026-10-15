@@ -1,3 +1,5 @@
+import { interviewQuestionExpansion } from './interviewQuestionExpansion'
+
 export const interviewQuestions = [
   {
     id: 'acct-1',
@@ -368,6 +370,7 @@ export const interviewQuestions = [
       'Higher rates raise debt financing costs, reduce how much leverage buyers can support, and increase discount rates, which can pressure valuations. That can make some deals less accretive or reduce sponsor returns. However, the effect varies by buyer balance sheet, strategic rationale, seller expectations, and whether valuation multiples adjust.',
     keyPoints: ['Higher financing cost', 'Lower debt capacity', 'Higher discount rates', 'Pressure on valuations and sponsor returns', 'Company-specific effects'],
   },
+  ...interviewQuestionExpansion,
 ]
 
 export const interviewCategories = [
