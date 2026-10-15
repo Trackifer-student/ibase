@@ -75,6 +75,8 @@ export const numericVariants = {
 'ppe-schedule/medium': k => { const capex=40+5*k; return variant([['capex is 40',`capex is ${capex}`]],150+capex-25-10,`Closing net PP&E = 150 opening + ${capex} capex − 25 depreciation − 10 net book value disposed = ${115+capex}.`) },
 'debt-schedule/medium': k => { const repay=50+5*k; return variant([['repayments are 50',`repayments are ${repay}`]],200+30-repay,`Closing debt = 200 opening + 30 borrowing − ${repay} repayments = ${230-repay}.`) },
 'nwc-schedule/hard': k => { const revenue=500+20*k; const increase=(revenue-400)*.15; return variant([['to 500.',`to ${revenue}.`]],100-20-30-increase,`NWC rises from 400 × 15% = 60 to ${revenue} × 15% = ${f(revenue*.15)}, using ${f(increase)} cash. Free cash flow = 100 EBITDA − 20 cash tax − 30 capex − ${f(increase)} = ${f(50-increase)}.`) },
+'advanced-nols/easy': k => { const opening=70+5*k; return variant([['starts with 70',`starts with ${opening}`]],opening-45,`Beginning NOL of ${opening} less 45 used leaves ${opening-45}. Real tax limitations can be more complex, but the schedule must track the remaining balance.`) },
+'advanced-ev-adjustments/medium': k => { const equity=500+25*k; return variant([['Common equity value is 500',`Common equity value is ${equity}`]],equity+180+20+30-40,`EV = ${equity} common equity + 180 debt + 20 preferred + 30 NCI − 40 excess cash = ${equity+190}.`) },
 }
 
 // Company names are fictional. The context never adds accounting assumptions or
