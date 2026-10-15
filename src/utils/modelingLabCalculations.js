@@ -62,6 +62,9 @@ export function calculateDcf(inputs = dcfDefaults) {
   const capexPct = pct(inputs.capexPctRevenue)
   const nwcPct = pct(inputs.nwcPctRevenue)
   const taxRate = pct(inputs.taxRatePct)
+  if (taxRate < 0 || taxRate > 1 || growth <= -1 || daPct < 0 || capexPct < 0 || nwcPct < 0) {
+    return { valid: false, error: 'Use a tax rate from 0%-100%, growth above -100%, and nonnegative D&A, CapEx, and NWC assumptions.' }
+  }
   let revenue = number(inputs.startingRevenue)
   let priorNwc = revenue * nwcPct
   const rows = []
@@ -125,6 +128,9 @@ export function calculateMerger(inputs = mergerDefaults) {
 
   const purchaseEquity = number(inputs.targetPurchaseEquity)
   const taxRate = pct(inputs.taxRatePct)
+  if (purchaseEquity <= 0 || taxRate < 0 || taxRate > 1 || pct(inputs.debtInterestRatePct) < 0) {
+    return { valid: false, error: 'Purchase price must be positive; tax rate must be 0%-100% and interest rate cannot be negative.' }
+  }
   const buyerEps = buyerNetIncome / buyerShares
   const stockConsideration = purchaseEquity * stockPct
   const debtIssued = purchaseEquity - stockConsideration
@@ -159,8 +165,10 @@ export function calculateLbo(inputs = lboDefaults) {
   const holdYears = Math.max(1, Math.min(10, Math.round(number(inputs.holdYears))))
   const entryEnterpriseValue = entryEbitda * entryMultiple
   const sponsorEquity = entryEnterpriseValue - debtAtEntry
-  if (entryEbitda <= 0 || entryMultiple <= 0 || sponsorEquity <= 0) {
-    return { valid: false, error: 'Entry EBITDA and multiple must be positive, and entry debt must be below entry enterprise value.' }
+  if (entryEbitda <= 0 || entryMultiple <= 0 || debtAtEntry < 0 || sponsorEquity <= 0 ||
+    number(inputs.exitMultiple) <= 0 || pct(inputs.fcfConversionPct) < 0 ||
+    pct(inputs.ebitdaGrowthPct) <= -1) {
+    return { valid: false, error: 'Use positive EBITDA and multiples, nonnegative debt and cash conversion, growth above -100%, and debt below entry enterprise value.' }
   }
 
   let ebitda = entryEbitda
@@ -208,14 +216,14 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
       [],
       ['Inputs', 'Value'],
       ['Starting Revenue', i.startingRevenue],
-      ['Revenue Growth', pct(i.revenueGrowthPct)],
-      ['EBIT Margin', pct(i.ebitMarginPct)],
-      ['D&A % Revenue', pct(i.daPctRevenue)],
-      ['CapEx % Revenue', pct(i.capexPctRevenue)],
-      ['Operating NWC % Revenue', pct(i.nwcPctRevenue)],
-      ['Tax Rate', pct(i.taxRatePct)],
-      ['WACC', pct(i.waccPct)],
-      ['Terminal Growth', pct(i.terminalGrowthPct)],
+      ['Revenue Growth', number(i.revenueGrowthPct) + '%'],
+      ['EBIT Margin', number(i.ebitMarginPct) + '%'],
+      ['D&A % Revenue', number(i.daPctRevenue) + '%'],
+      ['CapEx % Revenue', number(i.capexPctRevenue) + '%'],
+      ['Operating NWC % Revenue', number(i.nwcPctRevenue) + '%'],
+      ['Tax Rate', number(i.taxRatePct) + '%'],
+      ['WACC', number(i.waccPct) + '%'],
+      ['Terminal Growth', number(i.terminalGrowthPct) + '%'],
       ['Net Debt', i.netDebt],
       ['Diluted Shares', i.dilutedShares],
       [],
@@ -272,10 +280,10 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
       ['Buyer Net Income', i.buyerNetIncome],
       ['Target Purchase Equity Value', i.targetPurchaseEquity],
       ['Target Net Income', i.targetNetIncome],
-      ['Stock Consideration %', pct(i.stockConsiderationPct)],
-      ['Debt Interest Rate', pct(i.debtInterestRatePct)],
+      ['Stock Consideration %', number(i.stockConsiderationPct) + '%'],
+      ['Debt Interest Rate', number(i.debtInterestRatePct) + '%'],
       ['Pretax Synergies', i.pretaxSynergies],
-      ['Tax Rate', pct(i.taxRatePct)],
+      ['Tax Rate', number(i.taxRatePct) + '%'],
       [],
       ['Outputs', 'Formula / Result'],
       ['Buyer EPS'],
@@ -318,8 +326,8 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
       ['Entry EBITDA', i.entryEbitda],
       ['Entry Multiple', i.entryMultiple],
       ['Debt at Entry', i.debtAtEntry],
-      ['EBITDA Growth', pct(i.ebitdaGrowthPct)],
-      ['FCF Conversion of EBITDA', pct(i.fcfConversionPct)],
+      ['EBITDA Growth', number(i.ebitdaGrowthPct) + '%'],
+      ['FCF Conversion of EBITDA', number(i.fcfConversionPct) + '%'],
       ['Exit Multiple', i.exitMultiple],
       ['Hold Years', years],
       [],
