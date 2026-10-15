@@ -8,6 +8,7 @@ function SiteFooter({
   onVocabulary,
   onSearch,
   onBackup,
+  onLabs,
   onPrivacy,
   onTerms,
 }) {
@@ -27,6 +28,7 @@ function SiteFooter({
         <nav className="footer-links" aria-label="Footer navigation">
           <button onClick={onLearn}>Courses</button>
           <button onClick={onInterview}>Interview practice</button>
+          <button onClick={onLabs}>Modeling labs</button>
           <button onClick={onAI}>AI for banking</button>
           <button onClick={onVocabulary}>Saved vocabulary</button>
           <button onClick={onSearch}>Search IBase</button>
