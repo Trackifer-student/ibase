@@ -308,7 +308,8 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
   }
 
   if (labId === 'lbo') {
-    const i = { ...lboDefaults, ...inputs, holdYears: 5 }
+    const i = { ...lboDefaults, ...inputs }
+    const years = Math.max(1, Math.min(10, Math.round(number(i.holdYears))))
     const rows = [
       ['IBase LBO Returns Lab'],
       ['Simplified case: FCF conversion is cash available for debt paydown; no interim sponsor distributions.'],
@@ -320,12 +321,12 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
       ['EBITDA Growth', pct(i.ebitdaGrowthPct)],
       ['FCF Conversion of EBITDA', pct(i.fcfConversionPct)],
       ['Exit Multiple', i.exitMultiple],
-      ['Hold Years', 5],
+      ['Hold Years', years],
       [],
       ['Entry Enterprise Value'],
       ['Sponsor Equity'],
       [],
-      ['Year', '1', '2', '3', '4', '5'],
+      ['Year', ...Array.from({ length: years }, (_, index) => String(index + 1))],
       ['EBITDA'],
       ['Cash Available for Debt Paydown'],
       ['Debt Paydown'],
@@ -339,18 +340,21 @@ export function buildLabCsv(labId, inputs, includeSolution = false) {
     if (includeSolution) {
       rows[12].push('=B5*B6')
       rows[13].push('=B13-B7')
-      rows[16].push('=$B$5*(1+$B$8)', '=B17*(1+$B$8)', '=C17*(1+$B$8)', '=D17*(1+$B$8)', '=E17*(1+$B$8)')
-      for (let col = 1; col <= 5; col += 1) {
+      for (let col = 1; col <= years; col += 1) {
         const letter = String.fromCharCode(65 + col)
-        const priorDebt = col === 1 ? '$B$7' : String.fromCharCode(64 + col) + '20'
+        const priorLetter = String.fromCharCode(64 + col)
+        const priorDebt = col === 1 ? '$B$7' : priorLetter + '20'
+        rows[16].push(col === 1 ? '=$B$5*(1+$B$8)' : '=' + priorLetter + '17*(1+$B$8)')
         rows[17].push('=' + letter + '17*$B$9')
         rows[18].push('=MIN(' + letter + '18,' + priorDebt + ')')
         rows[19].push('=' + priorDebt + '-' + letter + '19')
       }
-      rows[21].push('', '', '', '', '=F17*$B$10')
-      rows[22].push('', '', '', '', '=F22-F20')
-      rows[23].push('', '', '', '', '=F23/$B$14')
-      rows[24].push('', '', '', '', '=F24^(1/$B$11)-1')
+      const exitLetter = String.fromCharCode(65 + years)
+      const padding = Array(Math.max(0, years - 1)).fill('')
+      rows[21].push(...padding, '=' + exitLetter + '17*$B$10')
+      rows[22].push(...padding, '=' + exitLetter + '22-' + exitLetter + '20')
+      rows[23].push(...padding, '=' + exitLetter + '23/$B$14')
+      rows[24].push(...padding, '=' + exitLetter + '24^(1/$B$11)-1')
     }
     return csv(rows)
   }
