@@ -3,6 +3,7 @@ import { tracks } from '../data/curriculum'
 import { aiBankingModule } from '../data/modules/aiBanking'
 import { concepts } from '../data/concepts'
 import { interviewQuestions } from '../data/interviewQuestions'
+import { modelingLabs } from '../data/modelingLabs'
 
 const lessonIndex = [
   ...tracks.flatMap((track) =>
@@ -19,7 +20,7 @@ const conceptIndex = Object.entries(concepts).map(([id, concept]) => ({
   id, ...concept,
 }))
 
-function GlobalSearchPage({ onBack, onLesson, onConcept, onInterviewQuestion }) {
+function GlobalSearchPage({ onBack, onLesson, onConcept, onInterviewQuestion, onLab }) {
   const [query, setQuery] = useState('')
   const inputRef = useRef(null)
 
@@ -82,9 +83,21 @@ function GlobalSearchPage({ onBack, onLesson, onConcept, onInterviewQuestion }) 
       })
     })
 
+    modelingLabs.forEach((lab) => {
+      const score = rank(lab.title, [lab.summary, lab.level, ...lab.keywords].join(' '))
+      if (score >= 0) matches.push({
+        id: 'lab-' + lab.id,
+        type: 'Modeling lab',
+        title: lab.title,
+        detail: lab.level + ' / downloadable spreadsheet exercise',
+        score,
+        action: () => onLab(lab.id),
+      })
+    })
+
     return matches.sort((a, b) => a.score - b.score ||
       a.title.localeCompare(b.title)).slice(0, 30)
-  }, [query, onLesson, onConcept, onInterviewQuestion])
+  }, [query, onLesson, onConcept, onInterviewQuestion, onLab])
 
   return (
     <section className="global-search-page">
@@ -93,7 +106,7 @@ function GlobalSearchPage({ onBack, onLesson, onConcept, onInterviewQuestion }) 
         <p className="eyebrow">FIND SOMETHING</p>
         <h1>Search IBase.</h1>
         <p className="page-intro">
-          Find lessons, finance definitions, and interview questions.
+          Find lessons, finance definitions, interview questions, and modeling labs.
           Press Cmd+K on Mac or Ctrl+K on Windows from anywhere to return here.
         </p>
       </header>
