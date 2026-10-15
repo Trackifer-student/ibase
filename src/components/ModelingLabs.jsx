@@ -10,8 +10,9 @@ import {
   lboDefaults,
   mergerDefaults,
 } from '../utils/modelingLabCalculations'
+import { modelingLabs as LABS } from '../data/modelingLabs'
 
-const LABS = [
+/*
   {
     id: 'dcf',
     number: '01',
@@ -33,7 +34,7 @@ const LABS = [
     level: 'Sponsor modeling',
     summary: 'Build the entry bridge, project debt paydown, calculate exit equity value, and solve for MOIC and IRR.',
   },
-]
+] */
 
 const readCompleted = () => {
   try {
