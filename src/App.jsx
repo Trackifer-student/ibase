@@ -419,6 +419,7 @@ function App() {
   }, [page, activeLesson, activeModule, activeTrack])
 
   useEffect(() => {
+    if (page === 'search') return
     const heading = document.querySelector('.lesson-card h1') || document.querySelector('main h1')
     if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }) }
   }, [page, lessonStep])
