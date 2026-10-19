@@ -13,6 +13,21 @@ const fixedKeys = new Set([
   'ibase-quiz-cumulative',
 ])
 
+const listKeys = new Set([
+  'ibase-completed-lessons', 'ibase-needs-review', 'ibase-saved-vocabulary',
+  'ibase-interview-review', 'ibase-completed-labs',
+])
+const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value)
+
+function validSavedValue(key, value) {
+  if (listKeys.has(key)) return Array.isArray(value) && value.every((id) => typeof id === 'string')
+  if (!isRecord(value)) return false
+  const values = Object.values(value)
+  if (key === 'ibase-notes') return values.every((note) => typeof note === 'string')
+  if (key === 'ibase-quiz-variants-v1') return values.every((index) => Number.isInteger(index) && index >= 0)
+  return values.every((score) => typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 100)
+}
+
 const isProgressKey = (key) =>
   fixedKeys.has(key) ||
   /^ibase-quiz-(module|track)-[a-z0-9-]+$/.test(key)
@@ -79,14 +94,14 @@ export function importProgress(text) {
       throw new Error('The backup contains an unsupported progress entry.')
     }
     if (key === 'ibase-xp') {
-      if (!Number.isFinite(Number(value)) || Number(value) < 0) {
+      if (!value.trim() || !Number.isFinite(Number(value)) || Number(value) < 0) {
         throw new Error('The backup contains an invalid learning-points value.')
       }
     } else {
       try {
-        JSON.parse(value)
+        if (!validSavedValue(key, JSON.parse(value))) throw new Error('shape')
       } catch {
-        throw new Error('The backup contains an invalid saved-data value.')
+        throw new Error('The backup contains invalid saved progress. Your current progress has not been changed.')
       }
     }
   }

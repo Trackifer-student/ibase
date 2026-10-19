@@ -62,3 +62,51 @@ test('progress import rejects invalid files without replacing existing progress'
     assert.equal(localStorage.getItem('ibase-xp'), '100')
   }
 })
+
+test('progress import rejects valid JSON with incompatible data shapes before changing any storage', () => {
+  const invalid = {
+    'ibase-completed-lessons': [{}, 'lesson1', [null], [42]],
+    'ibase-needs-review': [{}, ['interest', false]],
+    'ibase-saved-vocabulary': [{}, ['business', {}]],
+    'ibase-interview-review': [{}, [false]],
+    'ibase-completed-labs': [{}, [7]],
+    'ibase-notes': [[], 'a note', { lesson1: { text: 'not a string' } }],
+    'ibase-quiz-module-accounting': [[], { 'easy-v2': '100' }, { 'easy-v2': 101 }, { 'easy-v2': -1 }],
+    'ibase-quiz-track-technical': [[], { 'hard-v2': null }],
+    'ibase-quiz-cumulative': [[], { 'medium-v2': true }],
+    'ibase-quiz-variants-v1': [[], { question1: '2' }, { question1: -1 }, { question1: 1.5 }],
+  }
+  for (const [key, values] of Object.entries(invalid)) {
+    for (const value of [null, ...values]) {
+      globalThis.localStorage = new MemoryStorage()
+      localStorage.setItem('ibase-xp', '100')
+      localStorage.setItem('ibase-notes', '{"lesson1":"keep my note"}')
+      localStorage.setItem('unrelated-app', 'leave-me')
+      const before = [...localStorage.items.entries()]
+      assert.throws(() => importProgress(backup({ 'ibase-xp': '200', [key]: JSON.stringify(value) })), key + ': ' + JSON.stringify(value))
+      assert.deepEqual([...localStorage.items.entries()], before)
+    }
+  }
+  for (const value of ['', ' ', 'Infinity']) {
+    assert.throws(() => importProgress(backup({ 'ibase-xp': value })))
+  }
+})
+
+test('progress import accepts all current data shapes and previous difficulty scores', () => {
+  globalThis.localStorage = new MemoryStorage()
+  const data = {
+    'ibase-notes': JSON.stringify({ 'what-is-a-business': 'A saved note\nwith two lines.' }),
+    'ibase-completed-lessons': JSON.stringify(['what-is-a-business']),
+    'ibase-needs-review': JSON.stringify(['interest']),
+    'ibase-saved-vocabulary': JSON.stringify(['business']),
+    'ibase-interview-review': JSON.stringify(['acct-6']),
+    'ibase-completed-labs': JSON.stringify(['dcf']),
+    'ibase-quiz-variants-v1': JSON.stringify({ 'assessment-v2-business-basics-3': 4 }),
+    'ibase-quiz-module-accounting': JSON.stringify({ quick: 80, standard: 60, mastery: 0, 'easy-v2': 100 }),
+    'ibase-quiz-track-technical': JSON.stringify({ 'medium-v2': 67 }),
+    'ibase-quiz-cumulative': JSON.stringify({ 'hard-v2': 90 }),
+    'ibase-xp': '50',
+  }
+  assert.equal(importProgress(backup(data)), Object.keys(data).length)
+  for (const [key, value] of Object.entries(data)) assert.equal(localStorage.getItem(key), value)
+})
