@@ -1,3 +1,4 @@
+import { progressStorage as localStorage } from '../utils/progressStorage.js'
 import { useMemo, useState } from 'react'
 import {
   buildLabCsv,
@@ -22,6 +23,11 @@ const readCompleted = () => {
   }
 }
 
+const sheetUrls = { dcf: import.meta.env.VITE_DCF_SHEET_URL, merger: import.meta.env.VITE_MA_SHEET_URL, lbo: import.meta.env.VITE_LBO_SHEET_URL }
+function sheetCopyUrl(id) {
+  const match = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)(?:\/|$)/.exec(sheetUrls[id] || '')
+  return match ? `https://docs.google.com/spreadsheets/d/${match[1]}/copy` : null
+}
 function LabInput({ label, value, onChange, suffix = '', step = 'any', min }) {
   return (
     <label className="lab-input">
@@ -270,7 +276,9 @@ function ModelingLabs({ onBack, onLearn, initialLabId = null }) {
         </div>
 
         <div className="lab-download-bar">
+          {sheetCopyUrl(activeId) && <a className="secondary-button" href={sheetCopyUrl(activeId)} target="_blank" rel="noopener noreferrer">Make a copy in Google Sheets →</a>}
           <button className="secondary-button" onClick={() => downloadCsv(activeId, inputs, false)}>Download starter CSV →</button>
+          <p>Google Sheets: download the CSV, open a blank sheet, then choose File → Import → Upload. Your sheet belongs to your Google account; IBase does not request Drive access. Sheet edits are separate from lab completion sync.</p>
           <button className="secondary-button" onClick={() => setRevealed((current) => ({ ...current, [activeId]: !current[activeId] }))}>{revealed[activeId] ? 'Hide model check' : 'Reveal model check'}</button>
           {revealed[activeId] && <button className="secondary-button" onClick={() => downloadCsv(activeId, inputs, true)}>Download formula solution CSV →</button>}
         </div>

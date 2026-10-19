@@ -37,7 +37,7 @@ function ProgressBackup({ onBack }) {
       return
     }
 
-    if (!window.confirm('Importing will replace the IBase progress saved in this browser. Continue?')) {
+    if (!window.confirm('Importing will replace the active guest or account profile’s device progress. If sync is enabled, it will merge with cloud progress. Export a backup first to keep a copy. Continue?')) {
       return
     }
 
@@ -60,7 +60,7 @@ function ProgressBackup({ onBack }) {
         <h1>Back up your IBase progress.</h1>
         <p className="page-intro">
           Your completed lessons, notes, saved vocabulary, quiz scores, and interview review
-          questions stay in this browser. Download a backup to move them to another
+          questions save in this browser. Optional account sync keeps a cloud copy too. Download a backup to move them to another
           browser or protect against clearing local storage.
         </p>
       </header>
