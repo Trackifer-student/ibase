@@ -10,7 +10,11 @@ create policy "Read own progress" on public.user_progress for select to authenti
 -- Writes only through a CAS function: clients cannot bypass revision checks.
 revoke all on public.user_progress from anon, authenticated;
 grant select on public.user_progress to authenticated;
-create function public.save_progress(payload jsonb, expected_revision bigint)
+-- Keep privileged implementation outside the exposed Data API schema.
+create schema if not exists private;
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
+create function private.save_progress(payload jsonb, expected_revision bigint)
 returns boolean language plpgsql security definer set search_path = '' as $$
 declare affected integer;
 begin
@@ -25,6 +29,12 @@ begin
   get diagnostics affected = row_count;
   return affected = 1;
 end;
+$$;
+revoke all on function private.save_progress(jsonb, bigint) from public, anon;
+grant execute on function private.save_progress(jsonb, bigint) to authenticated;
+create function public.save_progress(payload jsonb, expected_revision bigint)
+returns boolean language sql security invoker set search_path = '' as $$
+  select private.save_progress(payload, expected_revision);
 $$;
 revoke all on function public.save_progress(jsonb, bigint) from public, anon;
 grant execute on function public.save_progress(jsonb, bigint) to authenticated;
