@@ -110,3 +110,7 @@ To enable each copy button:
 Until templates exist, students can use the CSV import workflow for free. A static copy starts from template defaults, whereas CSV downloads include the current in-page assumptions. No Drive integration or paid service is required.
 
 Google help: https://support.google.com/docs/answer/49114 and https://support.google.com/a/users/answer/9331167
+
+## Approved preview acceptance run
+
+On October 20, Zach approved a temporary test preview and its exact OAuth return destination, while keeping production unchanged. The preview uses the same five public build variables and the existing Free Supabase project. Its origin is `https://feat-optional-cloud-sync-ibasefinance.zachblach07-56c.workers.dev`. Automatic preview builds are enabled only for this acceptance build and will be paused again afterward. Production merge, deployment, and Google OAuth publication remain separate release actions. Physical-device and distinct-user results must be recorded after the user completes those checks; this preparation is not a passing result.
