@@ -93,3 +93,20 @@ test('malformed cloud snapshots fail before any write; first account save uses r
   const result = await syncProgress({ local, base: {}, read: async () => null, write: async (data, revision) => { assert.equal(revision, 0); assert.ok(sameProgress(data, local)); return true } })
   assert.ok(sameProgress(result, local))
 })
+test('a lost save response can be retried without duplicate XP or note versions', async () => {
+  const local = snapshot({ xp: 125, notes: { a: 'Offline note' }, 'completed-labs': ['dcf'] })
+  let row = { data: snapshot({ xp: 100, notes: { a: 'Cloud note' }, 'completed-labs': ['lbo'] }), revision: 7 }
+  let writes = 0
+  const read = async () => structuredClone(row)
+  await assert.rejects(syncProgress({ local, base: {}, read, write: async (data, revision) => {
+    assert.equal(revision, 7)
+    row = { data: structuredClone(data), revision: 8 }; writes += 1
+    throw new Error('Connection lost after the server committed')
+  } }), /Connection lost/)
+  const recovered = await syncProgress({ local, base: {}, read, write: async () => { writes += 1; return true } })
+  assert.equal(writes, 1)
+  assert.equal(row.revision, 8)
+  assert.equal(recovered['ibase-xp'], '125')
+  assert.deepEqual(JSON.parse(recovered['ibase-completed-labs']), ['dcf', 'lbo'])
+  assert.equal(JSON.parse(recovered['ibase-notes']).a, 'Cloud note\n\n--- Preserved note version ---\n\nOffline note')
+})
