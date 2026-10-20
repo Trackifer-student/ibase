@@ -1,3 +1,4 @@
+import { progressStorage as localStorage } from './utils/progressStorage.js'
 import { useEffect, useState } from 'react'
 import { tracks } from './data/curriculum'
 import { concepts } from './data/concepts'

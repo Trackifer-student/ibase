@@ -1,3 +1,4 @@
+import { progressStorage as localStorage } from '../utils/progressStorage.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { readVariantHistory } from '../data/quizVariants.js'
 import { prepareQuestions, isAnswered, scoreQuiz, formatAnswer, correctAnswer } from '../utils/quizBuilder'
@@ -30,7 +31,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
   const startQuiz = level => {
     // Merge persisted history so visits and other mounted quiz instances are respected.
     let history = variantHistory.current
-    try { history = { ...readVariantHistory(window.localStorage), ...history } } catch { /* In-memory history still supports retries. */ }
+    try { history = { ...readVariantHistory(localStorage), ...history } } catch { /* In-memory history still supports retries. */ }
     const questions = prepareQuestions(questionBank, level.count, level.difficulty, history)
     if (!questions.length) return
     const updatedHistory = { ...history }

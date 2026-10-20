@@ -1,3 +1,4 @@
+import { progressStorage as localStorage } from '../utils/progressStorage.js'
 import { useEffect, useMemo, useState } from 'react'
 import {
   interviewCategories,

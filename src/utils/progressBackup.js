@@ -1,3 +1,4 @@
+import { progressStorage as localStorage } from './progressStorage.js'
 const BACKUP_VERSION = 1
 const MAX_BACKUP_BYTES = 2 * 1024 * 1024
 
@@ -19,7 +20,7 @@ const listKeys = new Set([
 ])
 const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value)
 
-function validSavedValue(key, value) {
+export function validSavedValue(key, value) {
   if (listKeys.has(key)) return Array.isArray(value) && value.every((id) => typeof id === 'string')
   if (!isRecord(value)) return false
   const values = Object.values(value)
@@ -28,11 +29,11 @@ function validSavedValue(key, value) {
   return values.every((score) => typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 100)
 }
 
-const isProgressKey = (key) =>
+export const isProgressKey = (key) =>
   fixedKeys.has(key) ||
   /^ibase-quiz-(module|track)-[a-z0-9-]+$/.test(key)
 
-const currentProgress = () => {
+export const currentProgress = () => {
   const data = {}
   for (let i = 0; i < localStorage.length; i += 1) {
     const key = localStorage.key(i)

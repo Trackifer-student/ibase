@@ -9,7 +9,7 @@ function LegalPage({ type, onBack }) {
 
       <p className="eyebrow">{privacy ? 'PRIVACY' : 'TERMS'}</p>
       <h1>{privacy ? 'Privacy Policy' : 'Terms and Conditions'}</h1>
-      <p className="legal-updated">Last updated October 14, 2026</p>
+      <p className="legal-updated">Last updated October 19, 2026</p>
 
       {privacy ? (
         <div className="legal-copy">
@@ -18,7 +18,7 @@ function LegalPage({ type, onBack }) {
             <p>
               IBase does not require an account. Learning progress, notes, quiz
               scores, and review items are stored in your browser on your device
-              using local storage.
+              using local storage. If you choose Google sign-in and enable sync, Supabase stores your account identity and a private copy of this progress, including notes. Google handles authentication; IBase never receives your Google password. Guest progress is uploaded only if you choose to merge it.
             </p>
           </section>
 
@@ -26,7 +26,7 @@ function LegalPage({ type, onBack }) {
             <h2>What IBase does not collect</h2>
             <p>
               The current version does not ask for your name, phone number,
-              payment information, or account credentials. IBase does not sell
+              payment information, or your Google password. Optional sign-in shares your Google email and profile with Supabase Auth. IBase does not sell
               personal information.
             </p>
           </section>
@@ -78,7 +78,7 @@ function LegalPage({ type, onBack }) {
             <p>
               Because learning data is stored locally, clearing this site's
               browser storage can remove saved progress, notes, quiz scores, and
-              review items from that browser.
+              review items from that browser. Signing out returns to separate guest progress and keeps the account cache on this device for offline recovery; clear site data on shared devices. Clearing browser storage does not delete the cloud copy. Contact the site owner to delete your cloud account and its progress.
             </p>
           </section>
 
