@@ -11,14 +11,14 @@ const all = modules.flatMap(extractModuleQuestions)
 
 test('every module has independent questions at all three difficulties with valid answers and lesson links', () => {
   assert.equal(modules.length, 23)
-  assert.equal(all.length, 207)
+  assert.equal(all.length, 210)
   assert.equal(new Set(all.map(question => question.id)).size, all.length)
   assert.equal(new Set(all.map(question => question.prompt)).size, all.length)
   assert.deepEqual(Object.keys(quizBank).sort(), modules.map(module => module.id).sort())
   const lessonPrompts = new Set(modules.flatMap(module => module.lessons.flatMap(lesson => lesson.steps.map(step => step.title))))
   for (const module of modules) {
     const bank = extractModuleQuestions(module)
-    for (const difficulty of ['easy', 'medium', 'hard']) assert.equal(bank.filter(question => question.difficulty === difficulty).length, 3)
+    for (const difficulty of ['easy', 'medium', 'hard']) assert.equal(bank.filter(question => question.difficulty === difficulty).length, module.id === 'dcf' && difficulty === 'hard' ? 6 : 3)
     for (const question of bank) {
       assert.ok(!lessonPrompts.has(question.prompt), question.id)
       assert.ok(question.explanation.length > 10, question.id)
@@ -58,7 +58,7 @@ test('randomization preserves correct answers and selects only the requested dif
   }
   assert.equal(prepareQuestions(extractModuleQuestions(modules[0]), 20, 'hard').length, 3)
   assert.deepEqual(prepareQuestions([], 10, 'easy'), [])
-  assert.equal(extractAllQuestions(tracks).length, 198)
+  assert.equal(extractAllQuestions(tracks).length, 201)
   assert.equal(extractTrackQuestions(tracks[0]).length, 27)
 })
 
@@ -102,7 +102,7 @@ test('representative multi-step financial answer keys agree with independent cal
   assert.ok(Math.abs(find('lbo','A sponsor doubles')-((2**0.25-1)*100))<0.01)
 })
 
-test('all 1,242 variants preserve format, difficulty, lesson links, and valid scoring without mutating templates', () => {
+test('all assessment variants preserve format, difficulty, lesson links, and valid scoring without mutating templates', () => {
   const before = JSON.stringify(all)
   assert.equal(VARIANT_COUNT, 6)
   for (const template of all) {
@@ -141,7 +141,7 @@ test('repeated attempts and reloaded history never choose the previous version o
       }
     }
     history = readVariantHistory({ getItem: () => JSON.stringify(history) })
-    assert.equal(Object.keys(history).length, 207)
+    assert.equal(Object.keys(history).length, 210)
   }
   for (let previous = 0; previous < VARIANT_COUNT; previous++) {
     for (const random of [0, 0.2, 0.4, 0.6, 0.8, 0.99999]) assert.notEqual(chooseVariant(previous, () => random), previous)

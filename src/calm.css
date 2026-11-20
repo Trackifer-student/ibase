@@ -168,3 +168,60 @@ button, .primary-button, .secondary-button { font-weight: 600; }
 .quiz-checkbox input { margin-top: 5px; flex-shrink: 0; accent-color: var(--green); }
 .quiz-checkbox > span { font: inherit; color: inherit; width: auto; height: auto; background: none; }
 .quiz-review article { overflow-wrap: anywhere; }
+
+/* Notebook stays beside reading on wide screens and follows content on phones. */
+.lesson-notebook { grid-column: -2 / -1; padding: 20px; border: 1px solid var(--quiet-rule); background: var(--panel); order: 20; }
+.lesson-notebook h2 { font-size: 21px; margin-top: 0; }
+.lesson-notebook p, .workshop-source { font-size: 13px; line-height: 1.6; }
+.lesson-notebook textarea { display: block; width: 100%; min-height: 280px; resize: vertical; font: inherit; line-height: 1.7; margin: 8px 0; padding: 12px; }
+.lesson-notebook button { margin: 6px 0; padding: 10px; border: 1px solid var(--quiet-rule); background: transparent; color: var(--ink); }
+.statement-workshop section { margin: 28px 0; padding-top: 18px; border-top: 1px solid var(--quiet-rule); }
+.statement-workshop p, .statement-workshop li { line-height: 1.75; }
+.statement-workshop li { margin-bottom: 12px; }
+.statement-workshop label { display: block; line-height: 1.6; }
+.statement-workshop textarea { display: block; width: 100%; min-height: 90px; font: inherit; padding: 10px; }
+.workshop-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0; }
+.workshop-actions button { padding: 10px 14px; }
+.workshop-actions button:disabled { opacity: .45; cursor: default; }
+.workshop-actions input { width: min(180px, 100%); padding: 10px; font: inherit; }
+.statement-table-wrap { overflow-x: auto; margin: 20px 0; }
+.statement-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.statement-table caption { text-align: left; font-weight: 600; padding: 12px 0; }
+.statement-table caption small { display: block; font-weight: 400; }
+.statement-table th, .statement-table td { padding: 9px 6px; border-bottom: 1px solid var(--quiet-rule); text-align: left; }
+.statement-table tbody th { font-weight: 400; }
+.statement-table td { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.statement-workshop details { padding: 16px 0; }
+@media (min-width: 1250px) {
+  .lesson-shell.with-notebook { width: min(1480px, calc(100% - 48px)); grid-template-columns: minmax(0, 780px) 300px; }
+  .lesson-shell.with-notebook.outline-open { grid-template-columns: 180px minmax(0, 780px) 280px; }
+  .with-notebook > .lesson-topline, .with-notebook > .progress-track, .with-notebook > .lesson-card, .with-notebook > .lesson-help { grid-column: 1; }
+  .with-notebook.outline-open > .lesson-topline, .with-notebook.outline-open > .progress-track, .with-notebook.outline-open > .lesson-card, .with-notebook.outline-open > .lesson-help { grid-column: 2; }
+  .with-notebook > .lesson-notebook { grid-column: -2 / -1; grid-row: 5; position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; }
+}
+.plan-page { width: min(1080px, calc(100% - 40px)); margin: 32px auto 80px; }
+.plan-page > p, .plan-page section p { line-height: 1.75; }
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 24px; }
+.plan-grid section, .readiness-guide { padding: 24px 0; border-top: 1px solid var(--quiet-rule); }
+.plan-grid label { display: flex; align-items: baseline; gap: 10px; line-height: 1.6; }
+.plan-grid input { width: auto; }
+.readiness-guide { margin-top: 32px; }
+.readiness-guide p { max-width: 850px; line-height: 1.8; }
+.practice-table th small { display: block; font-weight: 400; color: var(--muted); }
+.practice-table td input, .statement-workshop td input { width: 100%; min-width: 80px; max-width: 150px; font: inherit; padding: 10px; }
+.practice-table td span { display: block; margin-top: 6px; }
+.practice-table th p { font-size: 13px; }
+.cloud-progress > div { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.cloud-progress > div[hidden] { display: none; }
+.cloud-progress > button { font-size: 12px; padding: 7px 12px; }
+.interview-probes { padding: 20px 0; }
+.interview-probes label { display: block; line-height: 1.7; margin: 16px 0; }
+.interview-probes textarea { display: block; width: 100%; min-height: 100px; padding: 12px; font: inherit; }
+.challenge-reasoning { display: block; line-height: 1.7; margin-top: 24px; }
+.challenge-reasoning textarea { display: block; width: 100%; min-height: 120px; padding: 12px; font: inherit; }
+
+.lesson-reading { grid-column: -2 / -1; min-width: 0; }
+@media (min-width: 1250px) {
+  .with-notebook > .lesson-reading { grid-column: 1; grid-row: 5; }
+  .with-notebook.outline-open > .lesson-reading { grid-column: 2; }
+}

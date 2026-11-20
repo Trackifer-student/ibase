@@ -256,7 +256,7 @@ function ModelingLabs({ onBack, onLearn, initialLabId = null }) {
         <p className="eyebrow">PRACTICAL MODELING</p>
         <h1>Build the model, not just the interview answer.</h1>
         <p className="page-intro">Three guided case studies turn the technical curriculum into spreadsheet work. Download the starter CSV, open it in Excel or Google Sheets, build the formulas yourself, then use IBase to check the result.</p>
-        <div className="lab-progress"><strong>{completed.length} / {LABS.length}</strong><span>labs complete on this device</span></div>
+        <div className="lab-progress"><strong>{completed.length} / {LABS.length}</strong><span>labs marked complete · self-reported</span></div>
       </header>
 
       <div className="lab-selector" aria-label="Modeling labs">
@@ -272,7 +272,7 @@ function ModelingLabs({ onBack, onLearn, initialLabId = null }) {
       <article className="active-lab">
         <div className="active-lab-heading">
           <div><p className="eyebrow">{active.level}</p><h2>{active.title}</h2></div>
-          <span className={completed.includes(activeId) ? 'lab-status complete' : 'lab-status'}>{completed.includes(activeId) ? 'Complete' : 'Not complete'}</span>
+          <span className={completed.includes(activeId) ? 'lab-status complete' : 'lab-status'}>{completed.includes(activeId) ? 'Self-reported complete' : 'Not marked complete'}</span>
         </div>
 
         <div className="lab-download-bar">
@@ -287,8 +287,8 @@ function ModelingLabs({ onBack, onLearn, initialLabId = null }) {
         {activeId === 'merger' && <MergerLab inputs={mergerInputs} setInputs={setMergerInputs} revealed={revealed.merger} />}
         {activeId === 'lbo' && <LboLab inputs={lboInputs} setInputs={setLboInputs} revealed={revealed.lbo} />}
 
-        <div className="lab-completion">
-          <button className="primary-button" onClick={toggleComplete}>{completed.includes(activeId) ? 'Mark incomplete' : 'Mark lab complete →'}</button>
+        <div className="lab-completion"><p>Completion is your own record. IBase does not inspect your uploaded workbook or certify that its formulas are linked correctly. Keep your spreadsheet and test it under changed assumptions.</p>
+          <button className="primary-button" onClick={toggleComplete}>{completed.includes(activeId) ? 'Mark incomplete' : 'Mark my lab work complete →'}</button>
           <button className="secondary-button" onClick={onLearn}>Review the curriculum</button>
           {message && <p role="status">{message}</p>}
         </div>

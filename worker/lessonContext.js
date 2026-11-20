@@ -2,7 +2,7 @@ import { tracks } from '../src/data/curriculum.js'
 import { aiBankingModule } from '../src/data/modules/aiBanking.js'
 import { concepts } from '../src/data/concepts.js'
 
-export const questionTypes = new Set(['mcq', 'fill', 'number', 'written'])
+export const questionTypes = new Set(['mcq', 'fill', 'number', 'written', 'statement-workshop', 'model-repair'])
 const teachingTypes = new Set(['intro', 'teach', 'worked', 'concept', 'list', 'complete'])
 const clean = text => String(text || '').replace(/\[\[([^|\]]+)(?:\|([^\]]+))?\]\]/g, (_, id, label) => label || concepts[id]?.name || id)
 // Explicitly allow teaching fields only. Never serialize answer keys, rubrics, or feedback.

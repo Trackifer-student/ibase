@@ -1,3 +1,5 @@
+import { statementGuides } from '../statementCase.js'
+
 export const accountingLessons = [
   {
     id: 'why-accounting-matters',
@@ -2374,3 +2376,10 @@ export const accountingLessons = [
     ],
   },
 ]
+
+// Pilot: deepen four existing lessons without replacing routes or completion IDs.
+for (const lesson of accountingLessons) {
+  if (!statementGuides[lesson.id]) continue
+  const completeIndex = lesson.steps.findIndex(step => step.type === 'complete')
+  lesson.steps.splice(completeIndex, 0, { type: 'statement-workshop', title: 'Northstar Equipment: work with the statements' })
+}

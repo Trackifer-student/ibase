@@ -3,9 +3,11 @@ import { supabase } from '../utils/supabase.js'
 import { currentProgress } from '../utils/progressBackup.js'
 import { progressStorage, setProgressOwner } from '../utils/progressStorage.js'
 import { mergeProgress, sameProgress, validateSnapshot } from '../utils/progressMerge.js'
+import { resumeAccountCache } from '../utils/accountResume.js'
 import { syncProgress } from '../utils/cloudSync.js'
 
 export default function CloudProgress({ onRefresh }) {
+  const [expanded, setExpanded] = useState(false)
   const [user, setUser] = useState(null)
   const [status, setStatus] = useState('Progress saves on this device. No account required.')
   const [pending, setPending] = useState(false)
@@ -66,6 +68,19 @@ export default function CloudProgress({ onRefresh }) {
       setPending(Boolean(s.user))
       setStatus(s.user ? 'Choose whether to merge this device’s guest progress.' : 'Progress saves on this device. No account required.')
       setProgressOwner(null)
+      // Reuse this account's isolated cache only after this device previously enabled sync.
+      if (s.user) {
+        try {
+          const restored = resumeAccountCache(s.user.id, window.localStorage)
+          if (restored) {
+            s.base = restored.base
+            s.enabled = true; setPending(false)
+            setStatus('Account progress restored from this device. Checking cloud sync…')
+            const epoch = s.epoch
+            setTimeout(() => { if (state.current.epoch === epoch) sync() }, 0)
+          }
+        } catch { setProgressOwner(null); s.enabled = false; setPending(true); setStatus('Account cache could not be loaded. Choose a progress option below; your stored data has not been removed.') }
+      }
       onRefresh()
     })
     let debounce
@@ -86,6 +101,7 @@ export default function CloudProgress({ onRefresh }) {
       const cached = validateSnapshot(currentProgress())
       s.base = validateSnapshot(JSON.parse(window.localStorage.getItem(`ibase-sync:base:${user.id}`) || '{}'))
       install(mergeProgress(cached, guest))
+      window.localStorage.setItem(`ibase-sync:enabled:${user.id}`, 'true')
       s.enabled = true; setPending(false); onRefresh()
       await sync()
     } catch {
@@ -101,6 +117,8 @@ export default function CloudProgress({ onRefresh }) {
     setProgressOwner(null); onRefresh()
   }
   return <aside className="cloud-progress" aria-label="Optional account and progress sync">
+    <button aria-expanded={expanded || pending || Boolean(incoming)} onClick={() => setExpanded(value => !value)}>Progress &amp; optional sync{pending ? ' · choose account progress' : incoming ? ' · cloud update ready' : ''}</button>
+    <div hidden={!expanded && !pending && !incoming}>
     <span role="status">{status}</span>
     {!user && supabase && <button onClick={async () => {
       const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin, scopes: 'openid email profile' } })
@@ -115,5 +133,6 @@ export default function CloudProgress({ onRefresh }) {
       try { install(mergeProgress(currentProgress(), incoming, state.current.incomingLocal)); state.current.base = state.current.pendingBase; window.localStorage.setItem(`ibase-sync:base:${user.id}`, JSON.stringify(state.current.base)); state.current.incoming = null; setIncoming(null); onRefresh(); setStatus('Cloud progress applied. Device changes will sync automatically.'); }
       catch { setStatus('Device storage is full. Export a backup before retrying.'); }
     }}>Apply cloud progress (leaves current activity)</button>}
+    </div>
   </aside>
 }

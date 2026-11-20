@@ -13,7 +13,8 @@
     "preview:assistant": "wrangler dev --port 5180",
     "test:interview": "node --experimental-loader ./tests/resolveJs.mjs --test tests/interviewAndBackup.test.js",
     "test:labs": "node --experimental-loader ./tests/resolveJs.mjs --test tests/modelingLabs.test.js",
-    "test:sync": "node --test tests/cloudSync.test.js"
+    "test:sync": "node --test tests/cloudSync.test.js",
+    "test:statements": "node --experimental-loader ./tests/resolveJs.mjs --test tests/statementLearning.test.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
