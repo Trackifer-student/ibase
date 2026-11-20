@@ -4,6 +4,7 @@ const MAX_BACKUP_BYTES = 2 * 1024 * 1024
 
 const fixedKeys = new Set([
   'ibase-notes',
+  'ibase-activity-drafts',
   'ibase-completed-lessons',
   'ibase-xp',
   'ibase-needs-review',
@@ -24,6 +25,10 @@ export function validSavedValue(key, value) {
   if (listKeys.has(key)) return Array.isArray(value) && value.every((id) => typeof id === 'string')
   if (!isRecord(value)) return false
   const values = Object.values(value)
+  if (key === 'ibase-activity-drafts') return values.every(raw => {
+    if (typeof raw !== 'string' || raw.length > 100000) return false
+    try { const draft = JSON.parse(raw); return isRecord(draft) && Number.isFinite(draft.updatedAt) && draft.updatedAt >= 0 && isRecord(draft.payload) } catch { return false }
+  })
   if (key === 'ibase-notes') return values.every((note) => typeof note === 'string')
   if (key === 'ibase-quiz-variants-v1') return values.every((index) => Number.isInteger(index) && index >= 0)
   return values.every((score) => typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 100)

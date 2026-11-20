@@ -34,7 +34,10 @@ export function mergeProgress(local, remote, base = {}) {
       const lv = lm[field], rv = rm[field], bv = bm[field]
       if (equal(lv, rv) || equal(rv, bv)) { if (lv !== undefined) merged[field] = lv }
       else if (equal(lv, bv)) { if (rv !== undefined) merged[field] = rv }
-      else if (key === 'ibase-notes') {
+      else if (key === 'ibase-activity-drafts') {
+        const versions = [lv, rv].filter(v => v !== undefined).sort((a, b) => JSON.parse(a).updatedAt - JSON.parse(b).updatedAt || a.localeCompare(b))
+        merged[field] = versions.at(-1)
+      } else if (key === 'ibase-notes') {
         // Sorted complete versions make conflict output deterministic and idempotent.
         const versions = [...new Set([lv, rv].filter(v => v !== undefined).flatMap(v => v.split('\n\n--- Preserved note version ---\n\n')))].sort()
         merged[field] = versions.join('\n\n--- Preserved note version ---\n\n')

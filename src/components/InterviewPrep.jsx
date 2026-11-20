@@ -5,6 +5,7 @@ import {
   interviewDifficulties,
   interviewQuestions,
 } from '../data/interviewQuestions'
+import { interviewProbes, rubricRating } from '../data/interviewProbes.js'
 import { shuffle } from '../utils/quizBuilder'
 
 function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
@@ -14,6 +15,8 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
   const [difficulty, setDifficulty] = useState(initialQuestion?.difficulty || 'All')
   const [currentQuestion, setCurrentQuestion] = useState(initialQuestion)
   const [answer, setAnswer] = useState('')
+  const [probeAnswers, setProbeAnswers] = useState(['', ''])
+  const [criticalError, setCriticalError] = useState(false)
   const [revealed, setRevealed] = useState(false)
   const [coveredPoints, setCoveredPoints] = useState([])
   const [voiceSupported] = useState(() =>
@@ -53,6 +56,7 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
 
   const resetAnswer = () => {
     setAnswer('')
+    setProbeAnswers(['', '']); setCriticalError(false)
     setRevealed(false)
     setCoveredPoints([])
     setListening(false)
@@ -172,7 +176,7 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
     // This is a structured self-assessment, not automated AI grading.
     const total = currentQuestion.keyPoints.length
     const covered = coveredPoints.length
-    const rating = total > 0 && covered / total >= 0.75 ? 'strong' : 'weak'
+    const { rating } = rubricRating(total, covered, criticalError)
 
     if (rating === 'weak') {
       markWeak(currentQuestion.id)
@@ -188,6 +192,7 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
           rating,
           covered,
           total,
+          criticalError,
         },
       ]
 
@@ -263,8 +268,8 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
             </div>
 
             <p>
-              Questions below 75% rubric coverage were added to your review
-              queue. Scores are based on the points you checked, not automatic grading.
+              Questions below 75% rubric coverage or with a reported material error were added to your review
+              queue. Scores are based on the points you checked, not automatic grading. A high overall percentage does not cancel material errors; review each flagged question.
             </p>
 
             <div className="quiz-result-actions">
@@ -328,6 +333,7 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
               aria-label="Interview answer"
             />
 
+            <section className="interview-probes"><h2>Go one level deeper</h2><p>Try these follow-ups before revealing the benchmark. These are practice prompts, not automated grading.</p>{interviewProbes(currentQuestion).map((prompt, index) => <label key={prompt}>{prompt}<textarea aria-label={`Follow-up ${index + 1}`} value={probeAnswers[index]} onChange={e => setProbeAnswers(current => current.map((value, i) => i === index ? e.target.value : value))} /></label>)}</section>
             <div className="interview-answer-tools">
               {voiceSupported && (
                 <button
@@ -382,15 +388,16 @@ function InterviewPrep({ onBack, onLearn, initialQuestionId = null }) {
                     <span>
                       {Math.round((coveredPoints.length / currentQuestion.keyPoints.length) * 100)}% covered
                       {' · '}
-                      {coveredPoints.length / currentQuestion.keyPoints.length >= 0.75
+                      {rubricRating(currentQuestion.keyPoints.length, coveredPoints.length, criticalError).rating === 'strong'
                         ? 'Meets review threshold'
                         : 'Add to review queue'}
                     </span>
                   </div>
                 </fieldset>
 
+                <label className="interview-rubric-point"><input type="checkbox" checked={criticalError} onChange={e => setCriticalError(e.target.checked)} /> My answer contained a material error (for example, reversing a cash-flow sign, confusing enterprise and equity value, or contradicting the core conclusion).</label>
                 <div className="interview-self-grade">
-                  <p>Use the checklist to decide what to revisit. A score of 75% or more clears this question from your review queue.</p>
+                  <p>Use the checklist to decide what to revisit. At least 75% coverage with no material error clears this question. A material error keeps it in review regardless of coverage.</p>
                   <button
                     className="primary-button"
                     onClick={rateQuestion}

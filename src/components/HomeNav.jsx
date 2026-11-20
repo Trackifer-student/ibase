@@ -16,6 +16,7 @@ function HomeNav({ onHome, onLearn, onInterview, onAI, onVocabulary, onSearch, o
 
       <div className="nav-links">
         <button onClick={onLearn}>Courses</button>
+          <a href="/recruiting-plan">Recruiting plan</a>
         <button onClick={onInterview}>Interview practice</button>
         <button onClick={onLabs}>Modeling labs</button>
         <button onClick={onAI}>AI for banking</button>

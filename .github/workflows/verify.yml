@@ -45,6 +45,9 @@ jobs:
       - name: Cloud progress merge and sync tests
         run: npm run test:sync
 
+      - name: Statement learning and restoration tests
+        run: npm run test:statements
+
       - name: Build
         run: npm run build
 

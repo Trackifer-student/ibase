@@ -110,3 +110,22 @@ test('a lost save response can be retried without duplicate XP or note versions'
   assert.deepEqual(JSON.parse(recovered['ibase-completed-labs']), ['dcf', 'lbo'])
   assert.equal(JSON.parse(recovered['ibase-notes']).a, 'Cloud note\n\n--- Preserved note version ---\n\nOffline note')
 })
+
+import { resumeAccountCache } from '../src/utils/accountResume.js'
+import { getProgressOwner } from '../src/utils/progressStorage.js'
+test('returning account restores only its previously enabled cache and never merges guest work implicitly', () => {
+  globalThis.localStorage = new MemoryStorage()
+  setProgressOwner(null); progressStorage.setItem('ibase-completed-lessons', '["guest"]')
+  setProgressOwner('alice'); progressStorage.setItem('ibase-completed-lessons', '["alice-work"]')
+  assert.equal(resumeAccountCache('alice', localStorage), null)
+  assert.equal(getProgressOwner(), null)
+  localStorage.setItem('ibase-sync:enabled:alice', 'true')
+  assert.deepEqual(resumeAccountCache('alice', localStorage), { base: {} })
+  assert.equal(progressStorage.getItem('ibase-completed-lessons'), '["alice-work"]')
+  assert.equal(resumeAccountCache('bob', localStorage), null)
+  assert.equal(progressStorage.getItem('ibase-completed-lessons'), '["guest"]')
+  localStorage.setItem('ibase-sync:base:alice', '{broken')
+  assert.throws(() => resumeAccountCache('alice', localStorage))
+  assert.equal(getProgressOwner(), null)
+  assert.equal(localStorage.getItem('ibase-account:alice:ibase-completed-lessons'), '["alice-work"]')
+})

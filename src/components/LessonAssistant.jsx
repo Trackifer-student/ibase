@@ -11,7 +11,7 @@ export default function LessonAssistant({ lesson, stepIndex, open, onClose }) {
   const answerEnd = useRef(null)
   const input = useRef(null)
   const closeButton = useRef(null)
-  const hintOnly = ['mcq', 'fill', 'number', 'written'].includes(lesson.steps[stepIndex].type)
+  const hintOnly = ['mcq', 'fill', 'number', 'written', 'statement-workshop', 'model-repair'].includes(lesson.steps[stepIndex].type)
   useEffect(() => () => request.current?.abort(), [])
   const close = () => { request.current?.abort(); request.current = null; setPending(''); onClose() }
   useEffect(() => { if (open && messages.length) answerEnd.current?.scrollIntoView({ block: 'nearest' }) }, [messages, open])

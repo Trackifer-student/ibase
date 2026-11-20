@@ -16,6 +16,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
   const [quiz, setQuiz] = useState(null)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
+  const [reasoning, setReasoning] = useState({})
   const [result, setResult] = useState(null)
   const [saveError, setSaveError] = useState('')
   const heading = useRef(null)
@@ -40,6 +41,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
     try { localStorage.setItem('ibase-quiz-variants-v1', JSON.stringify(updatedHistory)) } catch { /* Quizzes remain usable without storage. */ }
     setQuiz({ level, questions })
     setQuestionIndex(0)
+    setReasoning({})
     setAnswers({})
     setResult(null)
     setSaveError('')
@@ -115,7 +117,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
     <div className="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
     <div className="quiz-question-card">
       <div className="quiz-question-meta"><span>{current.moduleTitle}</span><span>Question {questionIndex + 1} / {quiz.questions.length}</span></div>
-      <p className="local-note">{current.scenario}</p>
+      <p className="local-note">{current.scenario}</p><p className="local-note">This quiz samples knowledge, not job readiness. Saved best scores describe past attempts; question sets can change.</p>
       <h1 ref={heading} tabIndex={-1}>{current.prompt}</h1>
       {current.type === 'number' ? <div className="quiz-number-answer">
         <label htmlFor="quiz-number">Your answer ({current.unit})</label>
@@ -128,6 +130,7 @@ function QuizRunner({ title, description, questionBank, onBack, storageKey, leve
           <input type="checkbox" checked={selected?.includes(index) || false} onChange={() => select(selected?.includes(index) ? selected.filter(item => item !== index) : [...(selected || []), index])} /><span>{option}</span>
         </label>)}</div>
       </fieldset> : <div className="quiz-answer-grid" role="group" aria-label="Choose one answer">{current.options.map((option, index) => <button key={index} aria-pressed={selected === index} className={`quiz-answer ${selected === index ? 'selected' : ''}`} onClick={() => select(index)}><span>{String.fromCharCode(65 + index)}</span><p>{option}</p></button>)}</div>}
+      {current.difficulty === 'hard' && <label className="challenge-reasoning">Explain your approach before continuing (practice reflection, not automatically graded)<textarea value={reasoning[questionIndex] || ''} onChange={e => setReasoning(previous => ({ ...previous, [questionIndex]: e.target.value }))} /></label>}
       <div className="quiz-nav-actions">
         <button className="secondary-button" onClick={() => move(-1)} disabled={questionIndex === 0}>← Previous</button>
         <button className="primary-button" disabled={!isAnswered(current, selected)} onClick={() => questionIndex === quiz.questions.length - 1 ? finishQuiz() : move(1)}>{questionIndex === quiz.questions.length - 1 ? 'Finish quiz' : 'Next question →'}</button>

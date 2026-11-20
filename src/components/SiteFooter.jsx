@@ -27,6 +27,7 @@ function SiteFooter({
 
         <nav className="footer-links" aria-label="Footer navigation">
           <button onClick={onLearn}>Courses</button>
+          <a href="/recruiting-plan">Recruiting plan</a>
           <button onClick={onInterview}>Interview practice</button>
           <button onClick={onLabs}>Modeling labs</button>
           <button onClick={onAI}>AI for banking</button>
@@ -40,7 +41,7 @@ function SiteFooter({
 
       <div className="footer-bottom">
         <span>© {COPYRIGHT_YEAR} IBase</span>
-        <span>Educational content only. Not financial advice.</span>
+        <span>Created by Zachary Blacher with AI assistance. Educational content; no independent banker review claimed.</span>
       </div>
     </footer>
   )

@@ -3,6 +3,7 @@
 const f = value => Number(value.toFixed(2)).toLocaleString('en-US', { maximumFractionDigits: 2 })
 const variant = (changes, answer, explanation) => ({ changes, answer: Number(answer.toFixed(2)), explanation })
 export const numericVariants = {
+'dcf-walkthrough/hard': k => { const ebit=100+10*k, ufcf=ebit*.75-15, tv=ufcf*1.02/.08, ev=(ufcf+tv)/1.1; return variant([['EBIT is 100', `EBIT is ${ebit}`]],ev-80,`UFCF = ${ebit} × 75% + 10 − 20 − 5 = ${f(ufcf)}. Terminal value = ${f(ufcf)} × 1.02 / 8% = ${f(tv)}. EV = (${f(ufcf)} + ${f(tv)}) / 1.10 = ${f(ev)}. Equity = EV − 100 debt + 20 excess cash = ${f(ev-80)}.`) },
 'how-business-makes-money/easy': k => { const count=18+2*k; return variant([['18 repairs',`${count} repairs`]],count*40,`Revenue = ${count} × $40 = $${f(count*40)}.`) },
 'how-business-makes-money/medium': k => { const count=30+2*k; return variant([['30 sessions',`${count} sessions`]],count*45-400,`Revenue = ${count} × $50 = $${f(count*50)}. Materials = ${count} × $5 = $${f(count*5)}. Profit = revenue − materials − $400 rent = $${f(count*45-400)}.`) },
 'debt-and-interest/medium': k => { const principal=8000+1000*k; return variant([['$8,000',`$${f(principal)}`]],principal*.06,`Annual simple interest = $${f(principal)} × 6% = $${f(principal*.06)}. Principal repayment is separate.`) },

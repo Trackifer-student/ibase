@@ -183,3 +183,6 @@ export const advancedTechnicalsModule = moduleFromSpecs({
     'Circularity, NOLs, dilution, stock compensation, advanced EV adjustments, leases, stub periods, and model error hunting.',
   specs: specs.map(lesson),
 })
+
+const errorHunt = advancedTechnicalsModule.lessons.find(lesson => lesson.id === 'advanced-model-error-hunt')
+errorHunt.steps.splice(errorHunt.steps.findIndex(step => step.type === 'complete'), 0, { type: 'model-repair', title: 'Repair Northstar’s broken model' })

@@ -21,6 +21,12 @@ import NotFound from './components/NotFound'
 import StudyDialog from './components/StudyDialog'
 import SavedVocabulary from './components/SavedVocabulary'
 import LessonAssistant from './components/LessonAssistant'
+import RecruitingPlan from './components/RecruitingPlan'
+import ModelRepair from './components/ModelRepair'
+import StatementWorkshop from './components/StatementWorkshop'
+import LessonNotebook from './components/LessonNotebook'
+import { saveLessonNote } from './utils/lessonNotebook.js'
+import { restoreLesson, lessonSignature, writeDraft, readDraft } from './utils/activityDrafts.js'
 import './App.css'
 import './calm.css'
 
@@ -119,7 +125,7 @@ const allEntries = [...lessonEntries, ...aiBankingModule.lessons.map(lesson =>
   ({ track: null, module: aiBankingModule, lesson }))]
 const routeFromPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
-  const pages = { '/': 'home', '/learn': 'learn', '/interview': 'interview',
+  const pages = { '/recruiting-plan': 'recruiting-plan', '/': 'home', '/learn': 'learn', '/interview': 'interview',
     '/ai': 'ai', '/vocabulary': 'vocabulary', '/review': 'review', '/search': 'search', '/backup': 'backup', '/labs': 'labs', '/privacy': 'privacy', '/terms': 'terms' }
   if (pages[path]) return { page: pages[path] }
   if (!/^\/(lesson|track|module)\/[^/]+$/.test(path)) return { page: 'not-found' }
@@ -143,10 +149,10 @@ const followLink = (event, action) => {
   event.preventDefault()
   action()
 }
-const initialRoute = routeFromPath()
 const pageFromPath = () => routeFromPath().page
 
 function App() {
+  const [initialRoute] = useState(routeFromPath)
   const [savedTerms, setSavedTerms] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('ibase-saved-vocabulary') || '[]')
@@ -189,21 +195,21 @@ function App() {
     useState(initialRoute.lesson || null)
 
   const [lessonStep, setLessonStep] =
-    useState(0)
+    useState(() => restoreLesson(initialRoute.lesson).step)
 
   const [
     selectedAnswer,
     setSelectedAnswer,
-  ] = useState(null)
+  ] = useState(() => restoreLesson(initialRoute.lesson).selected)
 
   const [showFeedback, setShowFeedback] =
     useState(false)
 
   const [shortAnswer, setShortAnswer] =
-    useState('')
+    useState(() => restoreLesson(initialRoute.lesson).short)
 
   const [numberAnswer, setNumberAnswer] =
-    useState('')
+    useState(() => restoreLesson(initialRoute.lesson).number)
 
   /*
     Written-answer tutor
@@ -212,7 +218,7 @@ function App() {
   const [
     writtenAnswer,
     setWrittenAnswer,
-  ] = useState('')
+  ] = useState(() => restoreLesson(initialRoute.lesson).written)
 
   const [
     writtenResult,
@@ -239,6 +245,7 @@ function App() {
   ] = useState(null)
 
   const [assistantOpen, setAssistantOpen] = useState(false)
+  const [noteSaveError, setNoteSaveError] = useState('')
   const [notesOpen, setNotesOpen] =
     useState(false)
 
@@ -312,13 +319,6 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem(
-      'ibase-notes',
-      JSON.stringify(notes),
-    )
-  }, [notes])
-
-  useEffect(() => {
-    localStorage.setItem(
       'ibase-completed-lessons',
       JSON.stringify(
         completedLessons,
@@ -347,7 +347,7 @@ function App() {
       setActiveModule(route.module || null)
       setActiveLesson(route.lesson || null)
       setModuleOrigin(route.module === aiBankingModule ? 'ai' : 'track')
-      setLessonStep(0)
+      restoreLessonState(route.lesson)
       setInterviewQuestionId(null)
       setSelectedAnswer(null)
       setShowFeedback(false)
@@ -359,6 +359,7 @@ function App() {
 
   useEffect(() => {
     const titles = {
+      'recruiting-plan': 'Sophomore Recruiting Plan | IBase',
       home: 'IBase | Learn Investment Banking from Zero',
       learn: 'Investment Banking Curriculum | IBase',
       interview: 'Investment Banking Interview Prep | IBase',
@@ -416,7 +417,7 @@ function App() {
   }, [page, activeTrack, activeModule, activeLesson, quizConfig])
 
   useEffect(() => {
-    const paths = { home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
+    const paths = { 'recruiting-plan': '/recruiting-plan', home: '/', learn: '/learn', interview: '/interview', ai: '/ai',
       vocabulary: '/vocabulary', review: '/review', search: '/search', backup: '/backup', labs: '/labs', privacy: '/privacy', terms: '/terms' }
     const path = page === 'lesson' && activeLesson ? `/lesson/${activeLesson.id}`
       : page === 'module' && activeModule ? `/module/${activeModule.id}`
@@ -450,6 +451,17 @@ function App() {
     window.addEventListener('keydown', onEscape)
     return () => window.removeEventListener('keydown', onEscape)
   }, [])
+
+  const [draftError, setDraftError] = useState('')
+  useEffect(() => {
+    if (page !== 'lesson' || !activeLesson) return
+    try {
+      writeDraft(`lesson:${activeLesson.id}`, { signature: lessonSignature(activeLesson), step: lessonStep, selected: selectedAnswer, short: shortAnswer, number: numberAnswer, written: writtenAnswer })
+      writeDraft('last-lesson', { id: activeLesson.id })
+      if (draftError) setDraftError('')
+    } catch { setDraftError('This browser could not save your lesson position. Export a backup before leaving.') }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, activeLesson, lessonStep, selectedAnswer, shortAnswer, numberAnswer, writtenAnswer])
 
   /*
     General helpers
@@ -588,7 +600,7 @@ function App() {
       questionBank,
       storageKey: `ibase-quiz-module-${module.id}`,
       returnPage,
-      levelCounts: [3, 3, 3],
+      levelCounts: [3, 3, module.id === 'dcf' ? 6 : 3],
     })
   }
 
@@ -620,11 +632,14 @@ function App() {
     })
   }
 
+  function restoreLessonState(lesson) {
+    const draft = restoreLesson(lesson)
+    resetInteraction()
+    setLessonStep(draft.step); setSelectedAnswer(draft.selected); setShortAnswer(draft.short); setNumberAnswer(draft.number); setWrittenAnswer(draft.written)
+  }
   const openLesson = (lesson) => {
     setActiveLesson(lesson)
-    setLessonStep(0)
-
-    resetInteraction()
+    restoreLessonState(lesson)
 
     setPage('lesson')
     scrollTop()
@@ -636,7 +651,9 @@ function App() {
     setModuleOrigin(module === aiBankingModule ? 'ai' : 'track')
     openLesson(lesson)
   }
-  const nextEntry = lessonEntries.find(entry => !completedLessons.includes(entry.lesson.id))
+  const lastActivity = readDraft('last-lesson')
+  const resumeEntry = allEntries.find(entry => entry.lesson.id === lastActivity?.id && !completedLessons.includes(entry.lesson.id))
+  const nextEntry = resumeEntry || lessonEntries.find(entry => !completedLessons.includes(entry.lesson.id))
   const matchingEntries = lessonEntries.filter(entry =>
     entry.lesson.title.toLowerCase().includes(search.trim().toLowerCase()))
 
@@ -779,10 +796,9 @@ function App() {
       return
     }
 
-    setNotes((current) => ({
-      ...current,
-      [activeLesson.id]: value,
-    }))
+    const result = saveLessonNote(localStorage, notes, activeLesson.id, value)
+    setNotes(result.notes)
+    setNoteSaveError(result.error)
   }
 
   /*
@@ -940,6 +956,8 @@ function App() {
       </div>
     )
   }
+
+  if (page === 'recruiting-plan') return <RecruitingPlan onHome={goHome} onInterview={openInterview} onLesson={id => { const entry = allEntries.find(e => e.lesson.id === id); if (entry) startEntry(entry) }} />
 
   if (page === 'search') {
     return (
@@ -1200,7 +1218,7 @@ function App() {
           </button>
         </nav>
 
-        <section className={`lesson-shell ${outlineOpen ? 'outline-open' : ''}`}>
+        <section className={`lesson-shell with-notebook ${outlineOpen ? 'outline-open' : ''}`}>
           <nav className="breadcrumbs" aria-label="Breadcrumb">
             <button onClick={openLearn}>All courses</button><span>/</span>
             <button onClick={() => { setPage('module'); scrollTop() }}>{activeModule.title}</button>
@@ -1267,11 +1285,16 @@ function App() {
             />
           </div>
 
+          <div className="lesson-reading">
           {lessonStep === 0 && <details className="getting-started lesson-help">
             <summary>First lesson? Here’s how it works.</summary>
             <p>Read each step and use the button below to continue. Try the questions and check the feedback. Notes saves your own reminders. Click highlighted terms for a definition.</p>
-            <p>At the end, choose Next lesson or Back to module to save completion. Completed lessons and notes stay in this browser; reopening a lesson starts it from the beginning.</p>
+            <p>At the end, choose Next lesson or Back to module to save completion. Completed lessons and notes stay in this browser; unfinished lessons restore your saved step and draft answers. Feedback is checked again when you return.</p>
           </details>}
+          {step.type === 'model-repair' && <ModelRepair onBack={() => changeLessonStep(lessonStep - 1)} onContinue={() => changeLessonStep(lessonStep + 1)} />}
+          {step.type === 'statement-workshop' && <StatementWorkshop key={activeLesson.id} lessonId={activeLesson.id} onSaveSnapshot={text => updateCurrentNote(`${notes[activeLesson.id] || ''}\n\n${text}`.trimStart())} onBack={() => changeLessonStep(lessonStep - 1)} onContinue={() => changeLessonStep(lessonStep + 1)} />}
+          {lessonStep === 0 && activeLesson.steps.some(item => item.type === 'statement-workshop') && <div className="lesson-card case-shortcut"><p>Apply this lesson to Northstar Equipment and a real company’s statements.</p><button className="secondary-button" onClick={() => changeLessonStep(activeLesson.steps.findIndex(item => item.type === 'statement-workshop'))}>Open statement workshop</button></div>}
+          {draftError && <p role="alert">{draftError}</p>}
           {/* INTRO */}
 
           {step.type === 'intro' && (
@@ -2315,6 +2338,8 @@ function App() {
               </div>
             </div>
           )}
+          </div>
+          <LessonNotebook lesson={activeLesson} step={step} value={notes[activeLesson.id] || ''} onChange={updateCurrentNote} error={noteSaveError} />
         </section>
 
         <LessonAssistant key={`${activeLesson.id}-${lessonStep}`} lesson={activeLesson} stepIndex={lessonStep} open={assistantOpen} onClose={() => setAssistantOpen(false)} />
@@ -2367,8 +2392,7 @@ function App() {
               />
 
               <p className="notes-save">
-                Saved automatically on
-                this device.
+                {noteSaveError || 'Saved on this device. Account sync follows your existing sync settings.'}
               </p>
             </StudyDialog>
           </div>
@@ -2656,7 +2680,7 @@ function App() {
             New to finance? Begin with Finance From Zero below and follow the lessons in order. Each course is divided into modules: small groups of lessons on one topic. Already know the basics? Browse or search for a topic.
           </p>
 
-          {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && <div className="learning-dashboard">
+          {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0 || resumeEntry) && <div className="learning-dashboard">
             <article>
               <span>CURRICULUM PROGRESS</span>
               <strong>
@@ -2867,7 +2891,7 @@ function App() {
       />
 
       <section className="workstation-home">
-        {!(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && <div className="home-opening">
+        {!(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0 || resumeEntry) && <div className="home-opening">
           <div className="home-introduction">
             <p className="eyebrow">Free finance lessons for complete beginners</p>
             <h1>Learn finance.<br />Understand investment banking.</h1>
@@ -2889,7 +2913,7 @@ function App() {
             <a className="preview-all" href="/learn" onClick={event => followLink(event, () => { openLearn() })}>See all {lessonEntries.length} lessons →</a>
           </aside>
         </div>}
-        {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0) && (
+        {(completedCurriculumCount > 0 || xp > 0 || needsReview.length > 0 || resumeEntry) && (
           <section className="returning-dashboard" aria-label="Your learning dashboard">
             <h1 className="returning-title">Welcome back.</h1>
             <div className="returning-dashboard-grid">
@@ -2926,6 +2950,7 @@ function App() {
             <p className="local-note">Saved locally in this browser on this device. No account required.</p>
           </section>
         )}
+        <section className="readiness-guide"><h2>Turn learning into recruiting work</h2><a className="primary-button" href="/recruiting-plan" onClick={event => followLink(event, () => setPage('recruiting-plan'))}>Open the sophomore recruiting plan →</a><p>Completion records lessons finished. Quiz performance checks sampled answers. Interview rubrics are self-assessments. Worksheet checks test entered figures; lab completion is self-reported, not workbook validation. None alone certifies interview or analyst readiness.</p></section>
         <details className="getting-started">
           <summary>How does learning on IBase work?</summary>
           <ol>
